@@ -8,7 +8,6 @@ const InformasiDesa = () => {
     return(
         <>
             <div className="container-fluid bg-primary">
-                ppppp
                 <Footer />
             </div>
         </>

@@ -1,7 +1,7 @@
 import './LandingPage.css'
 // components
-import Navbar from '../../components/navbar/Navbar'
-import ButtonLandingPage from '../../components/buttonLandingPage/ButtonLandingPage'
+    // import Navbar from '../../components/navbar/Navbar'
+    // import ButtonLandingPage from '../../components/buttonLandingPage/ButtonLandingPage'
 
 const LandingPage = () => {
 
