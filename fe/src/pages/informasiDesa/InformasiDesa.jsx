@@ -1,15 +1,21 @@
 
 
 //component
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/footer/Footer";
+import Navbar from "../../components/navbar/Navbar";
+import "./InformasiDesa.css";
 
 const InformasiDesa = () => {
 
     return(
         <>
-            <div className="container-fluid bg-primary">
+        <div className="informasidesa bg-primary">
+            ini informasi desa
+                <Navbar />
                 <Footer />
-            </div>
+        </div>
+               
+                
         </>
     )
 }
