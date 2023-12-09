@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LandingPage from './pages/landingPage/LandingPage';
 import InformasiDesa from './pages/informasiDesa/InformasiDesa';
 
-function App() {
+const App = () => {
 
   return (
     <>

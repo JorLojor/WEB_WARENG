@@ -3,7 +3,7 @@ const Card = () =>{
     return(
         <>
         <div className="card">
-            ini test
+            ini test card coba
         </div>
         </>
     )
