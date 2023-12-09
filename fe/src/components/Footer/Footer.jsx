@@ -4,7 +4,7 @@ import logo from "../../assets/LogoInsideWarengFooter.png";
 import maps from "../../assets/LogoMapsFooter.png";
 import instagram from "../../assets/LogoInstagramFooter.png";
 import facebook from "../../assets/LogoFacebookFooter.png";
-import "../Footer/Footer.css";
+import "./Footer.css";
 
 const Footer = () => {
     return(
