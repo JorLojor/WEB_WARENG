@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const suratAcara = new mongoose.Schema({
     nameAcara: { type: String, required: true },
     isiAcara : { type:[String], required: true }, 
-    statusAcara: { type:String, required: false, default: ''},
+    statusAcara: { type:String, required: false, default: 'pengajuan'},
     tanggalMulai: { type: Date, required: true },
     tanggalSelesai: { type: Date, required: true },
     tempatAcara: { type: String, required: true },

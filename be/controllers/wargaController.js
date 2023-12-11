@@ -140,18 +140,20 @@ exports.deleteWargaById = async (req,res) => {
 
 exports.CreateSuratAcara = async (req,res) => {
     try{
+        const wargaId = req.params.id;
         const warga = await WargaModel.findById(wargaId);
         if (!warga) {
             return res.status(404).send({
                 message: "warga not found with id " + id
             });
         }
-        const { nameAcara, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara, wargaId } = req.body;
+        const { nameAcara, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
         //menegecek apakah warga sudah memiliki surat acara dengan nama acara yang sama
-        const checkSuratAcara = await suratAcaraModel.findOne({nameAcara: nameAcara});
-        if(checkSuratAcara.nameAcara === nameAcara){
-            return res.status(404).send({
-                message: "warga already have surat acara with name " + nameAcara
+        const checkSuratAcara = warga.suratAcara.find((suratAcara) => suratAcara.nameAcara === nameAcara);
+        if (checkSuratAcara) {
+            console.log(checkSuratAcara);
+            return res.status(400).send({
+                message: "warga already has surat acara with name acara " + nameAcara
             });
         }
         const suratAcara = await suratAcaraModel.create({
