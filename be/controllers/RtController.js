@@ -62,6 +62,64 @@ exports.createRt = async (req, res) => {
     }
 }
 
+exports.updateRt = async (req, res) => {
+    const {name, nik, alamat, nohp, status} = req.body;
+    const id = req.params.id;
+    try{
+        const updatedRt = await RtModel.findByIdAndUpdate(id,{name, nik, alamat, nohp, status},{new: true});
+        if(!updatedRt){
+            return res.status(404).send({
+                message: "Failed update rt with id " + id,
+                data: null
+            });
+        }
+
+        if (updatedRt.isModified === 0) {
+            return res.status(200).send({
+                message: "Data not changed",
+                data: updatedRt
+            });
+        }
+
+        res.status(200).send({
+            message: "Success update rt",
+            data: updatedRt
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while update rt.",
+            data: null
+        });
+    }
+}
+
+exports.deleteRt = async (req, res) => {
+    const id = req.params.id;
+    try{
+        const deletedRt = await RtModel.findByIdAndRemove(id);
+        if(!deletedRt){
+            return res.status(404).send({
+                message: "Failed delete rt with id " + id,
+                data: null
+            });
+        }
+
+        res.status(200).send({
+            message: "Success delete rt",
+            data: deletedRt
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while delete rt.",
+            data: null
+        });
+    }
+}
+
 
 
 module.exports = exports;
+
+
