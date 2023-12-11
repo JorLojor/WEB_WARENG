@@ -5,7 +5,7 @@ const express = require('express');
 const Router = express.Router();
 
 
-Router.get('/get-warga',wargaController.getAllWarga);// http://localhost:3555/api/v1/warga/get-warga
+Router.get('/get',wargaController.getAllWarga);// http://localhost:3555/api/v1/warga/get-warga
 Router.post('/post-warga',wargaController.postWarga); // http://localhost:3555/api/v1/warga/post-warga
 Router.get('/get/:id',wargaController.getWargaById);
 Router.put('/update/:id',wargaController.updateWargaById);

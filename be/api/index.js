@@ -12,7 +12,11 @@ Router.get('/', (req, res) => {
 const wargaApi = require('./userApi/wargaApi');
 Router.use('/warga', wargaApi);
 
+const RtApi = require('./userApi/RtApi');
+Router.use('/rt', RtApi);
+
 module.exports = Router;
 
 
-//http://localhost:3555/api/v1/warga/post/warga
+
+//http://localhost:3555/ 
