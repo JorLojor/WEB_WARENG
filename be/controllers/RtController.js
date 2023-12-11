@@ -63,10 +63,10 @@ exports.createRt = async (req, res) => {
 }
 
 exports.updateRt = async (req, res) => {
-    const {name, nik, alamat, nohp, status} = req.body;
+    const updateData = req.body;
     const id = req.params.id;
     try{
-        const updatedRt = await RtModel.findByIdAndUpdate(id,{name, nik, alamat, nohp, status},{new: true});
+        const updatedRt = await RtModel.findByIdAndUpdate(id, updateData,{new: true});
         if(!updatedRt){
             return res.status(404).send({
                 message: "Failed update rt with id " + id,
@@ -95,9 +95,9 @@ exports.updateRt = async (req, res) => {
 }
 
 exports.deleteRt = async (req, res) => {
-    const id = req.params.id;
+    const _id = req.params.id;
     try{
-        const deletedRt = await RtModel.findByIdAndRemove(id);
+        const deletedRt = await RtModel.findByIdAndDelete(_id);
         if(!deletedRt){
             return res.status(404).send({
                 message: "Failed delete rt with id " + id,
@@ -121,5 +121,3 @@ exports.deleteRt = async (req, res) => {
 
 
 module.exports = exports;
-
-
