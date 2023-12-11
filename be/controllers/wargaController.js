@@ -180,5 +180,95 @@ exports.CreateSuratAcara = async (req,res) => {
     }
 };
 
+exports.pengajuanSuratAcara = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const suratAcaraId = req.params.suratAcaraId;
+
+        const user = await WargaModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({
+                message: "User not found with id " + userId
+            });
+        }
+
+        const suratAcara = await suratAcaraModel.findById(suratAcaraId);
+        if (!suratAcara) {
+            return res.status(404).send({
+                message: "Surat Acara not found with id " + suratAcaraId
+            });
+        }
+
+        if (suratAcara.wargaId.toString() !== userId) {
+            return res.status(403).send({
+                message: "Forbidden. Surat Acara does not belong to the specified user."
+            });
+        }
+
+        suratAcara.statusAcara = 'pengajuan';
+        await suratAcara.save();
+
+        res.status(200).send({
+            message: "Surat Acara berhasil diajukan.",
+            suratAcara: suratAcara
+        });
+
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating Surat Acara."
+        });
+    }
+};
+
+exports.deleteSuratAcaraById = async (req,res) =>{
+    const UserId = req.params.userId;
+    const SuratAcaraId = req.params.suratAcaraId;
+
+    try{
+        const User = await WargaModel.findById(UserId);
+        if (!User) {
+            return res.status(404).send({
+                message: "User not found with id " + UserId
+            });
+        }
+        const SuratAcara = await suratAcaraModel.findById(SuratAcaraId);
+        if (!SuratAcara) {
+            return res.status(404).send({
+                message: "Surat Acara not found with id " + SuratAcaraId
+            });
+        }
+
+        if (SuratAcara.wargaId.toString() !== UserId) {
+            return res.status(403).send({
+                message: "Forbidden. Surat Acara does not belong to the specified user."
+            });
+        }
+
+        const dataSuratAcara = await suratAcaraModel.findByIdAndDelete(SuratAcaraId);
+
+        res.status(200).send({
+            message: "Success delete surat acara",
+            data: dataSuratAcara
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while delete surat acara."
+        });
+    }
+}
+
 
 module.exports = exports;
+
+
+
+
+// do while
+
+// let i = 0;
+
+// do {
+//     console.log(i);
+//     i++;
+// } while (i < 5);
