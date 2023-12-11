@@ -3,13 +3,16 @@ const WargaModel = db.warga;
 const suratAcaraModel = db.suratAcara;
 
 exports.getAllWarga = async (req, res) => {
-    const page = parseInt(req.query.page);
-    const limitt = parseInt(req.query.limit);
-    try{
+    try {
+        const page = parseInt(req.query.page) || 1; // Menambahkan nilai default jika query parameter tidak ada
+        const limitt = parseInt(req.query.limit) || 10; // Menambahkan nilai default jika query parameter tidak ada
+
+        console.log(`Received GET request to /api/v1/warga/get with page: ${page}, limit: ${limitt}`);
+        
         const warga = await WargaModel.find()
-        .populate('suratAcara')
-        .limit(limitt)
-        .skip((page-1)*limitt);
+            .populate('suratAcara')
+            .limit(limitt)
+            .skip((page - 1) * limitt);
 
         const total = await WargaModel.countDocuments();
 
@@ -21,13 +24,14 @@ exports.getAllWarga = async (req, res) => {
             totalDocument: total
         });
 
-    }catch(err){
+    } catch (err) {
+        console.error('Error while handling GET request to /api/v1/warga/get:', err);
         res.status(500).send({
             message: err.message || "Some error occurred while retrieving warga."
         });
     }
-
 };
+
 exports.postWarga = async (req,res) => {
     const { name,nik, alamat, nohp, status } = req.body;
     try{
@@ -116,6 +120,24 @@ exports.deleteWargaById = async (req,res) => {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.CreateSuratAcara = async (req,res) => {
     try{
         const warga = await WargaModel.findById(wargaId);
@@ -124,7 +146,7 @@ exports.CreateSuratAcara = async (req,res) => {
                 message: "warga not found with id " + id
             });
         }
-        const { nameAcara, isiAcara, tanggalAcara, tempatAcara, wargaId } = req.body;
+        const { nameAcara, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara, wargaId } = req.body;
         //menegecek apakah warga sudah memiliki surat acara dengan nama acara yang sama
         const checkSuratAcara = await suratAcaraModel.findOne({nameAcara: nameAcara});
         if(checkSuratAcara.nameAcara === nameAcara){
@@ -135,7 +157,8 @@ exports.CreateSuratAcara = async (req,res) => {
         const suratAcara = await suratAcaraModel.create({
             nameAcara,
             isiAcara,
-            tanggalAcara,
+            tanggalMulai,
+            tanggalSelesai,
             tempatAcara,
             wargaId
         });
@@ -144,7 +167,8 @@ exports.CreateSuratAcara = async (req,res) => {
 
         res.status(200).send({
             message: "Success create surat acara",
-            data: suratAcara
+            data: suratAcara,
+            author: warga
         });
 
     }catch(error){
@@ -153,3 +177,6 @@ exports.CreateSuratAcara = async (req,res) => {
         });
     }
 };
+
+
+module.exports = exports;

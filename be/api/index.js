@@ -4,18 +4,15 @@ const express = require('express');
 // ROUTER
 
 // ENDPOINT
-const router = express.Router();
-router.get('/', (req, res) => {
+const Router = express.Router();
+Router.get('/', (req, res) => {
     res.send('API is running.....');
 });
 
 const wargaApi = require('./userApi/wargaApi');
+Router.use('/warga', wargaApi);
 
-const App = express();
-
-App.use('/warga', wargaApi);
-
-module.exports = router;
+module.exports = Router;
 
 
 //http://localhost:3555/api/v1/warga/post/warga

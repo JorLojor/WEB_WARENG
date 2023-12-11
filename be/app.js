@@ -16,7 +16,7 @@ const api = require('./api/index');
 app.use('/api/v1', api);
 
 // connect to mongodb
-mongoose.connect(process.env.database);
+mongoose.connect(process.env.DATABASE);
 
 const db = mongoose.connection;
 db.on('error', (err) => {
