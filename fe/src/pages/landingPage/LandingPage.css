@@ -4,6 +4,11 @@
     background-repeat: no-repeat;
     width: 100vw;
     height: 100vh;
+    border-radius: 16px;
+    border: 1px solid #00917C;
+}
+.set-btn-landing-page:hover{
+    color: #00917C;
 }
 .set-logo-nav{
     padding: 31px 0px 31px 127px;

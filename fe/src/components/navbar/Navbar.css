@@ -6,6 +6,7 @@ nav{
     padding: 31px 0 31px 0;
     width: 100vw;
     border-radius: 0 0 24px 24px;
+    background-color: transparent;
 }
 
 .list{
@@ -15,10 +16,14 @@ nav{
 }
 
 
-.login{
+.tentang{
     list-style: none;
-    border-right: 2px solid #979797;
+    border-right: 3px solid #979797;
     margin-right: 5%;
     color: #184D47;
     padding-right: 24px;
+}
+
+.Login-Button{
+    background-color: #00917C;
 }

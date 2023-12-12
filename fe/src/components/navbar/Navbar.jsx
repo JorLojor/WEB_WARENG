@@ -1,7 +1,7 @@
 // generate the component
 import React from 'react';
 import logo from "../../assets/LogoIconNavbar.png";
-import setting from "../../assets/LogoSettingNavbar.png";
+import login from "../../assets/LogoLoginNavbar.png";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -18,10 +18,12 @@ const Navbar = () => {
                                 <li className='list'>Beranda</li>
                                 <li className='list'>Program</li>
                                 <li className='list'>Layanan</li>
-                                <li className='list'>Tentang</li>
-                                <li className='login'>LOGIN</li>
-                                <img src={setting} alt="" />
+                                <li className='tentang'>Tentang</li>
                             </ul>
+                            <button>
+                                <img className='Login-Button' src={login} alt="" />
+                                <p>Login</p>
+                            </button>
                             
                         </div>
                     </div>
