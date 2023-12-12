@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import react from "react";
 import logo from "../../assets/LogoInsideWarengFooter.png";
-import maps from "../../assets/LogoMapsFooter.png";
-import instagram from "../../assets/LogoInstagramFooter.png";
-import facebook from "../../assets/LogoFacebookFooter.png";
+// import instagram from "../../assets/LogoIconInstagramFooter.png";
+// import google from "../../assets/LogoIconGoogleFooter.png";
+// import facebook from "../../assets/LogoIconFacebookFooter.png";
 import "./Footer.css";
 
 const Footer = () => {
@@ -16,9 +16,9 @@ const Footer = () => {
                             <img src={logo} alt="" />
                         </div>
                         <div className="col-3  text-end pe-5 me-5">
-                            <img className="mx-3" src={maps} alt="" />
-                            <img className="mx-3" src={instagram} alt="" />
                             <img className="mx-3" src={facebook} alt="" />
+                            <img className="mx-3" src={google} alt="" />
+                            <img className="mx-3" src={instagram} alt="" />
                         </div>
                     </div>
                 </div>
