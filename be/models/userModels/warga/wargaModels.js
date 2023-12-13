@@ -6,6 +6,9 @@ const warga = new mongoose.Schema({
     alamat: { type:String, required: false, default: ''},
     nohp: { type:String, required: false, default: ''},
     status: { type:String, required: false, default: ''},
+    // domisili array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
+    domisili: [{ type: String, required: false, default: '' }],
+    
     suratAcara: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }]
 },{timestamps: true});
 

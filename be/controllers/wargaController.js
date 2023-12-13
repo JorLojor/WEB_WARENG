@@ -78,9 +78,9 @@ exports.getWargaById = async (req,res) => {
 
 exports.updateWargaById = async (req,res) => {
     const id = req.params.id;
-    const { name,nik, alamat, nohp, status } = req.body;
+    const { name,nik, alamat, nohp, status,domisili } = req.body;
     try{
-        const warga = await WargaModel.findByIdAndUpdate(id,{ name,nik, alamat, nohp, status },{new: true}).populate('suratAcara');
+        const warga = await WargaModel.findByIdAndUpdate(id,{ name,nik, alamat, nohp, status,domisili },{new: true}).populate('suratAcara');
         if (!warga) {
             return res.status(404).send({
                 message: "warga not found with id " + id

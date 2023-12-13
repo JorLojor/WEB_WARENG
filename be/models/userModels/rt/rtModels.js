@@ -6,6 +6,8 @@ const rt = new moongose.Schema({
     alamat: { type:String, required: false, default: ''},
     nohp: { type:String, required: false, default: ''},
     status: { type:String, required: false, default: ''},
+    // domisili array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
+    domisili: [{ type: String, required: false, default: '' }],
     suratAcara: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
