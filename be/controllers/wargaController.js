@@ -1,6 +1,7 @@
 const db = require('../models/index');
 const WargaModel = db.warga;
 const suratAcaraModel = db.suratAcara;
+const RtModel = db.rt;
 
 exports.getAllWarga = async (req, res) => {
     try {
@@ -78,9 +79,9 @@ exports.getWargaById = async (req,res) => {
 
 exports.updateWargaById = async (req,res) => {
     const id = req.params.id;
-    const { name,nik, alamat, nohp, status,domisili } = req.body;
+    const updateData = req.body;
     try{
-        const warga = await WargaModel.findByIdAndUpdate(id,{ name,nik, alamat, nohp, status,domisili },{new: true}).populate('suratAcara');
+        const warga = await WargaModel.findByIdAndUpdate(id,updateData,{new: true}).populate('suratAcara');
         if (!warga) {
             return res.status(404).send({
                 message: "warga not found with id " + id
@@ -119,22 +120,6 @@ exports.deleteWargaById = async (req,res) => {
         });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -192,13 +177,36 @@ exports.pengajuanSuratAcara = async (req, res) => {
             });
         }
 
+        // mencari rt dengan domisili index ke 0 yang sama dengan user domisili index ke 0
+        const Rt = await RtModel.find({domisili: user.domisili[0]});
+        console.log('rt ketemu',Rt);
+        //
+
         const suratAcara = await suratAcaraModel.findById(suratAcaraId);
         if (!suratAcara) {
             return res.status(404).send({
                 message: "Surat Acara not found with id " + suratAcaraId
             });
         }
+        // mengecek apakah surat acara sudah diajukan
+        // if (suratAcara.statusAcara === 'pengajuan') {
+        //     return res.status(400).send({
+        //         message: "Surat Acara already pengajuan"
+        //     });
+        // }
 
+        //mengecek apakah surat acara sudah ada di dalam array suratAcaraPending
+        const checkSuratAcara = Rt[0].suratAcaraPending.find((suratAcaraPending) => suratAcaraPending.toString() === suratAcaraId);
+        if (checkSuratAcara) {
+            console.log(checkSuratAcara);
+            return res.status(400).send({
+                message: "Surat Acara already in pending"
+            });
+        }
+        //memasukan surat acara ke dalam araay yang berada rt.suratAcaraPending
+        Rt[0].suratAcaraPending.push(suratAcara._id);
+        await Rt[0].save();
+        console.log('rt berubah',Rt);
         if (suratAcara.wargaId.toString() !== userId) {
             return res.status(403).send({
                 message: "Forbidden. Surat Acara does not belong to the specified user."
