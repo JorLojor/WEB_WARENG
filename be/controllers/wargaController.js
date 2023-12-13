@@ -165,6 +165,13 @@ exports.CreateSuratAcara = async (req,res) => {
     }
 };
 
+
+
+
+
+
+
+
 exports.pengajuanSuratAcara = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -227,6 +234,13 @@ exports.pengajuanSuratAcara = async (req, res) => {
         });
     }
 };
+
+
+
+
+
+
+
 
 exports.deleteSuratAcaraById = async (req,res) =>{
     const UserId = req.params.userId;
