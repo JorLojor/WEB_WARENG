@@ -122,33 +122,59 @@ exports.deleteRt = async (req, res) => {
 
 
 exports.persetujuanSuratAcara = async (req, res) => {
-    const idSurat = req.params.id;
-    const idRt = req.params.id;
+    const idSurat = req.params.suratAcaraId; // Ubah dari req.params.id menjadi req.params.suratAcaraId
+    const idRt = req.params.rtId; // Ubah dari req.params.id menjadi req.params.rtId
     const statusPersetujuan = req.body.statusPersetujuan;
 
-    try{
+    try {
         const PakRt = await RtModel.findById(idRt);
-        if(!PakRt){
+        if (!PakRt) {
+            console.error("RT not found with id", idRt);
             return res.status(404).send({
-                message: "rt not found with id " + id
+                message: "RT not found with id " + idRt
             });
         }
 
         const suratAcara = await SuratAcaraModel.findById(idSurat);
-        if(!suratAcara){
+        if (!suratAcara) {
+            console.error("Surat Acara not found with id", idSurat);
             return res.status(404).send({
-                message: "suratAcara not found with id " + id
+                message: "Surat Acara not found with id " + idSurat
             });
         }
 
-        if(suratAcara.statusPersetujuan === 'belum ada persetujuan'){
-            
+        if (suratAcara.statusPersetujuan === 'belum ada persetujuan') {
+            suratAcara.rtId = idRt;
+
+            if (statusPersetujuan === true) {
+                suratAcara.statusPersetujuan = 'disetujui rt';
+                PakRt.suratAcaraApproved.push(suratAcara._id);
+            } else if (statusPersetujuan === false) {
+                suratAcara.statusPersetujuan = 'ditolak rt';
+                PakRt.suratAcaraRejected.push(suratAcara._id);
+            }
+
+            await suratAcara.save(); // Simpan perubahan surat acara ke dalam database
+            await PakRt.save(); // Simpan perubahan RT ke dalam database
+            console.log("Surat Acara successfully updated with RT approval status.");
+            res.status(200).send({
+                message: "Surat Acara successfully updated with RT approval status."
+            });
+        } else {
+            console.error("Surat Acara has already been approved or rejected.");
+            res.status(400).send({
+                message: "Surat Acara has already been approved or rejected."
+            });
         }
 
-    }catch(error){
-
+    } catch (error) {
+        console.error("Error in persetujuanSuratAcara:", error);
+        res.status(500).send({
+            message: error.message || "Some error occurred while updating surat acara."
+        });
     }
 };
+
 
 
 

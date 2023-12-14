@@ -34,14 +34,15 @@ exports.getAllWarga = async (req, res) => {
 };
 
 exports.postWarga = async (req,res) => {
-    const { name,nik, alamat, nohp, status } = req.body;
+    const { name,nik, alamat, nohp, status,domisili } = req.body;
     try{
         const warga = await WargaModel.create({
             name,
             nik,
             alamat,
             nohp,
-            status
+            status,
+            domisili
         });
 
         res.status(200).send({
@@ -102,7 +103,7 @@ exports.updateWargaById = async (req,res) => {
 exports.deleteWargaById = async (req,res) => {
     const id = req.params.id;
     try{
-        const warga = await WargaModel.findByIdAndRemove(id);
+        const warga = await WargaModel.findByIdAndDelete(id);
         if (!warga) {
             return res.status(404).send({
                 message: "warga not found with id " + id
@@ -185,9 +186,13 @@ exports.pengajuanSuratAcara = async (req, res) => {
         }
 
         // mencari rt dengan domisili index ke 0 yang sama dengan user domisili index ke 0
-        const Rt = await RtModel.find({domisili: user.domisili[0]});
-        console.log('rt ketemu',Rt);
-        //
+        const Rt = await RtModel.find({ domisili: user.domisili[0] });
+        if (!Rt || Rt.length === 0) {
+            return res.status(404).send({
+                message: "RT not found with domisili rt " + user.domisili[0]
+            });
+        }
+
 
         const suratAcara = await suratAcaraModel.findById(suratAcaraId);
         if (!suratAcara) {
@@ -196,18 +201,20 @@ exports.pengajuanSuratAcara = async (req, res) => {
             });
         }
 
-        //mengecek apakah surat acara sudah ada di dalam array suratAcaraPending
+        // mengecek apakah surat acara sudah ada di dalam array suratAcaraPending
         const checkSuratAcara = Rt[0].suratAcaraPending.find((suratAcaraPending) => suratAcaraPending.toString() === suratAcaraId);
         if (checkSuratAcara) {
-            console.log(checkSuratAcara);
             return res.status(400).send({
-                message: "Surat Acara already in pending"
+                message: "Surat Acara already in pending",
+                data: checkSuratAcara
             });
         }
-        //memasukan surat acara ke dalam araay yang berada rt.suratAcaraPending
+
+        // memasukan surat acara ke dalam array yang berada di Rt.suratAcaraPending
         Rt[0].suratAcaraPending.push(suratAcara._id);
         await Rt[0].save();
-        console.log('rt berubah',Rt);
+        console.log('RT updated:', Rt);
+
         if (suratAcara.wargaId.toString() !== userId) {
             return res.status(403).send({
                 message: "Forbidden. Surat Acara does not belong to the specified user."
@@ -223,11 +230,13 @@ exports.pengajuanSuratAcara = async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Error:', error);
         res.status(500).send({
             message: error.message || "Some error occurred while creating Surat Acara."
         });
     }
 };
+
 
 
 
@@ -277,14 +286,3 @@ exports.deleteSuratAcaraById = async (req,res) =>{
 
 module.exports = exports;
 
-
-
-
-// do while
-
-// let i = 0;
-
-// do {
-//     console.log(i);
-//     i++;
-// } while (i < 5);
