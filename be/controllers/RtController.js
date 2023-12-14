@@ -1,5 +1,6 @@
 const db = require('../models/index');
 const RtModel = db.rt;
+const SuratAcaraModel = db.suratAcara;
 
 
 exports.getAllRt = async (req, res) => {
@@ -117,6 +118,37 @@ exports.deleteRt = async (req, res) => {
         });
     }
 }
+
+
+
+exports.persetujuanSuratAcara = async (req, res) => {
+    const idSurat = req.params.id;
+    const idRt = req.params.id;
+    const statusPersetujuan = req.body.statusPersetujuan;
+
+    try{
+        const PakRt = await RtModel.findById(idRt);
+        if(!PakRt){
+            return res.status(404).send({
+                message: "rt not found with id " + id
+            });
+        }
+
+        const suratAcara = await SuratAcaraModel.findById(idSurat);
+        if(!suratAcara){
+            return res.status(404).send({
+                message: "suratAcara not found with id " + id
+            });
+        }
+
+        if(suratAcara.statusPersetujuan === 'belum ada persetujuan'){
+            
+        }
+
+    }catch(error){
+
+    }
+};
 
 
 

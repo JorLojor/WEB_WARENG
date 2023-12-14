@@ -195,12 +195,6 @@ exports.pengajuanSuratAcara = async (req, res) => {
                 message: "Surat Acara not found with id " + suratAcaraId
             });
         }
-        // mengecek apakah surat acara sudah diajukan
-        // if (suratAcara.statusAcara === 'pengajuan') {
-        //     return res.status(400).send({
-        //         message: "Surat Acara already pengajuan"
-        //     });
-        // }
 
         //mengecek apakah surat acara sudah ada di dalam array suratAcaraPending
         const checkSuratAcara = Rt[0].suratAcaraPending.find((suratAcaraPending) => suratAcaraPending.toString() === suratAcaraId);

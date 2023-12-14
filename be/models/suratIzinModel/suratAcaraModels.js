@@ -7,7 +7,7 @@ const suratAcara = new mongoose.Schema({
     tanggalMulai: { type: Date, required: true },
     tanggalSelesai: { type: Date, required: true },
     tempatAcara: { type: String, required: true },
-    statusPersetujuan: { type: String, required: false, default: 'belum ada persetujuan' },
+    statusPersetujuan: { type: String, required: false, default: 'belum ada persetujuan' }, //
     wargaId: { type: mongoose.Schema.Types.ObjectId, ref: 'warga', required: true },
 },{timestamps: true});
 
