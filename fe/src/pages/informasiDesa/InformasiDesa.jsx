@@ -11,7 +11,7 @@ const InformasiDesa = () => {
         <>
         <div className="informasidesa bg-primary">
             ini informasi desa
-                <Navbar />
+                <Navbar page='informasiDesa' />
                 <Footer />
         </div>
                

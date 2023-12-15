@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import react from "react";
 import logo from "../../assets/LogoInsideWarengFooter.png";
-// import instagram from "../../assets/LogoIconInstagramFooter.png";
-// import google from "../../assets/LogoIconGoogleFooter.png";
-// import facebook from "../../assets/LogoIconFacebookFooter.png";
+import instagram from "../../assets/LogoIconInstagramFooter.png";
+import google from "../../assets/LogoIconGoogleFooter.png";
+import facebook from "../../assets/LogoIconFacebookFooter.png";
 import "./Footer.css";
 
 const Footer = () => {
