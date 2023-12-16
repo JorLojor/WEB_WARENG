@@ -6,9 +6,11 @@ const warga = require('./userModels/warga/wargaModels');
 const suratAcara = require('./suratIzinModel/suratAcaraModels');
 const layanan = require('./userModels/konter/layananKonterModel');
 const rt = require('./userModels/rt/rtModels')
+const rw = require('./userModels/rw/rwModels')
 
 //db object
 const db = {
+    rw,
     rt,
     warga,
     konter,

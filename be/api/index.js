@@ -15,6 +15,9 @@ Router.use('/warga', wargaApi);
 const RtApi = require('./userApi/RtApi');
 Router.use('/rt', RtApi);
 
+const RwApi = require('./userApi/RwApi');
+Router.use('/rw', RwApi);
+
 module.exports = Router;
 
 

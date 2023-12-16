@@ -15,3 +15,4 @@ const rw = new moongose.Schema({
 },{timestamps: true});
 
 module.exports = moongose.model('rw', rw);
+
