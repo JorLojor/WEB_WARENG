@@ -45,11 +45,12 @@ exports.getRwById = async (req,res)=>{
 }
 
 exports.postRw = async (req,res)=>{
-    const { name,nik, alamat, nohp, status,domisili } = req.body;
+    const { name,nik,password, alamat, nohp, status,domisili } = req.body;
     try{
         const rw = await RwModel.create({
             name,
             nik,
+            password,
             alamat,
             nohp,
             status,

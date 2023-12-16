@@ -3,6 +3,7 @@ const moongose = require('mongoose');
 const rw = new moongose.Schema({
     name: { type: String, required: true },
     nik: { type:Number, required: false, default: '', unique: true},
+    password: { type:String, required: true, default: ''},
     alamat: { type:String, required: false, default: ''},
     nohp: { type:String, required: false, default: ''},
     status: { type:String, required: false, default: ''},
@@ -15,4 +16,3 @@ const rw = new moongose.Schema({
 },{timestamps: true});
 
 module.exports = moongose.model('rw', rw);
-

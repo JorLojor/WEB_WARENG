@@ -34,11 +34,12 @@ exports.getAllWarga = async (req, res) => {
 };
 
 exports.postWarga = async (req,res) => {
-    const { name,nik, alamat, nohp, status,domisili } = req.body;
+    const { name,nik,password, alamat, nohp, status,domisili } = req.body;
     try{
         const warga = await WargaModel.create({
             name,
             nik,
+            password,
             alamat,
             nohp,
             status,

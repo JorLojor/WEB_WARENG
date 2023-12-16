@@ -33,11 +33,12 @@ exports.getRtById = async (req, res) => {
 
 exports.createRt = async (req, res) => {
     try{
-        const {name, nik, alamat, nohp, status} = req.body;
+        const {name, nik,password, alamat, nohp, status} = req.body;
 
         const newRt = await RtModel.create({
             name,
             nik,
+            password,
             alamat,
             nohp,
             status

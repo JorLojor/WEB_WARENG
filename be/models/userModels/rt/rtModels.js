@@ -3,6 +3,7 @@ const moongose = require('mongoose');
 const rt = new moongose.Schema({
     name: { type: String, required: true },
     nik: { type:Number, required: false, default: '', unique: true},
+    password: { type:String, required: true, default: ''},
     alamat: { type:String, required: false, default: ''},
     nohp: { type:String, required: false, default: ''},
     status: { type:String, required: false, default: ''},
