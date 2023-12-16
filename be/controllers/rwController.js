@@ -151,7 +151,7 @@ exports.persetujuanSurat = async (req,res)=>{
                 message: "Surat not found with id " + idSurat
             });
         }
-
+        
         if(surat.statusPersetujuan === "belum ada persetujuan" || surat.statusPersetujuan === "ditolak rt"){
             return res.status(404).send({
                 message: "belum ada persetujuan dari rt"
