@@ -21,4 +21,5 @@ module.exports = mongoose.model('suratAcara', suratAcara);
 // -pengajuan (rt),
 // -pengajuan (rw),
 // -pengajuan (konter),  
+// -pengajuan (perangkatDesa)
 // -pengajuan (kades)

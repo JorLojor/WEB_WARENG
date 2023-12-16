@@ -1,4 +1,4 @@
-const {getAllRw,getRwById,postRw,updateRwById,deleteRwById,postManyRw} = require("../../controllers/rwController");
+const {getAllRw,getRwById,postRw,updateRwById,deleteRwById,postManyRw,persetujuanSurat} = require("../../controllers/rwController");
 const express = require('express');
 const Router = express.Router();
 
@@ -8,6 +8,7 @@ Router.post('/post',postRw);
 Router.post('/post-many-rw',postManyRw);
 Router.put('/update/:id',updateRwById);
 Router.delete('/delete/:id',deleteRwById);
+Router.put('/persetujuan-surat-acara/:RwId/:SuratId',persetujuanSurat);
 
 
 
@@ -21,3 +22,4 @@ module.exports = Router;
 //post many rw : http://localhost:3555/api/v1/rw/post-many-rw
 //update rw : http://localhost:3555/api/v1/rw/update/:id
 //delete rw : http://localhost:3555/api/v1/rw/delete/:id
+//persetujuan rw : http://localhost:3555/api/v1/rw//persetujuan-surat-acara/:rwId/:suratAcaraId

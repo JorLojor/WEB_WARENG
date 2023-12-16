@@ -1,5 +1,6 @@
 const db = require('../models/index');
 const RtModel = db.rt;
+const RwModel = db.rw;
 const SuratAcaraModel = db.suratAcara;
 
 
@@ -166,13 +167,27 @@ exports.persetujuanSuratAcara = async (req, res) => {
             if (statusPersetujuan === true) {
                 suratAcara.statusPersetujuan = 'disetujui rt';
                 PakRt.suratAcaraApproved.push(suratAcara._id);
+                // mencari rw dengan domisili[1] sama dengan rt domisili[1]
+                const PakRw = await RwModel.findOne({ domisili: PakRt.domisili[1] });
+                console.log("PakRw", PakRw);
+                if (!PakRw || PakRw.length === 0) {
+                    console.error("RW not found with domisili rw", PakRt.domisili[1]);
+                    return res.status(404).send({
+                        message: "RW not found with domisili rw " + PakRt.domisili[1]
+                    });
+                }
+                suratAcara.statusAcara = 'pengajuan rw';
+                PakRw.suratAcaraPending.push(suratAcara._id);
+                await PakRw.save();
+                
             } else if (statusPersetujuan === false) {
                 suratAcara.statusPersetujuan = 'ditolak rt';
                 PakRt.suratAcaraRejected.push(suratAcara._id);
             }
-
+            
             await suratAcara.save(); // Simpan perubahan surat acara ke dalam database
             await PakRt.save(); // Simpan perubahan RT ke dalam database
+            
             console.log("Surat Acara successfully updated with RT approval status.");
             res.status(200).send({
                 message: "Surat Acara successfully updated with RT approval status."
