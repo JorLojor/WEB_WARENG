@@ -63,6 +63,22 @@ exports.createRt = async (req, res) => {
     }
 }
 
+exports.postManyRt = async (req, res) => {
+    try{
+        const { rts } = req.body;
+        const newRt = await RtModel.insertMany(rts);
+        res.status(200).send({
+            message: "Success create rt",
+            data: newRt
+        });
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while create rt.",
+            data: null
+        });
+    }
+}
+
 exports.updateRt = async (req, res) => {
     const updateData = req.body;
     const id = req.params.id;

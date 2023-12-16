@@ -56,6 +56,22 @@ exports.postWarga = async (req,res) => {
     }
 };
 
+exports.postManyWarga = async (req,res) => {
+    try{
+        const { wargas } = req.body;
+        const warga = await WargaModel.insertMany(wargas);
+        res.status(200).send({
+            message: "Success create warga",
+            data: warga
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating warga."
+        });
+    }
+}
+
 exports.getWargaById = async (req,res) => {
     const id = req.params.id;
     try{
@@ -285,4 +301,3 @@ exports.deleteSuratAcaraById = async (req,res) =>{
 
 
 module.exports = exports;
-

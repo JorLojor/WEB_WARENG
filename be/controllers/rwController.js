@@ -68,6 +68,22 @@ exports.postRw = async (req,res)=>{
     }
 };
 
+exports.postManyRw = async (req,res)=>{
+    try{
+        const { rws } = req.body;
+        const rw = await RwModel.insertMany(rws);
+        res.status(200).send({
+            message: "Success create rw",
+            data: rw
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating rw."
+        });
+    }
+}
+
 exports.updateRwById = async (req,res)=>{
     const id = req.params.id;
     const updateData = req.body;
