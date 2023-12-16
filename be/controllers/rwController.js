@@ -113,6 +113,124 @@ exports.deleteRwById = async (req,res)=>{
     }
 }
 
+exports.persetujuanSurat = async (req,res)=>{
+    const idSurat = req.params.SuratId;
+    const idRw = req.params.RwId;
+    const ReqStatusPersetujuan = req.body.statusPersetujuan; 
+    try{
+        // cari pak rw dengan id rw
+        const PakRw = await RwModel.findById(idRw);
+        if (!PakRw) {
+            console.log("rw not found with id " + idRw);
+            return res.status(404).send({
+                message: "rw not found with id " + idRw
+            });
+        }
+        // cari surat dengan id surat
+        const surat = await SuratAcaraModel.findById(idSurat);
+        if (!surat) {
+            console.log("Surat not found with id " + idSurat);
+            return res.status(404).send({
+                message: "Surat not found with id " + idSurat
+            });
+        }
+
+        if(surat.statusPersetujuan === "belum ada persetujuan" || surat.statusPersetujuan === "ditolak rt"){
+            return res.status(404).send({
+                message: "belum ada persetujuan dari rt"
+            });
+        }else if (surat.statusPersetujuan === "disetujui rt" && surat.statusAcara === "pengajuan rw"){
+            if (ReqStatusPersetujuan === true) {
+                surat.statusPersetujuan = "disetujui rw";
+                surat.statusAcara = "pengajuan konter";
+                surat.rwId = idRw;
+                await surat.save();
+                res.status(200).send({
+                    message: "Success update persetujuan surat",
+                    info: "surat sudah disetujui rw dan sudah di ajukan ke konter",
+                    data: surat
+                });
+            }else{
+                surat.statusPersetujuan = "ditolak rw";
+                await surat.save();
+                res.status(200).send({
+                    message: "Success update persetujuan surat",
+                    info: "surat sudah ditolak rw",
+                    data: surat
+                });
+            }
+            
+        }
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while update persetujuan surat."
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

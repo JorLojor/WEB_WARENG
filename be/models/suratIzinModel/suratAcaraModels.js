@@ -14,3 +14,11 @@ const suratAcara = new mongoose.Schema({
 },{timestamps: true});
 
 module.exports = mongoose.model('suratAcara', suratAcara);
+
+
+//note :
+// statusAcara default = belum pengajuan (warga)
+// -pengajuan (rt),
+// -pengajuan (rw),
+// -pengajuan (konter),  
+// -pengajuan (kades)
