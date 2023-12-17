@@ -1,14 +1,13 @@
 const db = require('../models/index');
-const layananKonterModel = require('../models/userModels/konter/layananKonterModel');
-const KonterModel = db.konter;
-const LayananModel = db.layanan;
+const perangkatDesa = db.perangkatDesa;
 const SuratAcaraModel = db.suratAcara;
+const WargaModel = db.warga;
 
-exports.getAllKonter = async (req, res) => {
+exports.getAllPerangkatDesa = async (req, res) => {
     const page = parseInt(req.query.page);
     const limitt = parseInt(req.query.limit);
     try{
-        const konter = await KonterModel.find()
+        const konter = await perangkatDesa.find()
         .populate('layanan')
         .limit(limitt)
         .skip((page-1)*limitt);
@@ -28,10 +27,10 @@ exports.getAllKonter = async (req, res) => {
     }
 
 };
-exports.postKonter = async (req,res) => {
+exports.postPerangkatDesa = async (req,res) => {
     const { name, description, tags } = req.body;
     try{
-        const konter = await KonterModel.create({
+        const konter = await perangkatDesa.create({
             name,
             description,
             tags
@@ -48,10 +47,10 @@ exports.postKonter = async (req,res) => {
     }
 };
 
-exports.getKonterById = async (req,res) => {
+exports.getPerangkatDesaById = async (req,res) => {
     const id = req.params.id;
     try{
-        const konter = await KonterModel.findById(id);
+        const konter = await perangkatDesa.findById(id);
         if (!konter) {
             return res.status(404).send({
                 message: "konter not found with id " + id
@@ -69,11 +68,11 @@ exports.getKonterById = async (req,res) => {
     }
 };
 
-exports.updateKonterById = async (req, res) => {
+exports.updatePerangkatDesaById = async (req, res) => {
     const id = req.params.id;
     const { name, description, tags } = req.body;
     try {
-       const konter = await KonterModel.findByIdAndUpdate(
+       const konter = await perangkatDesa.findByIdAndUpdate(
           id,
           { name, description, tags },
           { new: true }
@@ -94,10 +93,10 @@ exports.updateKonterById = async (req, res) => {
        });
     }
  }; 
-exports.deleteKonterById = async (req,res) => {
+exports.deletePerangkatDesaById = async (req,res) => {
     const id = req.params.id;
     try{
-        const konter = await KonterModel.findByIdAndRemove(id);
+        const konter = await perangkatDesa.findByIdAndRemove(id);
         if (!konter) {
             return res.status(404).send({
                 message: "konter not found with id " + id
@@ -115,31 +114,23 @@ exports.deleteKonterById = async (req,res) => {
     }
 }
 
-
 //merubah statusPersetujuan pada suratAcara menjadi disetujuiKonter
 exports.SubmitSuratAcara = async (req,res) => {
     const id = req.params.id;
     const { suratAcaraId, wargaId } = req.body;
     try{
-        const konter = await KonterModel.findById(id);
-        if (!konter) {
+        const perangkatDesa = await perangkatDesa.findById(id);
+        if (!perangkatDesa) {
             return res.status(404).send({
                 message: "konter not found with id " + id
             });
         }
-        const ChangePersetujuan = await SuratAcaraModel.findByIdAndUpdate(suratAcaraId,{ statusPersetujuan: 'disetujuiKonter' },{new: true});
+        const ChangePersetujuan = await SuratAcaraModel.findByIdAndUpdate(suratAcaraId,{ statusPersetujuan: 'disetujui perangkat desa' },{new: true});
         if (!ChangePersetujuan) {
             return res.status(404).send({
                 message: "ChangePersetujuan not found with id " + id
             });
         }
-        const layanan = await layananKonterModel.create({
-            suratAcaraId: ChangePersetujuan._id,
-            wargaId: wargaId,
-            konterId: id,
-            status: "disetujui Konter"
-        })
-        konter.layanan.push(layanan._id);
         await konter.save();
         res.status(200).send({
             message: "Success pelayanan konter by id",
