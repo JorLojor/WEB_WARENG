@@ -1,6 +1,7 @@
 const db = require("../models");
 const RwModel = db.rw;
 const SuratAcaraModel = db.suratAcara;
+const PerangkatDesaModel = db.PerangkatDesaModel;
 
 // get all rw pagination
 exports.getAllRw = async (req,res)=>{
@@ -130,67 +131,113 @@ exports.deleteRwById = async (req,res)=>{
     }
 }
 
-exports.persetujuanSurat = async (req,res)=>{
-    const idSurat = req.params.SuratId;
-    const idRw = req.params.RwId;
-    const ReqStatusPersetujuan = req.body.statusPersetujuan; 
-    try{
-        // cari pak rw dengan id rw
-        const PakRw = await RwModel.findById(idRw);
-        if (!PakRw) {
-            console.log("rw not found with id " + idRw);
+const getRolePd = (jenisSurat) => {
+    const pd1 = [
+        "surat keterangan domisili",
+        "surat keterangan usaha",
+        "surat kenal lahir",
+        "surat pindah",
+        "surat pengantar skck",
+        "surat izin keramaian",
+        "surat izin pepergian",
+    ];
+
+    const pd2 = [
+        "pembuatan kk baru",
+        "pembuatan ktp baru",
+        "pembuatan ktp lama",
+        "pemecahan kk lama",
+        "pbb-p2",
+        "mutasi pbb",
+        "pencatatan kependudukan",
+    ];
+
+    const pd3 = [
+        "surat kematian",
+        "surat kelahiran",
+        "santunan kematian",
+        "pengajuan jkn-kis",
+        "koordinator rtlh",
+        "pendataan masalah sosial",
+        "bantuan sosial",
+    ];
+    if (pd1.includes(jenisSurat)) return 1;
+    if (pd2.includes(jenisSurat)) return 2;
+    if (pd3.includes(jenisSurat)) return 3;
+
+}
+
+const getKasiType = (rolePd) => {
+    const kasiTypes = ["pelayanan", "pemerintahan", "kersa"];
+    return kasiTypes[rolePd - 1] || "";
+};
+
+exports.persetujuanSurat = async (req, res) => {
+    const { SuratId, RwId } = req.params;
+    const { statusPersetujuan } = req.body;
+
+    try {
+        const PakRw = await RwModel.findById(RwId);
+        const surat = await SuratAcaraModel.findById(SuratId);
+
+        if (!PakRw || !surat) {
             return res.status(404).send({
-                message: "rw not found with id " + idRw
+                message: "RW or Surat not found."
             });
         }
-        // cari surat dengan id surat
-        const surat = await SuratAcaraModel.findById(idSurat);
-        if (!surat) {
-            console.log("Surat not found with id " + idSurat);
+
+        if (surat.statusPersetujuan === "belum ada persetujuan" || surat.statusPersetujuan === "ditolak rt") {
             return res.status(404).send({
-                message: "Surat not found with id " + idSurat
+                message: "Belum ada persetujuan dari RT."
             });
         }
-        // cek apakah surat sudah di setujui rt
-        if(surat.statusPersetujuan === "belum ada persetujuan" || surat.statusPersetujuan === "ditolak rt"){
-            return res.status(404).send({
-                message: "belum ada persetujuan dari rt"
-            });
-        }else if (surat.statusPersetujuan === "disetujui rt" && surat.statusAcara === "pengajuan rw"){
-            // cek apakah surat sudah di setujui rw
-            if (ReqStatusPersetujuan === true) {
+
+        if (surat.statusPersetujuan === "disetujui rt" && surat.statusAcara === "pengajuan rw") {
+            if (statusPersetujuan === true) {
                 surat.statusPersetujuan = "disetujui rw";
-                // cari perangkat desa dengan role = 
+                const rolePd = getRolePd(surat.jenisSurat);
 
+                if (rolePd) {
+                    surat.statusAcara = `pengajuan perangkat desa kasi ${getKasiType(rolePd)}`;
+                    const Kasi = await PerangkatDesaModel.findOne({ role: rolePd });
 
+                    if (Kasi) {
+                        surat.perangkatDesaId = Kasi._id;
+                        surat.rwId = RwId;
+                        await surat.save();
+                    } else {
+                        return res.status(404).send({
+                            message: "Perangkat Desa not found."
+                        });
+                    }
+                }
 
+                PakRw.suratAcaraApproved.push(surat._id);
+                const indexData = PakRw.suratAcaraPending.indexOf(surat._id);
+                PakRw.suratAcaraPending.splice(indexData, 1);
+                await PakRw.save();
 
-
-                surat.statusAcara = "pengajuan konter";
-                surat.rwId = idRw;
-                await surat.save();
-                res.status(200).send({
+                return res.status(200).send({
                     message: "Success update persetujuan surat",
-                    info: "surat sudah disetujui rw dan sudah di ajukan ke konter",
+                    info: "Surat sudah disetujui RW dan sudah diajukan ke Perangkat Desa",
                     data: surat
                 });
-            }else{
+            } else {
                 surat.statusPersetujuan = "ditolak rw";
                 await surat.save();
-                res.status(200).send({
+                return res.status(200).send({
                     message: "Success update persetujuan surat",
-                    info: "surat sudah ditolak rw",
+                    info: "Surat sudah ditolak RW",
                     data: surat
                 });
             }
-            
         }
-    }catch(error){
-        res.status(500).send({
-            message: error.message || "Some error occurred while update persetujuan surat."
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message || "Some error occurred while updating persetujuan surat."
         });
     }
-}
+};
 
 
 

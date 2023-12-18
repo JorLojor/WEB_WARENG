@@ -167,7 +167,8 @@ exports.persetujuanSuratAcara = async (req, res) => {
             if (statusPersetujuan === true) {
                 suratAcara.statusPersetujuan = 'disetujui rt';
                 PakRt.suratAcaraApproved.push(suratAcara._id);
-                // mencari rw dengan domisili[1] sama dengan rt domisili[1]
+                const dataIndex = PakRt.suratAcaraPending.indexOf(suratAcara._id);
+                PakRt.suratAcaraPending.splice(dataIndex, 1);
                 const PakRw = await RwModel.findOne({ domisili: PakRt.domisili[1] });
                 console.log("PakRw", PakRw);
                 if (!PakRw || PakRw.length === 0) {

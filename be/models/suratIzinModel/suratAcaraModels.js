@@ -11,7 +11,8 @@ const suratAcara = new mongoose.Schema({
     statusPersetujuan: { type: String, required: false, default: 'belum ada persetujuan' },
     rtId: { type: mongoose.Schema.Types.ObjectId, ref: 'rt', required: false },
     rwId: { type: mongoose.Schema.Types.ObjectId, ref: 'rw', required: false },
-    wargaId: { type: mongoose.Schema.Types.ObjectId, ref: 'warga', required: true },
+    perangkatDesaId: { type: mongoose.Schema.Types.ObjectId, ref: 'perangkatDesa', required: false },
+    wargaId: { type: mongoose.Schema.Types.ObjectId, ref: 'warga', required: false },
 },{timestamps: true});
 
 module.exports = mongoose.model('suratAcara', suratAcara);
@@ -22,7 +23,7 @@ module.exports = mongoose.model('suratAcara', suratAcara);
 // -pengajuan (rt),
 // -pengajuan (rw),
 // -pengajuan (konter),  
-// -pengajuan (perangkatDesa)
+// -pengajuan (perangkat desa kasi pelayanan),(perangkat desa kasi pemerintahan),(perangkat desa kasi kersa )
 // -pengajuan (kades)
 
 

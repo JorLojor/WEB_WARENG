@@ -150,7 +150,7 @@ exports.CreateSuratAcara = async (req,res) => {
                 message: "warga not found with id " + id
             });
         }
-        const { nameAcara, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
+        const { nameAcara,jenisSurat, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
         //menegecek apakah warga sudah memiliki surat acara dengan nama acara yang sama
         const checkSuratAcara = warga.suratAcara.find((suratAcara) => suratAcara.nameAcara === nameAcara);
         if (checkSuratAcara) {
@@ -161,11 +161,12 @@ exports.CreateSuratAcara = async (req,res) => {
         }
         const suratAcara = await suratAcaraModel.create({
             nameAcara,
+            jenisSurat : jenisSurat.toLowerCase(),
             isiAcara,
             tanggalMulai,
             tanggalSelesai,
             tempatAcara,
-            wargaId
+            wargaId : warga._id
         });
         warga.suratAcara.push(suratAcara._id);
         await warga.save();
