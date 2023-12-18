@@ -76,7 +76,7 @@ exports.postManyWarga = async (req,res) => {
 exports.getWargaById = async (req,res) => {
     const id = req.params.id;
     try{
-        const warga = await WargaModel.findById(id);
+        const warga = await WargaModel.findById(id).populate('suratAcara');
         if (!warga) {
             return res.status(404).send({
                 message: "warga not found with id " + id

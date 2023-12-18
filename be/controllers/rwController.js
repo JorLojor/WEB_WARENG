@@ -151,12 +151,13 @@ exports.persetujuanSurat = async (req,res)=>{
                 message: "Surat not found with id " + idSurat
             });
         }
-        
+        // cek apakah surat sudah di setujui rt
         if(surat.statusPersetujuan === "belum ada persetujuan" || surat.statusPersetujuan === "ditolak rt"){
             return res.status(404).send({
                 message: "belum ada persetujuan dari rt"
             });
         }else if (surat.statusPersetujuan === "disetujui rt" && surat.statusAcara === "pengajuan rw"){
+            // cek apakah surat sudah di setujui rw
             if (ReqStatusPersetujuan === true) {
                 surat.statusPersetujuan = "disetujui rw";
                 surat.statusAcara = "pengajuan konter";

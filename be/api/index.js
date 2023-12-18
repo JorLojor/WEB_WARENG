@@ -18,6 +18,9 @@ Router.use('/rt', RtApi);
 const RwApi = require('./userApi/RwApi');
 Router.use('/rw', RwApi);
 
+const perangkatDesaApi = require('./userApi/perangkatDesaApi');
+Router.use('/perangkatDesa', perangkatDesaApi);
+
 module.exports = Router;
 
 

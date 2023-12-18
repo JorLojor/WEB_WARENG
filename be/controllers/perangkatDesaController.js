@@ -1,32 +1,33 @@
 const db = require('../models/index');
-const perangkatDesa = db.perangkatDesa;
+const perangkatDesa = db.PerangkatDesaModel;
 const SuratAcaraModel = db.suratAcara;
 const WargaModel = db.warga;
 
 exports.getAllPerangkatDesa = async (req, res) => {
-    const page = parseInt(req.query.page);
-    const limitt = parseInt(req.query.limit);
-    try{
-        const konter = await perangkatDesa.find()
-        .populate('layanan')
-        .limit(limitt)
-        .skip((page-1)*limitt);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    try {
+        const perangkatDesaList = await perangkatDesa.find()
+            .limit(limit)
+            .skip((page - 1) * limit);
+        const total = await perangkatDesa.countDocuments();
 
         res.status(200).send({
             message: "Success get all konter",
-            data: konter,
+            data: perangkatDesaList,
             page: page,
-            limit: limitt,
-            total: konter.length
+            limit: limit,
+            totalDocument: total
         });
 
-    }catch(err){
+    } catch (err) {
         res.status(500).send({
             message: err.message || "Some error occurred while retrieving konter."
         });
     }
-
 };
+
 exports.postPerangkatDesa = async (req,res) => {
     const { name, description, tags } = req.body;
     try{

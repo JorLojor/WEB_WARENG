@@ -8,7 +8,7 @@ const Router = express.Router();
 Router.get('/get',wargaController.getAllWarga);
 Router.post('/post-warga',wargaController.postWarga); 
 Router.post('/post-many-warga',wargaController.postManyWarga);
-Router.get('/get/:id',wargaController.getWargaById); 
+Router.get('/get/:id',wargaController.getWargaById);
 Router.put('/update/:id',wargaController.updateWargaById);
 Router.delete('/delete/:id',wargaController.deleteWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
@@ -19,6 +19,7 @@ module.exports = Router;
 
 // note :
 // get all warga : http://localhost:3555/api/v1/warga/get
+// get warga by id : http://localhost:3555/api/v1/warga/get/:id
 // post warga : http://localhost:3555/api/v1/warga/post-warga
 // post many warga : http://localhost:3555/api/v1/warga/post-many-warga
 // get warga by id : http://localhost:3555/api/v1/warga/get/:id
