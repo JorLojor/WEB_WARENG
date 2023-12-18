@@ -15,12 +15,12 @@ Router.delete('/delete/:id', deletePerangkatDesaById);
 Router.put('/submit/:id', SubmitSuratAcara);
 
 //note 
-// get all : http://localhost:3555/api/perangkatDesa/get
-// get by id : http://localhost:3555/api/perangkatDesa/get/:id
-// create : http://localhost:3555/api/perangkatDesa/create
-// update : http://localhost:3555/api/perangkatDesa/update/:id
-// delete : http://localhost:3555/api/perangkatDesa/delete/:id
-// submit : http://localhost:3555/api/perangkatDesa/submit/:id
+// get all : http://localhost:3555/api/v1/perangkatDesa/get
+// get by id : http://localhost:3555/api/v1/perangkatDesa/get/:id
+// create : http://localhost:3555/api/v1/perangkatDesa/create
+// update : http://localhost:3555/api/v1/perangkatDesa/update/:id
+// delete : http://localhost:3555/api/v1/perangkatDesa/delete/:id
+// submit : http://localhost:3555/api/v1/perangkatDesa/submit/:id
 
 
 

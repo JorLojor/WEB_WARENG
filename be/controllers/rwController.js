@@ -160,6 +160,12 @@ exports.persetujuanSurat = async (req,res)=>{
             // cek apakah surat sudah di setujui rw
             if (ReqStatusPersetujuan === true) {
                 surat.statusPersetujuan = "disetujui rw";
+                // cari perangkat desa dengan role = 
+
+
+
+
+
                 surat.statusAcara = "pengajuan konter";
                 surat.rwId = idRw;
                 await surat.save();

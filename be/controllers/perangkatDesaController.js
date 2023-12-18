@@ -29,21 +29,26 @@ exports.getAllPerangkatDesa = async (req, res) => {
 };
 
 exports.postPerangkatDesa = async (req,res) => {
-    const { name, description, tags } = req.body;
+    const { name, nik,password, alamat, nohp, status,role } = req.body;
     try{
-        const konter = await perangkatDesa.create({
+        const newPerangkatDesa = await perangkatDesa.create({
             name,
-            description,
-            tags
+            nik,
+            password,
+            alamat,
+            nohp,
+            status,
+            role
         });
 
         res.status(200).send({
             message: "Success create konter",
-            data: konter
+            data: newPerangkatDesa
         });
+
     }catch(error){
         res.status(500).send({
-            message: error.message || "Some error occurred while creating konter."
+            message: error.message || "Some error occurred while post konter."
         });
     }
 };
@@ -51,16 +56,16 @@ exports.postPerangkatDesa = async (req,res) => {
 exports.getPerangkatDesaById = async (req,res) => {
     const id = req.params.id;
     try{
-        const konter = await perangkatDesa.findById(id);
-        if (!konter) {
+        const Datakonter = await perangkatDesa.findById(id);
+        if (!Datakonter) {
             return res.status(404).send({
-                message: "konter not found with id " + id
+                message: "perangkat desa not found with id " + id
             });
         }
 
         res.status(200).send({
-            message: "Success get konter by id",
-            data: konter
+            message: "Success get perangkat desa by id",
+            data: Datakonter
         });
     }catch(error){
         res.status(500).send({
@@ -115,7 +120,7 @@ exports.deletePerangkatDesaById = async (req,res) => {
     }
 }
 
-//merubah statusPersetujuan pada suratAcara menjadi disetujuiKonter
+//merubah statusPersetujuan pada suratAcara menjadi disetujui perangkat desa
 exports.SubmitSuratAcara = async (req,res) => {
     const id = req.params.id;
     const { suratAcaraId, wargaId } = req.body;
