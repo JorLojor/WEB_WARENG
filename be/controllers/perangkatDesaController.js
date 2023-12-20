@@ -122,26 +122,31 @@ exports.deletePerangkatDesaById = async (req,res) => {
 
 //merubah statusPersetujuan pada suratAcara menjadi disetujui perangkat desa
 exports.SubmitSuratAcara = async (req,res) => {
-    const id = req.params.id;
-    const { suratAcaraId, wargaId } = req.body;
+    const { suratAcaraId, perangkatDesaId } = req.params;
+    const { statusPersetujuan } = req.body;
     try{
-        const perangkatDesa = await perangkatDesa.findById(id);
-        if (!perangkatDesa) {
+        const perangkatDesa = await perangkatDesa.findById(perangkatDesaId);
+        const surat = await SuratAcaraModel.findById(suratAcaraId);
+
+        if (!perangkatDesa || !surat) {
             return res.status(404).send({
-                message: "konter not found with id " + id
+                message: "perangkat desa or surat acara not found with id " + id
             });
         }
-        const ChangePersetujuan = await SuratAcaraModel.findByIdAndUpdate(suratAcaraId,{ statusPersetujuan: 'disetujui perangkat desa' },{new: true});
-        if (!ChangePersetujuan) {
+
+        if (surat.statusPersetujuan === 'belum ada persetujuan' || surat.statusPersetujuan === 'ditolak rw') {
             return res.status(404).send({
-                message: "ChangePersetujuan not found with id " + id
+                message: "belum ada persetujuan dari rw " + id
             });
+           
         }
-        await konter.save();
-        res.status(200).send({
-            message: "Success pelayanan konter by id",
-            data: konter
-        });       
+
+        if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
+            
+        }
+
+
+           
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while pelayanan konter by id."

@@ -203,8 +203,24 @@ exports.persetujuanSurat = async (req, res) => {
 
                     if (Kasi) {
                         surat.perangkatDesaId = Kasi._id;
+                        Kasi.suratAcaraPending.push(surat._id);
+                        await Kasi.save();
+
                         surat.rwId = RwId;
                         await surat.save();
+
+                        PakRw.suratAcaraApproved.push(surat._id);
+                        const indexData = PakRw.suratAcaraPending.indexOf(surat._id);
+                        PakRw.suratAcaraPending.splice(indexData, 1);
+                        await PakRw.save();
+
+                        return res.status(200).send({
+                            message: "Success update persetujuan surat",
+                            info: "Surat sudah disetujui RW dan sudah diajukan ke Perangkat Desa",
+                            data: surat
+                        });
+
+                        
                     } else {
                         return res.status(404).send({
                             message: "Perangkat Desa not found."
@@ -212,16 +228,6 @@ exports.persetujuanSurat = async (req, res) => {
                     }
                 }
 
-                PakRw.suratAcaraApproved.push(surat._id);
-                const indexData = PakRw.suratAcaraPending.indexOf(surat._id);
-                PakRw.suratAcaraPending.splice(indexData, 1);
-                await PakRw.save();
-
-                return res.status(200).send({
-                    message: "Success update persetujuan surat",
-                    info: "Surat sudah disetujui RW dan sudah diajukan ke Perangkat Desa",
-                    data: surat
-                });
             } else {
                 surat.statusPersetujuan = "ditolak rw";
                 await surat.save();
