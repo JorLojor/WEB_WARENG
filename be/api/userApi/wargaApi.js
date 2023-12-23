@@ -14,6 +14,7 @@ Router.delete('/delete/:id',wargaController.deleteWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
 Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
 Router.delete('/delete/suratAcara/:userId/:suratAcaraId',wargaController.deleteSuratAcaraById);
+Router.post('/create/surat/example',wargaController.createsuratPDF);
 
 module.exports = Router;
 
@@ -28,3 +29,4 @@ module.exports = Router;
 // create surat acara : http://localhost:3555/api/v1/warga/create/suratAcara/:id
 // pengajuan surat acara : http://localhost:3555/api/v1/warga/pengajuan/SuratAcara/:userId/:suratAcaraId
 // delete surat acara : http://localhost:3555/api/v1/warga/delete/suratAcara/:userId/:suratAcaraId
+// create surat example : http://localhost:3555/api/v1/warga/create/surat/example

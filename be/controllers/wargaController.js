@@ -3,6 +3,10 @@ const WargaModel = db.warga;
 const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
 
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+
+
 exports.getAllWarga = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1; // Menambahkan nilai default jika query parameter tidak ada
@@ -254,6 +258,104 @@ exports.pengajuanSuratAcara = async (req, res) => {
         });
     }
 };
+
+exports.createsuratPDF = async (req, res) => {
+    try{
+        const { nameAcara,jenisSurat, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
+
+        const pdfhtml = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Surat Acara</title>
+            <style>
+                .container {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .card {
+                    width: 100%;
+                    height: 100%;
+                    border: 1px solid black;
+                    padding: 20px;
+                }
+                .card-header {
+                    text-align: center;
+                }
+                .card-body {
+                    margin-top: 20px;
+                }
+                .card-body .row {
+                    margin-bottom: 10px;
+                }
+                .card-body .row .col-3 {
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Surat Acara</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">Nama Acara</div>
+                            <div class="col-9">: ${nameAcara}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Jenis Surat</div>
+                            <div class="col-9">: ${jenisSurat}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Isi Acara</div>
+                            <div class="col-9">: ${isiAcara}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Tanggal Mulai</div>
+                            <div class="col-9">: ${tanggalMulai}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Tanggal Selesai</div>
+                            <div class="col-9">: ${tanggalSelesai}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Tempat Acara</div>
+                            <div class="col-9">: ${tempatAcara}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+        `
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage(); 
+
+        await page.setContent(pdfhtml);
+        await page.emulateMediaType('screen'); // set media type sebagai screen agar background warna putih
+        const pdfBuffer = await page.pdf({ format: 'A4' }); // generate pdf dengan format A4
+        const pdfPath = `${__dirname}/../assets/document`; // folder tempat menyimpan file pdf
+        const pdfName = `Surat-${nameAcara}.pdf`; // nama file pdf yang akan disimpan
+        const pdfFullPath = `${pdfPath}/${pdfName}`;
+        fs.writeFileSync(pdfFullPath, pdfBuffer); // simpan file pdf ke dalam folder assets/document
+
+        await browser.close();
+
+        res.status(200).send({
+            message: "Success create surat acara",
+            data: pdfName
+        });
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while create surat acara."
+        });
+    }
+}
 
 
 
