@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // pages
 import LandingPage from './pages/landingPage/LandingPage';
 import InformasiDesa from './pages/informasiDesa/InformasiDesa';
+import LoginPage from './pages/loginPage/loginPage';
 
 const App = () => {
 
@@ -15,6 +16,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/informasi-desa" element={<InformasiDesa/>} />
+            <Route path="/login" element={<LoginPage/>} />
+
           </Routes>
 
       </BrowserRouter>

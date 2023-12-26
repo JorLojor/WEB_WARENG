@@ -6,6 +6,7 @@ import TombolSettingNav from '../TombolNavbar/TombolSettingNav';
 import logo from "../../assets/LogoIconNavbar.png";
 import "./Navbar.css";
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 const Navbar = ({page}) => {
     const [pagesState,setPagesState]=useState()
 
@@ -36,7 +37,7 @@ const Navbar = ({page}) => {
                                 <li className='list mx-5'>Beranda</li>
                                 <li className='list mx-5'>Program</li>
                                 <li className='list mx-5'>Layanan</li>
-                                <li className='tentang mx-5'>Tentang</li>
+                                <li className='list mx-5'>Tentang</li>
                             </ul>
                              
                              <div id='pagesState'>
