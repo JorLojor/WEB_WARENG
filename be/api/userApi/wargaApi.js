@@ -14,7 +14,7 @@ Router.delete('/delete/:id',wargaController.deleteWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
 Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
 Router.delete('/delete/suratAcara/:userId/:suratAcaraId',wargaController.deleteSuratAcaraById);
-Router.post('/create/surat/example',wargaController.createsuratPDF);
+Router.post('/create/surat/example',wargaController.createSuratPdfEx2);
 
 module.exports = Router;
 

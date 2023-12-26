@@ -6,6 +6,8 @@ const RtModel = db.rt;
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
+const {generatePDF} = require('../middleware/fileUpload')
+
 
 exports.getAllWarga = async (req, res) => {
     try {
@@ -357,6 +359,31 @@ exports.createsuratPDF = async (req, res) => {
     }
 }
 
+exports.createSuratPdfEx2 = async (req, res) => {
+    try {
+        const { nameAcara,jenisSurat, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
+
+        const data = {
+            nameAcara,
+            jenisSurat,
+            isiAcara,
+            tanggalMulai,
+            tanggalSelesai,
+            tempatAcara
+        };
+
+        const SuratResultPdf = await generatePDF(data);
+        res.status(200).send({
+            message: "Success create surat acara",
+            data: SuratResultPdf
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating Surat Acara."
+        });
+    }
+}
 
 
 
