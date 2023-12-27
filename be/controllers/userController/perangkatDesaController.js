@@ -1,4 +1,4 @@
-const db = require('../models/index');
+const db = require('../../models/index');
 const perangkatDesa = db.PerangkatDesaModel;
 const SuratAcaraModel = db.suratAcara;
 const WargaModel = db.warga;

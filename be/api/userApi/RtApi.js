@@ -1,4 +1,4 @@
-const {getAllRt,createRt,updateRt,deleteRt,persetujuanSuratAcara,postManyRt} = require('../../controllers/RtController');
+const {getAllRt,createRt,updateRt,deleteRt,persetujuanSuratAcara,postManyRt} = require('../../controllers/userController/RtController');
 const express = require('express');
 const Router = express.Router();
 

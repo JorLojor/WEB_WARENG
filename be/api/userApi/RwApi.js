@@ -1,4 +1,4 @@
-const {getAllRw,getRwById,postRw,updateRwById,deleteRwById,postManyRw,persetujuanSurat} = require("../../controllers/rwController");
+const {getAllRw,getRwById,postRw,updateRwById,deleteRwById,postManyRw,persetujuanSurat} = require("../../controllers/userController/rwController");
 const express = require('express');
 const Router = express.Router();
 

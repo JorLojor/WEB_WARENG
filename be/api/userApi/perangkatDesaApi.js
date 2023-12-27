@@ -3,7 +3,7 @@ const {getAllPerangkatDesa,
     getPerangkatDesaById,
     updatePerangkatDesaById,
     deletePerangkatDesaById,
-    SubmitSuratAcara} = require('../../controllers/perangkatDesaController');
+    SubmitSuratAcara} = require('../../controllers/userController/perangkatDesaController');
 const express = require('express');
 const Router = express.Router();
 

@@ -1,4 +1,4 @@
-const db = require('../models/index');
+const db = require('../../models/index');
 const WargaModel = db.warga;
 const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
@@ -6,7 +6,7 @@ const RtModel = db.rt;
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const {generatePDF} = require('../middleware/fileUpload')
+const {generatePDF} = require('../../middleware/fileUpload')
 
 
 exports.getAllWarga = async (req, res) => {
