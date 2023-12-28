@@ -142,7 +142,12 @@ exports.SubmitSuratAcara = async (req,res) => {
         }
 
         if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
-            
+            const role = perangkatDesa.role;
+            console.log(role);
+
+
+            res.send({message: "test",result: role});
+
         }
 
 

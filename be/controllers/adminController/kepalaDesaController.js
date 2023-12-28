@@ -1,6 +1,7 @@
 const db = require("../../models/index");
 const mongoose = require("mongoose");
 const KadesModel = db.kades;
+const SuratAcaraModel = db.suratAcara;
 
 
 exports.getKades = async (req, res) => {
@@ -137,6 +138,27 @@ exports.SubmitSuratKades = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
+        const {kadesId, suratAcaraId} = req.body;
+        const dataKades = await KadesModel.findById([kadesId], {session: session});
+        if (!dataKades){
+            await session.abortTransaction();
+            return res.status(404).send({
+                message: "Data kades not found"
+            });
+        }
+        const dataSuratAcara = await SuratAcaraModel.findById([suratAcaraId], {session: session});
+        if (!dataSuratAcara){
+            await session.abortTransaction();
+            return res.status(404).send({
+                message: "Data surat acara not found"
+            });
+        }
+        if (dataSuratAcara.statusPersetujuan === "disetujui"){
+            await session.abortTransaction();
+            return res.status(400).send({
+                message: "Surat acara sudah disetujui"
+            });
+        }
 
     }catch(error){
         await session.abortTransaction();
