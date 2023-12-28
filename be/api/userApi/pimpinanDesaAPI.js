@@ -8,3 +8,4 @@ Router.put('/update/:role', updateKadesByRole);
 Router.delete('/delete/:id', deleteKadesById);
 Router.put('/submit/:kadesId/:suratAcaraId', SubmitSuratKades);
 
+module.exports = Router;

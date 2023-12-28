@@ -21,6 +21,9 @@ Router.use('/rw', RwApi);
 const perangkatDesaApi = require('./userApi/perangkatDesaApi');
 Router.use('/perangkatDesa', perangkatDesaApi);
 
+const pimpinanDesaApi = require('./userApi/pimpinanDesaAPI');
+Router.use('/pimpinanDesa', pimpinanDesaApi);
+
 module.exports = Router;
 
 

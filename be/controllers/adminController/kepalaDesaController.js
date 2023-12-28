@@ -1,6 +1,6 @@
 const db = require("../../models/index");
 const mongoose = require("mongoose");
-const KadesModel = db.kades;
+const KadesModel = db.pimpinanDesa
 const SuratAcaraModel = db.suratAcara;
 
 

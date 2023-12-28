@@ -38,8 +38,8 @@ submit : http://localhost:3555/api/v1/perangkatDesa/submit/:id
 
 
 kepala desa api
-// get all : http://localhost:3555/api/v1/kades/get/:role
-// create : http://localhost:3555/api/v1/kades/create
-// update : http://localhost:3555/api/v1/kades/update/:role
-// delete : http://localhost:3555/api/v1/kades/delete/:id
-// submit : http://localhost:3555/api/v1/kades/submit/:kadesId/:suratAcaraId
+// get all : http://localhost:3555/api/v1/pimpinanDesa/get/:role
+// create : http://localhost:3555/api/v1/pimpinanDesa/create
+// update : http://localhost:3555/api/v1/pimpinanDesa/update/:role
+// delete : http://localhost:3555/api/v1/pimpinanDesa/delete/:id
+// submit : http://localhost:3555/api/v1/pimpinanDesa/submit/:kadesId/:suratAcaraId
