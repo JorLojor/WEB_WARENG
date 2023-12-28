@@ -3,7 +3,7 @@ const {getAllPerangkatDesa,
     getPerangkatDesaById,
     updatePerangkatDesaById,
     deletePerangkatDesaById,
-    SubmitSuratAcara} = require('../../controllers/userController/perangkatDesaController');
+    SubmitSuratAcara} = require('../../controllers/adminController/perangkatDesaController');
 const express = require('express');
 const Router = express.Router();
 
@@ -12,7 +12,7 @@ Router.post('/create', postPerangkatDesa);
 Router.get('/get/:id', getPerangkatDesaById);
 Router.put('/update/:id', updatePerangkatDesaById);
 Router.delete('/delete/:id', deletePerangkatDesaById);
-Router.put('/submit/:id', SubmitSuratAcara);
+Router.put('/submit/:perangkatDesaId/:suratAcaraId', SubmitSuratAcara);
 
 //note 
 // get all : http://localhost:3555/api/v1/perangkatDesa/get
@@ -20,7 +20,7 @@ Router.put('/submit/:id', SubmitSuratAcara);
 // create : http://localhost:3555/api/v1/perangkatDesa/create
 // update : http://localhost:3555/api/v1/perangkatDesa/update/:id
 // delete : http://localhost:3555/api/v1/perangkatDesa/delete/:id
-// submit : http://localhost:3555/api/v1/perangkatDesa/submit/:id
+// submit : http://localhost:3555/api/v1/perangkatDesa/submit/:perangkatDesaId/:suratAcaraId
 
 
 

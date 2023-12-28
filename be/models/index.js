@@ -7,11 +7,11 @@ const suratAcara = require('./suratIzinModel/suratAcaraModels');
 const PerangkatDesaModel = require('./userModels/perangkatDesa/PerangkatDesaModel')
 const rt = require('./userModels/rt/rtModels')
 const rw = require('./userModels/rw/rwModels')
-const kades = require('./userModels/kepaladesa/kepaladesaModels')
+const pimpinanDesa = require('./userModels/pimpinanDesa/pimpinanDesaModels')
 
 //db object
 const db = {
-    kades,
+    pimpinanDesa,
     rw,
     rt,
     warga,

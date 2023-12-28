@@ -1,0 +1,10 @@
+const {getKades,postKadesWakades,updateKadesByRole,deleteKadesById,SubmitSuratKades} = require('../../controllers/adminController/kepalaDesaController');
+const express = require('express');
+const Router = express.Router();
+
+Router.get('/get/:role', getKades);
+Router.post('/create', postKadesWakades);
+Router.put('/update/:role', updateKadesByRole);
+Router.delete('/delete/:id', deleteKadesById);
+Router.put('/submit/:kadesId/:suratAcaraId', SubmitSuratKades);
+

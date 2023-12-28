@@ -1,6 +1,7 @@
 const db = require('../../models/index');
 const perangkatDesa = db.PerangkatDesaModel;
 const SuratAcaraModel = db.suratAcara;
+const PimpinanDesaModel = db.pimpinanDesa;
 const WargaModel = db.warga;
 
 exports.getAllPerangkatDesa = async (req, res) => {
@@ -125,10 +126,12 @@ exports.SubmitSuratAcara = async (req,res) => {
     const { suratAcaraId, perangkatDesaId } = req.params;
     const { statusPersetujuan } = req.body;
     try{
-        const perangkatDesa = await perangkatDesa.findById(perangkatDesaId);
+        const dataPD = await perangkatDesa.findById(perangkatDesaId);
         const surat = await SuratAcaraModel.findById(suratAcaraId);
+        console.log(surat);
+        console.log(dataPD);
 
-        if (!perangkatDesa || !surat) {
+        if (!dataPD || !surat) {
             return res.status(404).send({
                 message: "perangkat desa or surat acara not found with id " + id
             });
@@ -142,8 +145,11 @@ exports.SubmitSuratAcara = async (req,res) => {
         }
 
         if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
-            const role = perangkatDesa.role;
-            console.log(role);
+            // surat.statusPersetujuan = 'disetujui perangkat desa';
+            // surat.perangkatDesa = perangkatDesaId;
+
+            const DataPimpinanDesa = await PimpinanDesaModel.find({role: 'kades'});
+            console.log(DataPimpinanDesa);
 
 
             res.send({message: "test",result: role});
