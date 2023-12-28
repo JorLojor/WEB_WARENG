@@ -145,15 +145,13 @@ exports.SubmitSuratAcara = async (req,res) => {
         }
 
         if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
-            // surat.statusPersetujuan = 'disetujui perangkat desa';
-            // surat.perangkatDesa = perangkatDesaId;
-
-            const DataPimpinanDesa = await PimpinanDesaModel.find({role: 'kades'});
-            console.log(DataPimpinanDesa);
-
-
-            res.send({message: "test",result: role});
-
+            surat.statusPersetujuan = 'disetujui perangkat desa';
+            const DataPimpinanDesa = await PimpinanDesaModel.findOne({role: 'kepala desa'});
+            DataPimpinanDesa.suratAcaraPending.push(suratAcaraId);
+            await DataPimpinanDesa.save();
+            surat.pimpinanDesaId = DataPimpinanDesa._id;
+            await surat.save();
+            res.send({message: "test",result: surat});
         }
 
 

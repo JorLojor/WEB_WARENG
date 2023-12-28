@@ -8,7 +8,7 @@ const kepalaDesa = new mongoose.Schema({
     nohp: { type:String, required: false, default: ''},
     status: { type:String, required: false, default: ''},
 
-    role : { type: String, required: true, default: 'kades' }, // kepala desa atau wakil kepala desa
+    role : { type: String, required: true }, // kepala desa atau wakil kepala desa
     suratAcara: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],

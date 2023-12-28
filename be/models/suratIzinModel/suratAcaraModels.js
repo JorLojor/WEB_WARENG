@@ -11,6 +11,7 @@ const suratAcara = new mongoose.Schema({
     statusPersetujuan: { type: String, required: false, default: 'belum ada persetujuan' },
     rtId: { type: mongoose.Schema.Types.ObjectId, ref: 'rt', required: false },
     rwId: { type: mongoose.Schema.Types.ObjectId, ref: 'rw', required: false },
+    pimpinanDesaId: { type: mongoose.Schema.Types.ObjectId, ref: 'pimpinanDesa', required: false },
     perangkatDesaId: { type: mongoose.Schema.Types.ObjectId, ref: 'perangkatDesa', required: false },
     wargaId: { type: mongoose.Schema.Types.ObjectId, ref: 'warga', required: false },
 },{timestamps: true});
