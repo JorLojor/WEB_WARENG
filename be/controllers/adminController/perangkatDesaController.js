@@ -146,6 +146,7 @@ exports.SubmitSuratAcara = async (req,res) => {
 
         if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
             surat.statusPersetujuan = 'disetujui perangkat desa';
+            surat.statusAcara = 'pengajuan kades dan wakades';
             const DataPimpinanDesa = await PimpinanDesaModel.findOne({role: 'kepala desa'});
             DataPimpinanDesa.suratAcaraPending.push(suratAcaraId);
             await DataPimpinanDesa.save();

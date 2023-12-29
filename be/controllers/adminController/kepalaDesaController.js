@@ -50,9 +50,27 @@ exports.getKades = async (req, res) => {
             message: error.message || "Some error occurred while get kades."
         });
     }
-   
-
 }
+
+exports.getAllPimpinanDesa = async (req, res) => {
+    try{
+        const dataKades = await KadesModel.find();
+        if (!dataKades){
+            return res.status(404).send({
+                message: "Data kades not found"
+            });
+        }
+        res.status(200).send({
+            message: "Success get all kades",
+            data: dataKades
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while get all kades."
+        });
+    }
+};
 
 exports.postKadesWakades = async (req, res) => {
     try{
@@ -138,15 +156,16 @@ exports.SubmitSuratKades = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
-        const {kadesId, suratAcaraId} = req.body;
-        const dataKades = await KadesModel.findById([kadesId], {session: session});
+        const {kadesId, suratAcaraId} = req.params;
+        const { statusPersetujuan } = req.body;
+        const dataKades = await KadesModel.findById([kadesId]).session(session);
         if (!dataKades){
             await session.abortTransaction();
             return res.status(404).send({
                 message: "Data kades not found"
             });
         }
-        const dataSuratAcara = await SuratAcaraModel.findById([suratAcaraId], {session: session});
+        const dataSuratAcara = await SuratAcaraModel.findById([suratAcaraId]).session(session);
         if (!dataSuratAcara){
             await session.abortTransaction();
             return res.status(404).send({
@@ -159,6 +178,28 @@ exports.SubmitSuratKades = async (req, res) => {
                 message: "Surat acara sudah disetujui"
             });
         }
+
+        if (statusPersetujuan === true && dataSuratAcara.statusAcara === "pengajuan kades dan wakades" && dataSuratAcara.statusPersetujuan === "disetujui perangkat desa"){
+            dataSuratAcara.statusPersetujuan = "disetujui pimpinan desa";
+            dataSuratAcara.statusAcara = "pengajuan selesai";
+            dataKades.suratAcaraApproved.push(dataSuratAcara._id);
+            const indexData = dataKades.suratAcaraPending.indexOf(dataSuratAcara._id);
+            dataKades.suratAcaraPending.splice(indexData, 1);
+            await dataKades.save();
+            await dataSuratAcara.save();
+            await session.commitTransaction();
+            return res.status(200).send({
+                message: "Success submit surat kades",
+                data: dataSuratAcara
+            });
+        }
+
+        res.send({
+            message: "test",
+            data: dataKades,
+            data2: dataSuratAcara
+        });
+
 
     }catch(error){
         await session.abortTransaction();
