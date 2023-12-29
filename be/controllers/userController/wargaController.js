@@ -362,10 +362,11 @@ exports.createsuratPDF = async (req, res) => {
     }
 }
 
-exports.createSuratPdfEx2 = async (req, res) => {
+exports.createSuratPdf = async (req, res) => {
     try {
        
         const {idSuratAcara} = req.params;
+        const {idWarga} = req.params;
 
         const dataSurat = await suratAcaraModel.findById(idSuratAcara);
 
