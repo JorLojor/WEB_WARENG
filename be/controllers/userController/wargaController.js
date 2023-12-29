@@ -6,7 +6,8 @@ const RtModel = db.rt;
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const {generatePDF} = require('../../middleware/fileUpload')
+const {generatePDF} = require('../../middleware/fileUpload');
+const e = require('express');
 
 
 exports.getAllWarga = async (req, res) => {
@@ -197,6 +198,8 @@ exports.CreateSuratAcara = async (req,res) => {
 
 
 
+
+
 exports.pengajuanSuratAcara = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -361,22 +364,44 @@ exports.createsuratPDF = async (req, res) => {
 
 exports.createSuratPdfEx2 = async (req, res) => {
     try {
-        const { nameAcara,jenisSurat, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
+       
+        const {idSuratAcara} = req.params;
 
-        const data = {
-            nameAcara,
-            jenisSurat,
-            isiAcara,
-            tanggalMulai,
-            tanggalSelesai,
-            tempatAcara
-        };
+        const dataSurat = await suratAcaraModel.findById(idSuratAcara);
 
-        const SuratResultPdf = await generatePDF(data);
-        res.status(200).send({
-            message: "Success create surat acara",
-            data: SuratResultPdf
-        });
+        if (!dataSurat) {
+            return res.status(404).send({
+                message: "Surat Acara not found with id " + idSuratAcara
+            });
+        }
+
+        if (dataSurat.statusAcara === 'pengajuan') {
+            return res.status(400).send({
+                message: "Surat Acara harus disetujui terlebih dahulu."
+            });
+        }
+
+        if(dataSurat.statusPersetujuan === 'disetujui pimpinan desa' && dataSurat.statusAcara === 'pengajuan selesai'){
+
+            const data = {
+                nameAcara: dataSurat.nameAcara,
+                jenisSurat : dataSurat.jenisSurat,
+                isiAcara : dataSurat.isiAcara,
+                tanggalMulai : dataSurat.tanggalMulai,
+                tanggalSelesai : dataSurat.tanggalSelesai,
+                tempatAcara : dataSurat.tempatAcara
+            };
+
+            const SuratResultPdf = await generatePDF(data);
+            res.status(200).send({
+                message: "Success create surat acara",
+                data: SuratResultPdf
+            });
+        }else{
+            return res.status(400).send({
+                message: "Surat Acara harus disetujui terlebih dahulu."
+            });
+        }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send({
