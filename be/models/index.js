@@ -2,7 +2,8 @@ const express = require('express');
 
 //import models
 const konter = require('./userModels/perangkatDesa/PerangkatDesaModel');
-const warga = require('./userModels/warga/wargaModels');
+const warga = require('./userModels/warga/wargaModel');
+const user = require('./userModels/warga/userModel');
 const suratAcara = require('./suratIzinModel/suratAcaraModels');
 const PerangkatDesaModel = require('./userModels/perangkatDesa/PerangkatDesaModel')
 const rt = require('./userModels/rt/rtModels')
@@ -15,6 +16,7 @@ const db = {
     rw,
     rt,
     warga,
+    user,
     konter,
     suratAcara,
     PerangkatDesaModel,

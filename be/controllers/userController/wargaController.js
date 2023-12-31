@@ -41,16 +41,17 @@ exports.getAllWarga = async (req, res) => {
 };
 
 exports.postWarga = async (req,res) => {
-    const { name,nik,password, alamat, nohp, status,domisili } = req.body;
+    const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
     try{
+        // UPPER CASE request body
         const warga = await WargaModel.create({
-            name,
+            name : name.toUpperCase(),
             nik,
             password,
-            alamat,
+            alamat: alamat.toUpperCase(),
             nohp,
-            status,
-            domisili
+            statusPerkawinan : statusPerkawinan.toUpperCase(),
+            domisili : domisili.map((domisili) => domisili.toUpperCase())
         });
 
         res.status(200).send({
