@@ -6,7 +6,7 @@ const warga = new mongoose.Schema({
     password: { type:String, required: true, default: ''},
     alamat: { type:String, required: true, default: ''},
     nohp: { type:String, required: true, default: ''},
-    status: { type:String, required: true, default: ''},
+    status: { type:String, required: true, default: ''}, // sudah menikah atau belum ,janda ,duda, meninggal
     // domisili array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
     domisili: [{ type: String, required: true, default: '' }],
     
