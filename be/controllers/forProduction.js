@@ -5,13 +5,14 @@ const rtModel = db.rt;
 const rwModel = db.rw;
 const pdModel = db.PerangkatDesaModel;
 const ppModel = db.pimpinanDesa;
+const userModel = db.user;
 
 
-exports.postManyWarga = async (req, res) => {
+exports.postManyUser = async (req, res) => {
     try{
-        const dataWarga = req.body;
+        const data = req.body;
 
-        const result = await WargaModel.insertMany(dataWarga);
+        const result = await userModel.insertMany(data);
 
         res.status(200).send({
             success: true,
@@ -23,6 +24,53 @@ exports.postManyWarga = async (req, res) => {
         res.status(500).send({success:false,message: err.message});
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 exports.deleteManyWarga = async (req, res) => {
