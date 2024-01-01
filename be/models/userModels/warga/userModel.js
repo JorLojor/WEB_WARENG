@@ -5,7 +5,8 @@ const user = new mongoose.Schema({
     nik: { type:Number, required: true, default: '',unique: true},
     password: { type:String, required: true, default: ''},
     alamat: { type:String, required: true, default: ''},
-    nohp: { type:String, required: true, default: ''},
+    domisili: [{ type: String, required: true, default: '' }],
+    nohp: { type:Number, required: true, default: ''},
     statusPerkawinan: { type:String, required: true, default: ''}, // sudah menikah atau belum ,janda ,duda, meninggal
     tempatlahir: { type:String, required: false, default: ''},
     tanggallahir: { type:String, required: false, default: ''},
@@ -15,8 +16,7 @@ const user = new mongoose.Schema({
     kewarganegaraan: { type:String, required: false, default: 'WNI'},
     berlakuHingga: { type:String, required: false, default: 'SEUMUR HIDUP'},
     // domisili array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
-    domisili: [{ type: String, required: true, default: '' }],
-    role : { type: Number, required: true }, // 1 = warga, 2 = rt , 3 = rw, 4 = perangkat desa, 5 = pimpinan desa
+    role : { type: Number, required: false }, // 1 = warga, 2 = rt , 3 = rw, 4 = perangkat desa, 5 = pimpinan desa
 },{timestamps: true});
 
 module.exports = mongoose.model('user', user);
