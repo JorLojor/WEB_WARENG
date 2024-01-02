@@ -9,6 +9,9 @@ Router.get('/', (req, res) => {
     res.send('API is running.....');
 });
 
+const userApi = require('./userApi/userApi');
+Router.use('/user', userApi);
+
 const wargaApi = require('./userApi/wargaApi');
 Router.use('/warga', wargaApi);
 

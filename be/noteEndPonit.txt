@@ -1,3 +1,10 @@
+user api
+// get all user : http://localhost:3555/api/v1/user/get
+// get user by id : http://localhost:3555/api/v1/user/get/:id
+// post user : http://localhost:3555/api/v1/user/post-user
+// post many user : http://localhost:3555/api/v1/user/post-many-user
+// update user by id : http://localhost:3555/api/v1/user/update/:id
+// delete user by id : http://localhost:3555/api/v1/user/delete/:id
 
 warga api
 get all warga : http://localhost:3555/api/v1/warga/get

@@ -20,6 +20,7 @@ exports.getAllWarga = async (req, res) => {
         console.log(`Received GET request to /api/v1/warga/get with page: ${page}, limit: ${limitt}`);
         
         const warga = await WargaModel.find()
+            .populate('user')
             .populate('suratAcara')
             .limit(limitt)
             .skip((page - 1) * limitt);
@@ -41,74 +42,6 @@ exports.getAllWarga = async (req, res) => {
         });
     }
 };
-
-// exports.postWarga = async (req,res) => {
-//     const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
-//     try{
-//         // UPPER CASE request body
-//         const warga = await WargaModel.create({
-//             name : name.toUpperCase(),
-//             nik,
-//             password,
-//             alamat: alamat.toUpperCase(),
-//             nohp,
-//             statusPerkawinan : statusPerkawinan.toUpperCase(),
-//             domisili : domisili.map((domisili) => domisili.toUpperCase())
-//         });
-
-//         res.status(200).send({
-//             message: "Success create warga",
-//             data: warga
-//         });
-//     }catch(error){
-//         res.status(500).send({
-//             message: error.message || "Some error occurred while creating warga."
-//         });
-//     }
-// };
-
-
-exports.postUser = async (req,res) => {
-    try{
-        const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
-
-        const newUser = await userModel.create({
-            name : name.toUpperCase(),
-            nik,
-            password,
-            alamat: alamat.toUpperCase(),
-            nohp,
-            statusPerkawinan : statusPerkawinan.toUpperCase(),
-            domisili : domisili.map((domisili) => domisili.toUpperCase())
-        });
-        res.status(200).send({
-            message: "Success create user",
-            data: newUser
-        });
-
-    }catch(error){
-        res.status(500).send({
-            message: error.message || "Some error occurred while creating warga."
-        });
-    }
-}
-
-exports.postManyUser = async (req,res) => {
-    try{
-        const { data } = req.body;
-        const newUser = await userModel.insertMany(data);
-        res.status(200).send({
-            message: "Success create user",
-            data: newUser
-        });
-
-    }catch(error){
-        res.status(500).send({
-            message: error.message || "Some error occurred while creating warga."
-        });
-    }
-}
-
 
 exports.getWargaById = async (req,res) => {
     const id = req.params.id;
@@ -132,49 +65,6 @@ exports.getWargaById = async (req,res) => {
 }
         
 
-exports.updateuserById = async (req,res) => {
-    const id = req.params.id;
-    const updateData = req.body;
-    try{
-        const user = await userModel.findByIdAndUpdate(id,updateData,{new: true});
-        if (!user) {
-            return res.status(404).send({
-                message: "user not found with id " + id
-            });
-        }
-
-        res.status(200).send({
-            message: "Success update user by id",
-            data: user
-        });
-    }catch(error){ 
-        res.status(500).send({
-            message: error.message || "Some error occurred while update user by id."
-        });
-    }   
-};
-
-exports.deleteUserById = async (req,res) => {
-    const id = req.params.id;
-    try{
-        const user = await userModel.findByIdAndDelete(id);
-        if (!user) {
-            return res.status(404).send({
-                message: "user not found with id " + id
-            });
-        }
-
-        res.status(200).send({
-            message: "Success delete user by id",
-            data: user
-
-        });
-    }catch(error){
-        res.status(500).send({
-            message: error.message || "Some error occurred while delete user by id."
-        });
-    }
-}
 
 exports.deleteWargaById = async (req,res) => {
     const id = req.params.id;
@@ -253,16 +143,6 @@ exports.CreateSuratAcara = async (req,res) => {
         });
     }
 };
-
-
-
-
-
-
-
-
-
-
 exports.pengajuanSuratAcara = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -521,3 +401,38 @@ exports.deleteSuratAcaraById = async (req,res) =>{
 
 
 module.exports = exports;
+
+
+
+
+
+
+
+
+
+
+
+// exports.postWarga = async (req,res) => {
+//     const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
+//     try{
+//         // UPPER CASE request body
+//         const warga = await WargaModel.create({
+//             name : name.toUpperCase(),
+//             nik,
+//             password,
+//             alamat: alamat.toUpperCase(),
+//             nohp,
+//             statusPerkawinan : statusPerkawinan.toUpperCase(),
+//             domisili : domisili.map((domisili) => domisili.toUpperCase())
+//         });
+
+//         res.status(200).send({
+//             message: "Success create warga",
+//             data: warga
+//         });
+//     }catch(error){
+//         res.status(500).send({
+//             message: error.message || "Some error occurred while creating warga."
+//         });
+//     }
+// };
