@@ -16,7 +16,7 @@ update warga by id : http://localhost:3555/api/v1/warga/update/:id
 delete warga by id : http://localhost:3555/api/v1/warga/delete/:id
 create surat acara : http://localhost:3555/api/v1/warga/create/suratAcara/:id
 pengajuan surat acara : http://localhost:3555/api/v1/warga/pengajuan/SuratAcara/:userId/:suratAcaraId
-delete surat acara : http://localhost:3555/api/v1/warga/delete/suratAcara/:userId/:suratAcaraId
+delete surat acara pdf : http://localhost:3555/api/v1/warga/delete/suratAcara/:userId/:suratAcaraId
 
 rt api
 get all rt : http://localhost:3555/api/v1/rt/get

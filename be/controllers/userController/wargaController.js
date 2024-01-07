@@ -66,10 +66,17 @@ exports.RegisterWarga = async (req,res) => {
             password : await bcrypt.hash(password, 10), 
             nohp: nohp,
         });
+
+        // buat warga
+
+        const newWarga = await WargaModel.create({
+            user: newUser._id
+        });
         
         res.status(200).send({
             message: "Success register warga",
-            data: newUser
+            user: newUser,
+            warga: newWarga
         });
     }catch(error){
         res.status(500).send({
@@ -262,6 +269,8 @@ exports.CreateSuratAcara = async (req,res) => {
         });
     }
 };
+
+
 exports.pengajuanSuratAcara = async (req, res) => {
     try {
         const userId = req.params.userId;
