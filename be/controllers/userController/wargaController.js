@@ -4,12 +4,126 @@ const userModel = db.user;
 const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
 
+const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const {generatePDF} = require('../../middleware/fileUpload');
-const e = require('express');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
+
+
+exports.LoginWarga = async (req,res) => {
+    const {name,password} = req.body;
+    try{
+        const dataUser = await userModel.findOne({name: name}).select('-token');
+
+        if (!dataUser) {
+            return res.status(404).send({
+                message: "User not found with name " + name
+            });
+        }
+
+        const comparePassword = await bcrypt.compare(password, dataUser.password);
+
+        if (!comparePassword) {
+            return res.status(400).send({
+                message: "Password not match"
+            });
+        }
+
+        const dataWarga = await WargaModel.findOne({user: dataUser._id}).populate('user').populate('suratAcara');
+
+        res.status(200).send({
+            message: "Success login warga",
+            data: dataWarga
+        });
+
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while login warga."
+        });
+    }
+};
+
+exports.RegisterWarga = async (req,res) => {
+    try{
+        const {username,password,nohp} = req.body;
+
+        if (!username || !password || !nohp) {
+            return res.status(400).send({
+                message: "you must insert username, password, and nohp"
+            });
+        }
+
+        const newUser = await userModel.create({
+            name: username.toUpperCase(),
+            password : await bcrypt.hash(password, 10), 
+            nohp: nohp,
+        });
+        
+        res.status(200).send({
+            message: "Success register warga",
+            data: newUser
+        });
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while register warga."
+        });
+    }
+};
+
+
+exports.postWarga = async (req,res) => {
+    const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
+    try{
+        // UPPER CASE request body
+        const warga = await WargaModel.create({
+            name : name.toUpperCase(),
+            nik,
+            password,
+            alamat: alamat.toUpperCase(),
+            nohp,
+            statusPerkawinan : statusPerkawinan.toUpperCase(),
+            domisili : domisili.map((domisili) => domisili.toUpperCase())
+        });
+
+        res.status(200).send({
+            message: "Success create warga",
+            data: warga
+        });
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating warga."
+        });
+    }
+};
+
+exports.updateWargaById = async (req,res) => {
+    try{
+        const id = req.params.id;
+        const {updatedData} = req.body;
+
+        const updatedWarga = await userModel.findByIdAndUpdate(id, updatedData, {new: true});
+        if (!updatedWarga) {
+            return res.status(404).send({
+                message: "warga not found with id " + id
+            });
+        }
+
+        updatedWarga.save();
+
+        res.status(200).send({
+            message: "Success update warga",
+            data: updatedWarga
+        });
+        
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while update warga."
+        });
+    }
+}
 
 
 exports.getAllWarga = async (req, res) => {
@@ -401,38 +515,3 @@ exports.deleteSuratAcaraById = async (req,res) =>{
 
 
 module.exports = exports;
-
-
-
-
-
-
-
-
-
-
-
-// exports.postWarga = async (req,res) => {
-//     const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
-//     try{
-//         // UPPER CASE request body
-//         const warga = await WargaModel.create({
-//             name : name.toUpperCase(),
-//             nik,
-//             password,
-//             alamat: alamat.toUpperCase(),
-//             nohp,
-//             statusPerkawinan : statusPerkawinan.toUpperCase(),
-//             domisili : domisili.map((domisili) => domisili.toUpperCase())
-//         });
-
-//         res.status(200).send({
-//             message: "Success create warga",
-//             data: warga
-//         });
-//     }catch(error){
-//         res.status(500).send({
-//             message: error.message || "Some error occurred while creating warga."
-//         });
-//     }
-// };

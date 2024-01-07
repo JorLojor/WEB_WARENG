@@ -12,6 +12,9 @@ Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengaj
 Router.delete('/delete/suratAcara/:userId/:suratAcaraId',wargaController.deleteSuratAcaraById);
 Router.post('/create/surat/:idWarga/:idSuratAcara',wargaController.createSuratPdf);
 
+Router.post('/login',wargaController.LoginWarga); // http://localhost:3555/api/v1/warga/login
+Router.post('/register',wargaController.RegisterWarga); // http://localhost:3555/api/v1/warga/register
+
 module.exports = Router;
 
 // note :

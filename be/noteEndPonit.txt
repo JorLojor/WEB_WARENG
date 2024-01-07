@@ -56,6 +56,10 @@ kepala desa api
 admin api
 
 // note :
+login : http://localhost:3555/api/v1/warga/login
+register : http://localhost:3555/api/v1/warga/register
+
+
 // post admin : http://localhost:3555/api/v1/admin/post-admin
 // get admin by id : http://localhost:3555/api/v1/admin/get-admin/:id
 // update admin by id : http://localhost:3555/api/v1/admin/update-admin/:id
