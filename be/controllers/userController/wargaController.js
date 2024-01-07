@@ -7,6 +7,8 @@ const RtModel = db.rt;
 const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
@@ -15,7 +17,8 @@ const wargaModel = require('../../models/userModels/warga/wargaModel');
 exports.LoginWarga = async (req,res) => {
     const {name,password} = req.body;
     try{
-        const dataUser = await userModel.findOne({name: name}).select('-token');
+        const dataNama = name.toUpperCase();
+        const dataUser = await userModel.findOne({name: dataNama}).select('-token');
 
         if (!dataUser) {
             return res.status(404).send({
@@ -27,17 +30,19 @@ exports.LoginWarga = async (req,res) => {
 
         if (!comparePassword) {
             return res.status(400).send({
-                message: "Password not match"
+                message: "incorrect password"
             });
         }
 
-        const dataWarga = await WargaModel.findOne({user: dataUser._id}).populate('user').populate('suratAcara');
+        const token = jwt.sign({id: dataUser._id}, process.env.LOGIN_TOKEN, {expiresIn: '1d'});
+        dataUser.token = token;
+        await dataUser.save();
 
         res.status(200).send({
             message: "Success login warga",
-            data: dataWarga
+            data: dataUser
         });
-
+    
 
     }catch(error){
         res.status(500).send({
