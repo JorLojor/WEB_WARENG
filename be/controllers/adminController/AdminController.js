@@ -126,6 +126,9 @@ exports.postRt = async (req,res) => {
             role: 2 // (rt)
         }, {new: true});
 
+        // mencari model warga berdasarkan idUser dan delete
+        await WargaModel.findOneAndDelete({user: idUser});
+
         const newRt = await rtModel.create({
             user: idUser
         });
@@ -152,6 +155,19 @@ exports.postRw = async (req,res) => {
         const dataUser = await userModel.findByIdAndUpdate(idUser, {
             role: 3 // (rw)
         }, {new: true});
+
+        // mencari model warga untuk cek apakah user sudah menjadi rt atau belum
+        const cekWarga = await WargaModel.findOne({user: idUser});
+        if (cekWarga) {
+            return res.status(400).send({
+                message: "User must be rt first"
+            });
+        }
+        // mencari model rt berdasarkan idUser dan delete
+        const cekRt = await rtModel.findOne({user: idUser});
+        if (cekRt){
+            await rtModel.findOneAndDelete({user: idUser});
+        }
 
         const newRw = await rwModel.create({
             user: idUser
