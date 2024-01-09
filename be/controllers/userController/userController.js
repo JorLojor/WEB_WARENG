@@ -87,15 +87,19 @@ exports.postManyUser = async (req,res) => {
         });
     }
 }
-
+// untuk melengkapi data user
 exports.updateuserById = async (req,res) => {
     try{
         const id = req.params.id;
         const updateData = req.body;
-        // data 
+        // data
         if (updateData.name) updateData.name = updateData.name.toUpperCase();
         if (updateData.alamat) updateData.alamat = updateData.alamat.toUpperCase();
         if (updateData.statusPerkawinan) updateData.statusPerkawinan = updateData.statusPerkawinan.toUpperCase();
+        if (updateData.tempatlahir) updateData.tempatlahir = updateData.tempatlahir.toUpperCase();
+        if (updateData.tanggallahir) updateData.tanggallahir = updateData.tanggallahir.toUpperCase();
+        if (updateData.agama) updateData.agama = updateData.agama.toUpperCase();
+        if (updateData.pekerjaan) updateData.pekerjaan = updateData.pekerjaan.toUpperCase();
         if (updateData.domisili) updateData.domisili = updateData.domisili.map((domisili) => domisili.toUpperCase());
         const user = await userModel.findByIdAndUpdate(id,updateData,{new: true});
         if (!user) {

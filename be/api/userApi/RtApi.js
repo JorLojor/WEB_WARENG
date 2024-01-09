@@ -3,7 +3,7 @@ const express = require('express');
 const Router = express.Router();
 
 
-Router.get('/get',getAllRt);
+Router.get('/get',getAllRt); // 
 Router.post('/create',createRt);
 Router.post('/post-many-rt',postManyRt);
 Router.put('/update/:id',updateRt);
