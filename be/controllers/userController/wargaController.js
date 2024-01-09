@@ -12,6 +12,7 @@ require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
+const { find } = require('../../models/suratIzinModel/suratAcaraModels');
 
 
 exports.LoginWarga = async (req,res) => {
@@ -226,34 +227,54 @@ exports.deleteWargaById = async (req,res) => {
 }
 
 
-
-exports.CreateSuratAcara = async (req,res) => {
-    try{
+exports.CreateSuratAcara = async (req, res) => {
+    try {
         const wargaId = req.params.id;
-        const warga = await WargaModel.findById(wargaId);
+
+        // Temukan user berdasarkan id
+        const user = await userModel.findById(wargaId);
+
+        if (!user) {
+            return res.status(404).send({
+                message: "User not found with id " + wargaId
+            });
+        }
+
+        // Temukan warga berdasarkan user id
+        const warga = await WargaModel.findOne({ user: wargaId });
+
         if (!warga) {
             return res.status(404).send({
-                message: "warga not found with id " + id
+                message: "Warga not found with user id " + wargaId
             });
         }
-        const { nameAcara,jenisSurat, isiAcara, tanggalMulai,tanggalSelesai, tempatAcara} = req.body;
-        //menegecek apakah warga sudah memiliki surat acara dengan nama acara yang sama
-        const checkSuratAcara = warga.suratAcara.find((suratAcara) => suratAcara.nameAcara === nameAcara);
-        if (checkSuratAcara) {
-            console.log(checkSuratAcara);
+
+        const { nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSelesai, tempatAcara } = req.body;
+
+        // Periksa apakah surat acara dengan nama yang sama sudah ada
+        const existingSuratAcara = await suratAcaraModel.findOne({
+            nameAcara,
+            wargaId: warga._id
+        });
+
+        if (existingSuratAcara) {
             return res.status(400).send({
-                message: "warga already has surat acara with name acara " + nameAcara
+                message: "Surat Acara already exists with name " + nameAcara + " for user with id " + wargaId,
             });
         }
+
+        // Buat surat acara baru
         const suratAcara = await suratAcaraModel.create({
             nameAcara,
-            jenisSurat : jenisSurat.toLowerCase(),
+            jenisSurat: jenisSurat.toLowerCase(),
             isiAcara,
             tanggalMulai,
             tanggalSelesai,
             tempatAcara,
-            wargaId : warga._id
+            wargaId: warga._id
         });
+
+        // Tambahkan ID surat acara ke array suratAcara di warga
         warga.suratAcara.push(suratAcara._id);
         await warga.save();
 
@@ -262,13 +283,14 @@ exports.CreateSuratAcara = async (req,res) => {
             data: suratAcara,
             author: warga
         });
-
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
             message: error.message || "Some error occurred while create surat acara."
         });
     }
 };
+
+
 
 
 exports.pengajuanSuratAcara = async (req, res) => {
