@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const user = new mongoose.Schema({
     name: { type: String, required: true },
-    nik: { type:Number, required: false, default: '',unique: true},
+    nik: { type:Number, required: false, default: ''},
     password: { type:String, required: true, default: ''},
     alamat: { type:String, required: false, default: ''},
     domisili: [{ type: String, required: false, default: '' }],  // array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
@@ -17,7 +17,7 @@ const user = new mongoose.Schema({
     berlakuHingga: { type:String, required: false, default: 'SEUMUR HIDUP'},
     token: { type:String, required: false, default: ''},
     // domisili array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
-    role : { type: Number, required: false, default : 1}, // 1 = warga, 2 = rt , 3 = rw, 4 = perangkat desa, 5 = pimpinan desa
+    role : { type: Number, required: false}, // 1 = warga, 2 = rt , 3 = rw, 4 = perangkat desa, 5 = pimpinan desa
 },{timestamps: true});
 
 module.exports = mongoose.model('user', user);

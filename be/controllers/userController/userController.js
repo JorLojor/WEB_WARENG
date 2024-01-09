@@ -101,7 +101,19 @@ exports.updateuserById = async (req,res) => {
         if (updateData.agama) updateData.agama = updateData.agama.toUpperCase();
         if (updateData.pekerjaan) updateData.pekerjaan = updateData.pekerjaan.toUpperCase();
         if (updateData.domisili) updateData.domisili = updateData.domisili.map((domisili) => domisili.toUpperCase());
-        const user = await userModel.findByIdAndUpdate(id,updateData,{new: true});
+
+        const dataUdatedValid = {
+            name: updateData.name,
+            nik: updateData.nik,
+            alamat: updateData.alamat,
+            statusPerkawinan: updateData.statusPerkawinan,
+            tempatlahir: updateData.tempatlahir,
+            tanggallahir: updateData.tanggallahir,
+            agama: updateData.agama,
+            pekerjaan: updateData.pekerjaan,
+            domisili: updateData.domisili
+        };
+        const user = await userModel.findByIdAndUpdate(id,dataUdatedValid,{new: true});
         if (!user) {
             return res.status(404).send({
                 message: "user not found with id " + id
