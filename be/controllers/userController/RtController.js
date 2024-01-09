@@ -1,13 +1,14 @@
 const db = require('../../models/index');
 const RtModel = db.rt;
 const RwModel = db.rw;
+const userModel = db.user;
 const SuratAcaraModel = db.suratAcara;
 
 
 exports.getAllRt = async (req, res) => {
     try {
         const rt = await RtModel.find();
-        res.status(200).send({
+        res.status(200).send({ 
             message: "Success get all rt",
             data: rt
         });
@@ -140,9 +141,11 @@ exports.deleteRt = async (req, res) => {
 
 
 exports.persetujuanSuratAcara = async (req, res) => {
-    const idSurat = req.params.suratAcaraId; // Ubah dari req.params.id menjadi req.params.suratAcaraId
-    const idRt = req.params.rtId; // Ubah dari req.params.id menjadi req.params.rtId
+    const idSurat = req.params.suratAcaraId; 
+    const idRt = req.params.rtId; 
     const statusPersetujuan = req.body.statusPersetujuan;
+
+    
 
     try {
         const PakRt = await RtModel.findById(idRt);
@@ -150,6 +153,14 @@ exports.persetujuanSuratAcara = async (req, res) => {
             console.error("RT not found with id", idRt);
             return res.status(404).send({
                 message: "RT not found with id " + idRt
+            });
+        }
+
+        const userRt = await userModel.findById(PakRt.user);
+        if (!userRt) {
+            console.error("User RT not found with id", PakRt.user);
+            return res.status(404).send({
+                message: "User RT not found with id " + PakRt.user
             });
         }
 
@@ -169,12 +180,13 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 PakRt.suratAcaraApproved.push(suratAcara._id);
                 const dataIndex = PakRt.suratAcaraPending.indexOf(suratAcara._id);
                 PakRt.suratAcaraPending.splice(dataIndex, 1);
-                const PakRw = await RwModel.findOne({ domisili: PakRt.domisili[1] });
-                console.log("PakRw", PakRw);
+
+                
+                const PakRw = await RwModel.findOne({ ketuaRw: userRt.domisili[1] });
                 if (!PakRw || PakRw.length === 0) {
-                    console.error("RW not found with domisili rw", PakRt.domisili[1]);
+                    console.error("RW not found with domisili rw", userRt.domisili[1]);
                     return res.status(404).send({
-                        message: "RW not found with domisili rw " + PakRt.domisili[1]
+                        message: "RW not found with domisili rw " + userRt.domisili[1]
                     });
                 }
                 suratAcara.statusAcara = 'pengajuan rw';
@@ -191,7 +203,8 @@ exports.persetujuanSuratAcara = async (req, res) => {
             
             console.log("Surat Acara successfully updated with RT approval status.");
             res.status(200).send({
-                message: "Surat Acara successfully updated with RT approval status."
+                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuan,
+                data: suratAcara
             });
         } else {
             console.error("Surat Acara has already been approved or rejected.");
