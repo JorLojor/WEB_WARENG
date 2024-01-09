@@ -298,6 +298,14 @@ exports.pengajuanSuratAcara = async (req, res) => {
         const userId = req.params.userId;
         const suratAcaraId = req.params.suratAcaraId;
 
+        // mencari user dengan id userId
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({
+                message: "User not found with id = " + userId
+            });
+        }
+
         // mencari warga dengan user userId
         const warga = await WargaModel.findOne({ user: userId });
         if (!warga){
@@ -305,9 +313,8 @@ exports.pengajuanSuratAcara = async (req, res) => {
                 message: "Warga not found with id " + userId
             });
         }
-        // sabarrr pr nya adalah mencari rt dengan field rt yang sama dengan domisili warga index ke 0
-        // mencari rt dengan domisili index ke 0 yang sama dengan user domisili index ke 0
-        const Rt = await RtModel.find({ domisili: user.domisili[0] });
+        //mencari rt dengan field rt yang sama dengan domisili warga index ke 0
+        const Rt = await RtModel.find({ ketuaRt: user.domisili[0] });
         if (!Rt || Rt.length === 0) {
             return res.status(404).send({
                 message: "RT not found with domisili rt " + user.domisili[0]
@@ -336,7 +343,7 @@ exports.pengajuanSuratAcara = async (req, res) => {
         await Rt[0].save();
         console.log('RT updated:', Rt);
 
-        if (suratAcara.wargaId.toString() !== userId) {
+        if (suratAcara.wargaId.toString() !== warga._id.toString()) {
             return res.status(403).send({
                 message: "Forbidden. Surat Acara does not belong to the specified user."
             });
