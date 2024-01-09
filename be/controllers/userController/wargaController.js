@@ -12,7 +12,7 @@ require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
-const { find } = require('../../models/suratIzinModel/suratAcaraModels');
+const { find, findOne } = require('../../models/suratIzinModel/suratAcaraModels');
 
 
 exports.LoginWarga = async (req,res) => {
@@ -298,13 +298,14 @@ exports.pengajuanSuratAcara = async (req, res) => {
         const userId = req.params.userId;
         const suratAcaraId = req.params.suratAcaraId;
 
-        const user = await WargaModel.findById(userId);
-        if (!user) {
+        // mencari warga dengan user userId
+        const warga = await WargaModel.findOne({ user: userId });
+        if (!warga){
             return res.status(404).send({
-                message: "User not found with id " + userId
+                message: "Warga not found with id " + userId
             });
         }
-
+        // sabarrr pr nya adalah mencari rt dengan field rt yang sama dengan domisili warga index ke 0
         // mencari rt dengan domisili index ke 0 yang sama dengan user domisili index ke 0
         const Rt = await RtModel.find({ domisili: user.domisili[0] });
         if (!Rt || Rt.length === 0) {

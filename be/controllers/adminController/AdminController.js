@@ -130,7 +130,8 @@ exports.postRt = async (req,res) => {
         await WargaModel.findOneAndDelete({user: idUser});
 
         const newRt = await rtModel.create({
-            user: idUser
+            user: idUser,
+            ketuaRt:dataUser.domisili[0]
         });
 
         await dataUser.save();
@@ -170,7 +171,8 @@ exports.postRw = async (req,res) => {
         }
 
         const newRw = await rwModel.create({
-            user: idUser
+            user: idUser,
+            ketuaRw:dataUser.domisili[1]
         });
 
         await dataUser.save();

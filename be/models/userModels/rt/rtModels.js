@@ -3,6 +3,8 @@ const moongose = require('mongoose');
 const rt = new moongose.Schema({
     user : { type: moongose.Schema.Types.ObjectId, ref: 'user' },
 
+
+    ketuaRt: { type: String, required: false, default: '' },
     suratAcara: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
