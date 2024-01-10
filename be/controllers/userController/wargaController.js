@@ -341,7 +341,7 @@ exports.pengajuanSuratAcara = async (req, res) => {
         // memasukan surat acara ke dalam array yang berada di Rt.suratAcaraPending
         Rt[0].suratAcaraPending.push(suratAcara._id);
         await Rt[0].save();
-        console.log('RT updated:', Rt);
+        // console.log('RT updated:', Rt);
 
         if (suratAcara.wargaId.toString() !== warga._id.toString()) {
             return res.status(403).send({

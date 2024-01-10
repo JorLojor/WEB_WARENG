@@ -192,10 +192,12 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 suratAcara.statusAcara = 'pengajuan rw';
                 PakRw.suratAcaraPending.push(suratAcara._id);
                 await PakRw.save();
+                await PakRt.save();
                 
             } else if (statusPersetujuan === false) {
                 suratAcara.statusPersetujuan = 'ditolak rt';
                 PakRt.suratAcaraRejected.push(suratAcara._id);
+                await PakRt.save();
             }
             
             await suratAcara.save(); // Simpan perubahan surat acara ke dalam database

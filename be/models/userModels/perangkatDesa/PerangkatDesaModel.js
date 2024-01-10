@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const perangkatDesaSchema = new mongoose.Schema({
     user : { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
 
-    role : { type: Number, required: true },
+    rolePD : { type: Number, required: true },
     suratAcara: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],

@@ -12,7 +12,8 @@ exports.getAllRw = async (req,res)=>{
         
         const dataRw  = await RwModel.find()
             .limit(limit)
-            .skip((page - 1) * limit);
+            .skip((page - 1) * limit)
+            .populate('user')
 
         const total = await RwModel.countDocuments();
 
@@ -169,7 +170,7 @@ const getRolePd = (jenisSurat) => {
 
 const getKasiType = (rolePd) => {
     const kasiTypes = ["pelayanan", "pemerintahan", "kersa"];
-    return kasiTypes[rolePd - 1] || "";
+    return kasiTypes[rolePd - 1] || ""; 
 };
 
 exports.persetujuanSurat = async (req, res) => {
@@ -199,10 +200,9 @@ exports.persetujuanSurat = async (req, res) => {
 
                 if (rolePd) {
                     surat.statusAcara = `pengajuan perangkat desa kasi ${getKasiType(rolePd)}`;
-                    const Kasi = await PerangkatDesaModel.findOne({ role: rolePd });
+                    const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePd });
 
                     if (Kasi) {
-                        surat.perangkatDesaId = Kasi._id;
                         Kasi.suratAcaraPending.push(surat._id);
                         await Kasi.save();
 
@@ -233,7 +233,7 @@ exports.persetujuanSurat = async (req, res) => {
                 await surat.save();
                 return res.status(200).send({
                     message: "Success update persetujuan surat",
-                    info: "Surat sudah ditolak RW",
+                    info: "Surat ditolak RW",
                     data: surat
                 });
             }

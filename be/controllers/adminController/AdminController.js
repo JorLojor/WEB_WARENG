@@ -193,12 +193,14 @@ exports.postRw = async (req,res) => {
 exports.postPerangkatDesa = async (req,res) => {
     try{
         const {idUser} = req.params;
+        const {rolePerangkatDesa} = req.body;
         const dataUser = await userModel.findByIdAndUpdate(idUser, {
             role: 4 // (perangkat desa)
         }, {new: true});
 
         const newPerangkatDesa = await pdModel.create({
-            user: idUser
+            user: idUser,
+            rolePD : rolePerangkatDesa
         });
 
         await dataUser.save();
