@@ -99,6 +99,7 @@ exports.updateuserById = async (req,res) => {
         if (updateData.tempatlahir) updateData.tempatlahir = updateData.tempatlahir.toUpperCase();
         if (updateData.tanggallahir) updateData.tanggallahir = updateData.tanggallahir.toUpperCase();
         if (updateData.agama) updateData.agama = updateData.agama.toUpperCase();
+        if (updateData.jenisKelamin) updateData.jenisKelamin = updateData.jenisKelamin.toUpperCase();
         if (updateData.pekerjaan) updateData.pekerjaan = updateData.pekerjaan.toUpperCase();
         if (updateData.domisili) updateData.domisili = updateData.domisili.map((domisili) => domisili.toUpperCase());
 

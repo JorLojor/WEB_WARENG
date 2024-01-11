@@ -128,8 +128,7 @@ exports.SubmitSuratAcara = async (req,res) => {
     try{
         const dataPD = await perangkatDesa.findById(perangkatDesaId);
         const surat = await SuratAcaraModel.findById(suratAcaraId);
-        console.log(surat);
-        console.log(dataPD);
+        
 
         if (!dataPD || !surat) {
             return res.status(404).send({
@@ -141,22 +140,32 @@ exports.SubmitSuratAcara = async (req,res) => {
             return res.status(404).send({
                 message: "belum ada persetujuan dari rw " + id
             });
-           
         }
 
         if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
             surat.statusPersetujuan = 'disetujui perangkat desa';
             surat.statusAcara = 'pengajuan kades dan wakades';
-            const DataPimpinanDesa = await PimpinanDesaModel.findOne({role: 'kepala desa'});
+
+            dataPD.suratAcaraApproved.push(suratAcaraId);
+            const indexData = dataPD.suratAcaraPending.indexOf(suratAcaraId);
+            dataPD.suratAcaraPending.splice(indexData, 1);
+            await dataPD.save();
+            
+            const DataPimpinanDesa = await PimpinanDesaModel.findOne({rolePemimpinDesa:1});
+            if(!DataPimpinanDesa){
+                return res.status(404).send({message: "kepala desa not found"});
+            } 
             DataPimpinanDesa.suratAcaraPending.push(suratAcaraId);
             await DataPimpinanDesa.save();
             surat.pimpinanDesaId = DataPimpinanDesa._id;
             await surat.save();
-            res.send({message: "test",result: surat});
+            return res.send({message: "test",result: surat});
         }
-
-
-           
+        else{
+            surat.statusPersetujuan = 'ditolak perangkat desa';
+            await surat.save();
+            return res.send({message: "test",result: surat});
+        }
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while pelayanan konter by id."

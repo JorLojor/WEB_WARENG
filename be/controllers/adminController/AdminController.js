@@ -224,12 +224,15 @@ exports.postPerangkatDesa = async (req,res) => {
 exports.postPimpinanDesa = async (req,res) => {
     try{
         const {idUser} = req.params;
+        const {RolePemimpinDesa} = req.body;
         const dataUser = await userModel.findByIdAndUpdate(idUser, {
-            role: 5 // (pimpinan desa)
+            role: 5, // (pimpinan desa)
+            
         }, {new: true});
 
         const newPimpinanDesa = await ppModel.create({
-            user: idUser
+            user: idUser,
+            rolePemimpinDesa : RolePemimpinDesa
         });
 
         await dataUser.save();
