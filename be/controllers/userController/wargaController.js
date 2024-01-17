@@ -75,7 +75,7 @@ exports.RegisterWarga = async (req,res) => {
             user: newUser._id
         });
         
-        res.status(200).send({
+        return res.status(200).send({
             message: "Success register warga",
             user: newUser,
             warga: newWarga,
@@ -86,6 +86,38 @@ exports.RegisterWarga = async (req,res) => {
             message: error.message || "Some error occurred while register warga."
         });
     }
+};
+
+// forgot password warga
+
+exports.ForgotPassword = async (req,res) => {
+    try{
+        const {nik} = req.body;
+        const {newPassword} = req.body;
+
+        const dataWarga = await WargaModel.findOne({nik: nik});
+        if (!dataWarga) {
+            return res.status(404).send({
+                status: 'failed',
+                message: "Warga not found with nik " + nik
+            });
+        }
+
+        dataWarga.password = await bcrypt.hash(newPassword, 10);
+        await dataWarga.save();
+
+        return res.status(200).send({
+            status: 'success',
+            message: "Success forgot password warga",
+            data: dataWarga
+        });
+        
+    }catch(error){
+        return res.status(500).send({
+            message: error.message || "Some error occurred while forgot password warga."
+        });
+    }
+
 };
 
 
@@ -103,7 +135,7 @@ exports.postWarga = async (req,res) => {
             domisili : domisili.map((domisili) => domisili.toUpperCase())
         });
 
-        res.status(200).send({
+        return res.status(200).send({
             message: "Success create warga",
             data: warga
         });
