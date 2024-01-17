@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
-// import Navbar from "../../components/navbar/Navbar"
-import "../siginPage/SiginPage.css";
-import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
-import { useState, useEffect } from "react";
-function loginPage() {
+import React from 'react';
+import './SiginPage.css';
+import ButtonSignin from '../../components/buttonSignin/ButtonSigin';
+import { useState, useEffect } from 'react';
+
+
+const SiginPage = () => {
+
     const [dataUser , setDataUser] = useState({
-        name : '',
+        nama : '',
         password : '',
+        nohp : null,
     });
 
     const updateField = (e) => {
@@ -26,7 +29,7 @@ function loginPage() {
                 <div className="container-fluid box-Sigin">
                         
                         <div className="box-Sigin-title">
-                            <h1>LOGIN</h1>
+                            <h1>SIGN UP</h1>
                             {/* input nama */}
                             <div className="box-Sigin__title__input">
                                 <label className='text-light' htmlFor="">Nama</label>
@@ -47,8 +50,17 @@ function loginPage() {
                                     onChange = {updateField}    
                                 />
                             </div>
-                            
-                            <ButtonLogin data={dataUser} />
+                            {/* input nik */}
+                            <div className="box-Sigin__title__input">
+                                <label className='text-light' htmlFor="">Nomor Telpon</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Masukan Nomor Telpon"
+                                    name = 'nohp'
+                                    onChange = {updateField}    
+                                />
+                            </div>
+                            <ButtonSignin data={dataUser}/>
                         </div>
                 </div>
 
@@ -59,4 +71,4 @@ function loginPage() {
     )
 }
 
-export default loginPage;
+export default SiginPage;

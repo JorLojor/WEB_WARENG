@@ -40,6 +40,7 @@ exports.LoginWarga = async (req,res) => {
         await dataUser.save();
 
         res.status(200).send({
+            status: 'success',
             message: "Success login warga",
             data: dataUser
         });
@@ -77,7 +78,8 @@ exports.RegisterWarga = async (req,res) => {
         res.status(200).send({
             message: "Success register warga",
             user: newUser,
-            warga: newWarga
+            warga: newWarga,
+            status: 'success'
         });
     }catch(error){
         res.status(500).send({
