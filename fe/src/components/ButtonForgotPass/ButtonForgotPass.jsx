@@ -30,6 +30,8 @@ const ButtonForgotPass = ({ data }) => {
         } catch (error) {
             console.log('Error:', error);
         }
+
+        
     };
 
     return (
