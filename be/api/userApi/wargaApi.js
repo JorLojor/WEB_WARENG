@@ -14,7 +14,7 @@ Router.post('/create/surat/:idWarga/:idSuratAcara',wargaController.createSuratPd
 
 Router.post('/login',wargaController.LoginWarga); // http://localhost:3555/api/v1/warga/login
 Router.post('/register',wargaController.RegisterWarga); // http://localhost:3555/api/v1/warga/register
-Router.put('forgot-password',wargaController.ForgotPassword); // http://localhost:3555/api/v1/warga/forgot-password
+Router.put('/forgot-password',wargaController.ForgotPassword); // http://localhost:3555/api/v1/warga/forgot-password
 
 module.exports = Router;
 

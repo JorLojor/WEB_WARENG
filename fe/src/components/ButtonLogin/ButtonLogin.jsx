@@ -35,12 +35,12 @@ const ButtonSignin = ({data}) => {
 
     return(
         <>
-             <div className="login-btn d-flex justify-content-between mt-5">
+            <div className="login-btn d-flex justify-content-between mt-5">
                 <button onClick={
                     handleSubmit
                 }>Login</button>
                 <div className="d-flex cover-spa-sigin gap-4">
-                    <Link to={'/sigin'}> <p>lupa password</p></Link>
+                    <Link to={'/forgot-password'}> <p>lupa password</p></Link>
                     <Link to={'/sigin'}> <p>belum punya akun</p></Link>
                 </div>
                 

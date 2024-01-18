@@ -89,13 +89,12 @@ exports.RegisterWarga = async (req,res) => {
 };
 
 // forgot password warga
+exports.ForgotPassword = async (req, res) => {
+    try {
+        const { nik, newPassword } = req.body;
 
-exports.ForgotPassword = async (req,res) => {
-    try{
-        const {nik} = req.body;
-        const {newPassword} = req.body;
-
-        const dataWarga = await WargaModel.findOne({nik: nik});
+        const dataWarga = await userModel.findOneAndUpdate({ nik: nik });
+        console.log('dataWarga:', dataWarga);
         if (!dataWarga) {
             return res.status(404).send({
                 status: 'failed',
@@ -111,15 +110,14 @@ exports.ForgotPassword = async (req,res) => {
             message: "Success forgot password warga",
             data: dataWarga
         });
-        
-    }catch(error){
+
+    } catch (error) {
+        console.error('Error:', error);
         return res.status(500).send({
-            message: error.message || "Some error occurred while forgot password warga."
+            message: "Internal server error. Please try again later."
         });
     }
-
 };
-
 
 exports.postWarga = async (req,res) => {
     const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;

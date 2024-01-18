@@ -7,6 +7,7 @@ import LandingPage from './pages/landingPage/LandingPage';
 import InformasiDesa from './pages/informasiDesa/InformasiDesa';
 import LoginPage from './pages/loginPage/loginPage';
 import SiginPage from './pages/siginPage/SiginPage';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/informasi-desa" element={<InformasiDesa/>} />
             <Route path="/login" element={<LoginPage/>} />
             <Route path="/sigin" element={<SiginPage/>} />
+            <Route path="/forgot-password" element={<ForgotPassword/>} />
 
           </Routes>
 
