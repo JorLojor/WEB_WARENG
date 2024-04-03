@@ -4,7 +4,6 @@ const db = require('../models');
 
 exports.getDataKonter = async (req, res) => {
     try{
-        // nyusull
         const dataKonter = await db.konter.find();
         const totalPelayanan = await dataKonter.pelayanan.countDocuments();
 
@@ -21,64 +20,13 @@ exports.getDataKonter = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 exports.getDataKonterById = async (req, res) => {
     try{
-        // nyusull
+        const dayaKonter = await db.konter.findById(req.params.id);
+        return res.status(200).send({
+            message: "Success get konter by id",
+            data: dayaKonter
+        });
 
     }catch(error){
         console.log(error);
