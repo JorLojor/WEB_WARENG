@@ -5,7 +5,14 @@ const db = require('../models');
 exports.getDataKonter = async (req, res) => {
     try{
         // nyusull
+        const dataKonter = await db.konter.find();
+        const totalPelayanan = await dataKonter.pelayanan.countDocuments();
 
+        return res.status(200).send({
+            message: "Success get all konter",
+            data: dataKonter,
+            totalPelayanan: totalPelayanan
+        }); 
     }catch(error){
         console.log(error);
         return res.status(500).send({
@@ -13,6 +20,61 @@ exports.getDataKonter = async (req, res) => {
         });
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.getDataKonterById = async (req, res) => {
     try{
