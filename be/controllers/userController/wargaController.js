@@ -545,12 +545,6 @@ exports.createSuratPdf = async (req, res) => {
 }
 
 
-
-
-
-
-
-
 exports.deleteSuratAcaraById = async (req,res) =>{
     const UserId = req.params.userId;
     const SuratAcaraId = req.params.suratAcaraId;

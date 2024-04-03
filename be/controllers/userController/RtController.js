@@ -7,7 +7,7 @@ const SuratAcaraModel = db.suratAcara;
 
 exports.getAllRt = async (req, res) => {
     try {
-        const rt = await RtModel.find();
+        const rt = await RtModel.find().populate('user');
         res.status(200).send({ 
             message: "Success get all rt",
             data: rt
