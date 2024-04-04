@@ -1,5 +1,3 @@
-
-
 const wargaController = require('../../controllers/userController/wargaController');
 const express = require('express');
 const Router = express.Router();
