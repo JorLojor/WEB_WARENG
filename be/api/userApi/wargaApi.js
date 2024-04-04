@@ -6,6 +6,8 @@ const Router = express.Router();
 
 
 Router.get('/get',wargaController.getAllWarga);
+Router.get('/get-all/user',wargaController.getAllwargaLessDetail);
+
 Router.get('/get/:id',wargaController.getWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
 Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
@@ -20,6 +22,12 @@ module.exports = Router;
 
 // note :
 // get all user : http://localhost:3555/api/v1/warga/get-all/user
+// get all warga : http://localhost:3555/api/v1/warga/get
+
+// login : http://localhost:3555/api/v1/warga/login
+// register : http://localhost:3555/api/v1/warga/register
+// forgot password : http://localhost:3555/api/v1/warga/forgot-password
+
 // get all warga : http://localhost:3555/api/v1/warga/get
 // get warga by id : http://localhost:3555/api/v1/warga/get/:id
 // post warga : http://localhost:3555/api/v1/warga/post-warga

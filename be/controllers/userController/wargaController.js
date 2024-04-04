@@ -202,6 +202,47 @@ exports.getAllWarga = async (req, res) => {
     }
 };
 
+
+// this controller used for user not admin
+exports.getAllwargaLessDetail = async (req,res) => {
+    try{
+        const viewer = req.params.id;
+        const validViewr = await userModel.findById(viewer)
+
+        if (!validViewr) {
+            return res.status(404).send({
+                message: "Warga not found with id " + viewer
+            });
+        }
+
+        const page = parseInt(req.query.page) || 1; // Menambahkan nilai default jika query parameter tidak ada
+        const limitt = parseInt(req.query.limit) || 10; 
+
+        const warga = await WargaModel.find().populate('user')
+        const total = await WargaModel.countDocuments();
+        let dataResponse = {
+            nama : warga.user.name,
+            alamat : warga.user.alamat,
+        }
+        let dataRequest = validViewr.name;
+    
+        res.status(200).send({
+            request: "GET",
+            from : dataRequest,
+            message: "Success get all warga less detail for users",
+            data: dataResponse,
+            page: page,
+            limit: limitt,
+            totalDocument: total
+        });
+        console.log(`Received GET request to /api/v1/warga/get with page: ${page}, limit: ${limitt}`);
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while get all warga less detail."
+        });
+    }
+}
+
 exports.getWargaById = async (req,res) => {
     const id = req.params.id;
     try{
@@ -582,6 +623,7 @@ exports.deleteSuratAcaraById = async (req,res) =>{
         });
     }
 }
+
 
 
 module.exports = exports;
