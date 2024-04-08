@@ -91,7 +91,7 @@ exports.RegisterWarga = async (req,res) => {
 // forgot password warga
 exports.ForgotPassword = async (req, res) => {
     try {
-        const { nik, newPassword } = req.body;
+        const { nik, newPassword } = req.body;;
 
         const dataWarga = await userModel.findOneAndUpdate({ nik: nik });
         console.log('dataWarga:', dataWarga);
