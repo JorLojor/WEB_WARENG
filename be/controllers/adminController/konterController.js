@@ -1,6 +1,4 @@
-const db = require('../models');
-
-
+const db = require('../../models/konterModel/KonterModel');
 
 exports.getDataKonter = async (req, res) => {
     try{
@@ -12,6 +10,7 @@ exports.getDataKonter = async (req, res) => {
             data: dataKonter,
             totalPelayanan: totalPelayanan
         }); 
+        
     }catch(error){
         console.log(error);
         return res.status(500).send({

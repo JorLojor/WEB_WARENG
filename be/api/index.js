@@ -27,6 +27,9 @@ Router.use('/perangkatDesa', perangkatDesaApi);
 const pimpinanDesaApi = require('./userApi/pimpinanDesaAPI');
 Router.use('/pimpinanDesa', pimpinanDesaApi);
 
+const konterApi = require('./konterApi/konterApi');
+Router.use('/konter', konterApi);
+
 const adminApi = require('./adminApi/adminApi');
 Router.use('/admin', adminApi);
 
