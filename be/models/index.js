@@ -10,6 +10,7 @@ const rw = require('./userModels/rw/rwModels')
 const pimpinanDesa = require('./userModels/pimpinanDesa/pimpinanDesaModels')
 const admin = require('./adminModels/adminModels')
 const konter = require('./konterModel/KonterModel')
+const pelayanan = require('./konterModel/PelayananModels')
 
 //db object
 const db = {
@@ -19,6 +20,7 @@ const db = {
     warga,
     user,
     konter,
+    // pelayanan,
     suratAcara,
     PerangkatDesaModel,
     admin

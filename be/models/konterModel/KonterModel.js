@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const konter = new mongoose.Schema({
     konterName: {type: String, required: true},
-    pelayanan:[{ type: mongoose.Schema.Types.ObjectId ,ref: 'pelayanan',required: false}]
+    suratAcaraId:[{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara', required: false }],
 })
 
-module.exports = mongoose.model('konter',konter)
+module.exports = mongoose.model('konter',konter);
