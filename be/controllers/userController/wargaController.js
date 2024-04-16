@@ -121,23 +121,28 @@ exports.ForgotPassword = async (req, res) => {
 };
 
 exports.postWarga = async (req,res) => {
-    const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
     try{
-        // UPPER CASE request body
-        const warga = await WargaModel.create({
-            name : name.toUpperCase(),
-            nik,
-            password,
-            alamat: alamat.toUpperCase(),
-            nohp,
-            statusPerkawinan : statusPerkawinan.toUpperCase(),
-            domisili : domisili.map((domisili) => domisili.toUpperCase())
+        const {id} = req.params;
+
+        const data = await userModel.findById(id);
+        if (!data) {
+            return res.status(404).send({
+                message: "User not found with id " + id
+            });
+        }
+
+        const newWarga = await WargaModel.create({
+            user: id
         });
 
-        return res.status(200).send({
+        res.status(200).send({
             message: "Success create warga",
-            data: warga
+
+            
+            // delete when deploy   
+            data: newWarga
         });
+       
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while creating warga."

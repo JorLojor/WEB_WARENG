@@ -6,6 +6,8 @@ const Router = express.Router();
 Router.get('/get',wargaController.getAllWarga);
 Router.get('/get/less/:id',wargaController.getAllwargaLessDetail);
 
+Router.post('/post-warga/:id',wargaController.postWarga);   // http://localhost:3555/api/v1/warga/post-warga
+
 Router.get('/get/:id',wargaController.getWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
 Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
