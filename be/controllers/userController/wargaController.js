@@ -13,26 +13,24 @@ require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
-const { find, findOne } = require('../../models/suratIzinModel/suratAcaraModels');
 
 
 exports.LoginWarga = async (req,res) => {
     const {name,password} = req.body;
     try{
         const dataNama = name.toUpperCase();
-        const dataUser = await userModel.findOne({name: dataNama}).select('-token');
+        const dataUser = await userModel.findOne({name: dataNama});
+        console.log('dataUser:', dataUser);
+        
 
         if (!dataUser) {
-            return res.status(404).send({
-                message: "User not found with name " + name
-            });
+            throw new Error('user not found with name :  ' + name);
         }
 
         const comparePassword = await bcrypt.compare(password, dataUser.password);
-
         if (!comparePassword) {
             return res.status(400).send({
-                message: "incorrect password"
+                message: "Invalid Password!"
             });
         }
 
@@ -48,40 +46,76 @@ exports.LoginWarga = async (req,res) => {
     
 
     }catch(error){
+        console.log('Error:', error);
         res.status(500).send({
             message: error.message || "Some error occurred while login warga."
         });
     }
 };
 
+exports.LogOutWarga = async (req,res) => {
+    const {id} = req.params;
+    try{
+        const dataUser = await userModel.findById(id);
+        if (!dataUser) {
+            return res.status(404).send({
+                message: "User not found with id " + id
+            });
+        }
+
+        dataUser.token = '';
+        await dataUser.save();
+
+        res.status(200).send({
+            message: "Success logout warga",
+            data: dataUser
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while logout warga."
+        });
+    }
+}
+
 exports.RegisterWarga = async (req,res) => {
     try{
         const {username,password,nohp} = req.body;
-
+        
         if (!username || !password || !nohp) {
             return res.status(400).send({
                 message: "you must insert username, password, and nohp"
             });
         }
-
-        const newUser = await userModel.create({
-            name: username.toUpperCase(),
-            password : await bcrypt.hash(password, 10), 
-            nohp: nohp,
-        });
-
-        // buat warga
-
-        const newWarga = await WargaModel.create({
-            user: newUser._id
-        });
         
-        return res.status(200).send({
-            message: "Success register warga",
-            user: newUser,
-            warga: newWarga,
-            status: 'success'
+        // cek apakah username belum terdaftar
+        const checkUsername = await userModel.findOne({
+            name: username.toUpperCase()
         });
+        if (checkUsername) {
+            const cekWarga = await wargaModel.findOne({user: checkUsername._id});
+            if (cekWarga) {
+                throw new Error('user already registered as warga');
+            }
+            const Hashpassword = await bcrypt.hash(password, 10);
+            const newWarga = await WargaModel.create({
+                user: checkUsername._id,
+            });
+            checkUsername.password = Hashpassword;
+            checkUsername.nohp = nohp;
+            checkUsername.role = 1;
+            checkUsername.save();
+            
+            return res.status(200).send({
+                message: "Success register warga",
+                user: checkUsername,
+                warga: newWarga,
+                status: 'success'
+            });
+        }else{
+            // lempar kesalahan kebagian catch
+            throw new Error('user not found with name :  ' + username);    
+        }
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while register warga."
@@ -210,29 +244,32 @@ exports.getAllWarga = async (req, res) => {
 
 
 // this controller used for user not admin
+
 exports.getAllwargaLessDetail = async (req, res) => {
     try {
         const viewerId = req.params.id;
         const ArrData = [];
         const validViewer = await userModel.findById(viewerId);
 
-        if (!validViewer) {
-            return res.status(404).send({
-                message: "Viewer not found with id " + viewerId
+        // validasi user memiliki token sesuai login
+        const token = req.header('Authorization');
+        if (!token || !validViewer || validViewer.token !== token.replace('Bearer ', '')) {
+            return res.status(403).send({
+                message: "Forbidden. You are not authorized to access this resource."
             });
         }
+
         const warga = await WargaModel.find().populate('user');
         warga.forEach((warga) => {
-            
             if (warga.user && warga.user.name && warga.user.alamat) {
                 const dataResponse = {
                     nama: warga.user.name,
                     alamat: warga.user.alamat
                 };
-                
                 ArrData.push(dataResponse);
             }
         });
+
         const dataRequest = validViewer.name;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -256,6 +293,7 @@ exports.getAllwargaLessDetail = async (req, res) => {
         });
     }
 }
+
 
 
 exports.getWargaById = async (req,res) => {

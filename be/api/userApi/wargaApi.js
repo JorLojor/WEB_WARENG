@@ -4,7 +4,7 @@ const Router = express.Router();
 
 
 Router.get('/get',wargaController.getAllWarga);
-Router.get('/get/less/:id',wargaController.getAllwargaLessDetail);
+Router.get('/get/less/:id',wargaController.getAllwargaLessDetail);// http://localhost:3555/api/v1/warga/get/less/:id
 
 Router.post('/post-warga/:id',wargaController.postWarga);   // http://localhost:3555/api/v1/warga/post-warga
 
@@ -15,6 +15,7 @@ Router.delete('/delete/suratAcara/:userId/:suratAcaraId',wargaController.deleteS
 Router.post('/create/surat/:idWarga',wargaController.createSuratPdf);
 
 Router.post('/login',wargaController.LoginWarga); // http://localhost:3555/api/v1/warga/login
+Router.post('/logout/:id',wargaController.LogOutWarga); // http://localhost:3555/api/v1/warga/logout/:id
 Router.post('/register',wargaController.RegisterWarga); // http://localhost:3555/api/v1/warga/register
 Router.put('/forgot-password',wargaController.ForgotPassword); // http://localhost:3555/api/v1/warga/forgot-password
 

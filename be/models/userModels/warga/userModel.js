@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const user = new mongoose.Schema({
     name: { type: String, required: true },
     nik: { type:String, required: false, default: ''},
-    password: { type:String, required: true, default: ''},
+    password: { type:String, required: false, default: ''},
     alamat: { type:String, required: false, default: ''},
     domisili: [{ type: String, required: false, default: '' }],  // array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
     nohp: { type:Number, required: true, default: ''},
