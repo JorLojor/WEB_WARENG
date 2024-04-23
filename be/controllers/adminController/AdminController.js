@@ -119,56 +119,50 @@ exports.postWarga = async (req,res) => {
 
 
 ////// RT //////
-exports.postRt = async (req,res) => {
-    try{
-        const {idUser} = req.params;
+exports.postRt = async (req, res) => {
+    try {
+        const { idUser } = req.params;
         const dataUser = await userModel.findByIdAndUpdate(idUser, {
             role: 2 // (rt)
-        }, {new: true});
+        }, { new: true });
 
         // mencari model warga berdasarkan idUser dan delete
-        await WargaModel.findOneAndDelete({user: idUser});
+        await WargaModel.findOneAndDelete({ user: idUser });
 
         const newRt = await rtModel.create({
             user: idUser,
-            ketuaRt:dataUser.domisili[0]
+            ketuaRt: dataUser.domisili[0]
         });
 
         await dataUser.save();
 
-        res.status(200).send({
+        res.status(200).json({
             message: "Success create rt",
             data: newRt
         });
-
-    }catch(error){
-        res.status(500).send({
+    } catch (error) {
+        res.status(500).json({
             message: error.message || "Some error occurred while creating warga."
         });
     }
 }
 
 
+
 ////// RW //////
 exports.postRw = async (req,res) => {
     try{
         const {idUser} = req.params;
+        // mencari model warga berdasarkan idUser dan delete
+        const cekWarga = await WargaModel.findOne({user: idUser});
+        if (!cekWarga) {
+            throw new Error("User belum terdaftar sebagai warga");
+        }
+        await WargaModel.findOneAndDelete({user: idUser});
+        
         const dataUser = await userModel.findByIdAndUpdate(idUser, {
             role: 3 // (rw)
         }, {new: true});
-
-        // mencari model warga untuk cek apakah user sudah menjadi rt atau belum
-        const cekWarga = await WargaModel.findOne({user: idUser});
-        if (cekWarga) {
-            return res.status(400).send({
-                message: "User must be rt first"
-            });
-        }
-        // mencari model rt berdasarkan idUser dan delete
-        const cekRt = await rtModel.findOne({user: idUser});
-        if (cekRt){
-            await rtModel.findOneAndDelete({user: idUser});
-        }
 
         const newRw = await rwModel.create({
             user: idUser,

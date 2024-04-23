@@ -681,15 +681,11 @@ exports.deleteSuratAcaraById = async (req,res) =>{
 //TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
 //TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
 //TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
-
-
 //TA version
 exports.createSuratPdf_TAVERSION = async (req, res) => {
     try {
         const {idWarga} = req.params;
         const dataWarga = await WargaModel.findById(idWarga).populate('user');
-
-
         const Rt = await RtModel.findOne({ ketuaRt: dataWarga.user.domisili[0] }).populate('user');
         console.log('Rt:', Rt);
         console.log('nama Rw:', Rt.user.alamat);
@@ -698,7 +694,6 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
                 message: "RT not found with domisili rt " + dataWarga.user.domisili[0]
             });
         }
-
         const Rw = await RwModel.findOne({ ketuaRw: dataWarga.user.domisili[1] }).populate('user');
         console.log('Rw:', Rw);
         console.log('nama Rw:', Rw.user.alamat);
@@ -763,8 +758,6 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
             message: "Success create surat acara",
             data: SuratResultPdf
         });
-
-
 
     } catch (error) {
         console.error('Error:', error);
