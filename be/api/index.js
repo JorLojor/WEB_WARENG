@@ -15,6 +15,9 @@ Router.use('/user', userApi);
 const wargaApi = require('./userApi/wargaApi');
 Router.use('/warga', wargaApi);
 
+const suratApi = require('./suratApi/suratApi')
+Router.use('/surat', suratApi);
+
 const RtApi = require('./userApi/RtApi');
 Router.use('/rt', RtApi);
 

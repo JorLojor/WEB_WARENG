@@ -11,7 +11,7 @@ Router.post('/post-warga/:id',wargaController.postWarga);   // http://localhost:
 Router.get('/get/:id',wargaController.getWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
 Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
-Router.delete('/delete/suratAcara/:userId/:suratAcaraId',wargaController.deleteSuratAcaraById);
+
 Router.post('/create/surat/:idWarga',wargaController.createSuratPdf);
 
 Router.post('/login',wargaController.LoginWarga); // http://localhost:3555/api/v1/warga/login
@@ -19,7 +19,7 @@ Router.post('/logout/:id',wargaController.LogOutWarga); // http://localhost:3555
 Router.post('/register',wargaController.RegisterWarga); // http://localhost:3555/api/v1/warga/register
 Router.put('/forgot-password',wargaController.ForgotPassword); // http://localhost:3555/api/v1/warga/forgot-password
 
-Router.post('/create/suratAcara/TAversion/:idWarga',wargaController.createSuratPdf_TAVERSION);  // http://localhost:3555/api/v1/warga/create/suratAcara/TAversion/:idWarga
+
 
 
 
