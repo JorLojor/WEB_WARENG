@@ -5,6 +5,7 @@ const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
 const RwModel = db.rw;
 const PerangkatDesaModel = db.PerangkatDesaModel;
+const PimpinanDesa = db.pimpinanDesa;
 const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
@@ -24,8 +25,6 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
         const dataWarga = await WargaModel.findById(idWarga).populate('user');
         const Rt = await RtModel.findOne({ ketuaRt: dataWarga.user.domisili[0] }).populate('user');
         
-        console.log('Rt:', Rt);
-        console.log('nama Rw:', Rt.user.alamat);
         if (!Rt || Rt.length === 0) {
             return res.status(404).send({
                 message: "RT not found with domisili rt " + dataWarga.user.domisili[0]
@@ -43,6 +42,14 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
         console.log('rolePerangkatDesa:', rolePerangkatDesa);
         const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePerangkatDesa.role });
         console.log('Kasi:', Kasi);
+
+        const kades = await PimpinanDesa.findOne({rolePemimpinDesa: 1});
+        if (!kades) {
+            return res.status(404).send({
+                message: "Kades not found"
+            });
+        }
+        console.log('kades:', kades);
     
         //pengondisian jika kasi tidak ditemukan
         if(rolePerangkatDesa === "rolePd not found"){
@@ -68,23 +75,23 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
             tempatAcara,
             wargaId: dataWarga._id
         });
-        // // Tambahkan ID surat acara ke array suratAcara di warga
-        // dataWarga.suratAcara.push(suratAcara._id);
-        // await dataWarga.save();
-        // // // tmbahkan ID surat acara ke array suratAcaraPending di Rt
-        // Rt[0].suratAcaraComing.push(suratAcara._id);
-        // await Rt[0].save();
-        // // tambahkan ID surat acara ke array suratAcaraPending di Rw
-        // Rw[0].suratAcaraComing.push(suratAcara._id);
-        // await Rw[0].save();
-        // // tamabhakan ID surat acara ke array suratAcaraPending di Kasi
-        // Kasi.suratAcaraComing.push(suratAcara._id);
-
-        console.log('rt :', Rt);
-        console.log('rw :', Rw);
-        console.log('kasi :', Kasi);
+        // Tambahkan ID surat acara ke array suratAcara di warga
+        dataWarga.suratAcara.push(suratAcara._id);
+        await dataWarga.save();
+        // // tmbahkan ID surat acara ke array suratAcaraPending di Rt
+        Rt.suratAcaraComing.push(suratAcara._id);
         
-
+        await Rt.save();
+        // tambahkan ID surat acara ke array suratAcaraPending di Rw
+        Rw.suratAcaraComing.push(suratAcara._id);
+        await Rw.save();
+        // tamabhakan ID surat acara ke array suratAcaraPending di Kasi
+        Kasi.suratAcaraComing.push(suratAcara._id);
+        await Kasi.save();
+         // tambahkan ID surat acara ke array suratAcaraComing di Kades
+        kades.suratAcaraComing.push(suratAcara._id);
+        await kades.save();
+        
         if (suratAcara.wargaId.toString() !== dataWarga._id.toString()) {
             return res.status(403).send({
                 message: "Forbidden. Surat Acara does not belong to the specified user."
