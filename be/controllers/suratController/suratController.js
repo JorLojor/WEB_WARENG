@@ -17,7 +17,45 @@ const {generatePDF} = require('../../middleware/fileUpload');
 const {kasiDecider} = require('../../middleware/kasiDecider') 
 
 
-exports.createSuratPdf_TAVERSION = async (req, res) => {
+exports.getAllSuratAcaraLessDetail_TAVERSION = async (req, res) => {
+    try{
+        const page = parseInt(req.query.page) || 1;
+        let arrDataSuratAcara = [];
+        const limit = parseInt(req.query.limit) || 10;
+        const dataSuratAcara = await suratAcaraModel.find()
+            .limit(limit)
+            .skip((page - 1) * limit);
+
+
+        dataSuratAcara.forEach((suratAcara) => {
+            arrDataSuratAcara.push({
+                nameAcara: suratAcara.nameAcara,
+                jenisSurat: suratAcara.jenisSurat,
+                isiAcara: suratAcara.isiAcara,
+                statusAcara: suratAcara.statusAcara,
+                tanggalMulai: suratAcara.tanggalMulai,
+                tanggalSelesai: suratAcara.tanggalSelesai,
+            });
+        });
+            
+        const dataTotal = await suratAcaraModel.countDocuments();
+        res.status(200).send({
+            message: "Success get all surat acara",
+            data: arrDataSuratAcara,
+            page: page,
+            limit: limit,
+            totalDocument: dataTotal
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while get all surat acara."
+        });
+    }
+}
+
+
+exports.createSurat_TAVERSION = async (req, res) => {
     try {
         const {idWarga} = req.params;
         const { nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSelesai, tempatAcara } = req.body;
@@ -124,7 +162,71 @@ exports.createSuratPdf_TAVERSION = async (req, res) => {
     }
 }
 
+exports.generateSuratPdf_TAVERSION = async (req, res) => {
+    try {
+        const {idSuratAcara} = req.params;
+        const suratAcara = await suratAcaraModel.findById(idSuratAcara).populate('wargaId');
+        if (!suratAcara) {
+            throw new Error(`Surat Acara with id ${idSuratAcara} not found`);
+        }
+        const data = {
+            nameAcara: suratAcara.nameAcara,
+            jenisSurat : suratAcara.jenisSurat,
+            isiAcara : suratAcara.isiAcara,
+            tanggalMulai : suratAcara.tanggalMulai,
+            tanggalSelesai : suratAcara.tanggalSelesai,
+            tempatAcara : suratAcara.tempatAcara,
+            Rt : suratAcara.rtId,
+            Rw : suratAcara.rwId,
+            Warga : suratAcara.wargaId
+        };
+        const SuratResultPdf = await generatePDF(data);
+        res.status(200).send({
+            message: "Success generate surat acara",
+            data: SuratResultPdf
+        });
 
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message || "Some error occurred while generating Surat Acara."
+        });
+    }
+};
+
+exports.updateSuratPdf_TAVERSION = async (req, res) => {
+    try {
+        const {idSuratAcara} = req.params;
+        const { nameAcara,isiAcara, tanggalMulai, tanggalSelesai, tempatAcara, } = req.body;
+        const suratAcara = await suratAcaraModel.findById(idSuratAcara)
+        if (!suratAcara) {
+            throw new Error(`Surat Acara with id ${idSuratAcara} not found`);
+        }
+
+        if (!suratAcara.statusAcara === 'revision') {
+            throw new Error(`Surat Acara with id ${idSuratAcara} is not revision status`);
+        }
+        if (nameAcara) {
+            suratAcara.nameAcara = nameAcara;
+        }
+        if (isiAcara) {
+            suratAcara.isiAcara = isiAcara;
+        }
+        if (tanggalMulai) {
+            suratAcara.tanggalMulai = tanggalMulai;
+        }
+        if (tanggalSelesai) {
+            suratAcara.tanggalSelesai = tanggalSelesai;
+        }
+        if (tempatAcara) {
+            suratAcara.tempatAcara = tempatAcara;
+        }
+        await suratAcara.save();
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message || "Some error occurred while updating Surat Acara."
+        });   
+    }
+}
 
 
 exports.deleteSuratAcaraById = async (req,res) =>{
@@ -164,6 +266,8 @@ exports.deleteSuratAcaraById = async (req,res) =>{
         });
     }
 }
+
+
 
 
 
