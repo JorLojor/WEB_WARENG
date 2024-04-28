@@ -20,31 +20,23 @@ exports.LoginWarga = async (req,res) => {
     try{
         const dataNama = name.toUpperCase();
         const dataUser = await userModel.findOne({name: dataNama});
-        console.log('dataUser:', dataUser);
-        
-
         if (!dataUser) {
             throw new Error('user not found with name :  ' + name);
         }
-
         const comparePassword = await bcrypt.compare(password, dataUser.password);
         if (!comparePassword) {
             return res.status(400).send({
                 message: "Invalid Password!"
             });
         }
-
         const token = jwt.sign({id: dataUser._id}, process.env.LOGIN_TOKEN, {expiresIn: '1d'});
         dataUser.token = token;
         await dataUser.save();
-
         res.status(200).send({
             status: 'success',
             message: "Success login warga",
             data: dataUser
         });
-    
-
     }catch(error){
         console.log('Error:', error);
         res.status(500).send({

@@ -25,8 +25,6 @@ exports.getAllSuratAcaraLessDetail_TAVERSION = async (req, res) => {
         const dataSuratAcara = await suratAcaraModel.find()
             .limit(limit)
             .skip((page - 1) * limit);
-
-
         dataSuratAcara.forEach((suratAcara) => {
             arrDataSuratAcara.push({
                 nameAcara: suratAcara.nameAcara,
@@ -135,24 +133,30 @@ exports.createSurat_TAVERSION = async (req, res) => {
                 message: "Forbidden. Surat Acara does not belong to the specified user."
             });
         }
-        const data = {
-            nameAcara: suratAcara.nameAcara,
-            jenisSurat : suratAcara.jenisSurat,
-            isiAcara : suratAcara.isiAcara,
-            tanggalMulai : suratAcara.tanggalMulai,
-            tanggalSelesai : suratAcara.tanggalSelesai,
-            tempatAcara : suratAcara.tempatAcara,
-            Rt : Rt.ketuaRt,
-            Rw : Rw.ketuaRw,
-            RtName : Rt.user.name,
-            RwName : Rw.user.name
-        };
 
-        const SuratResultPdf = await generatePDF(data);
         res.status(200).send({
             message: "Success create surat acara",
-            data: SuratResultPdf
+            data: suratAcara
         });
+        
+        // const data = {
+        //     nameAcara: suratAcara.nameAcara,
+        //     jenisSurat : suratAcara.jenisSurat,
+        //     isiAcara : suratAcara.isiAcara,
+        //     tanggalMulai : suratAcara.tanggalMulai,
+        //     tanggalSelesai : suratAcara.tanggalSelesai,
+        //     tempatAcara : suratAcara.tempatAcara,
+        //     Rt : Rt.ketuaRt,
+        //     Rw : Rw.ketuaRw,
+        //     RtName : Rt.user.name,
+        //     RwName : Rw.user.name
+        // };
+
+        // const SuratResultPdf = await generatePDF(data);
+        // res.status(200).send({
+        //     message: "Success create surat acara",
+        //     data: SuratResultPdf
+        // });
 
     } catch (error) {
         console.error('Error:', error);
