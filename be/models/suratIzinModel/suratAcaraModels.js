@@ -4,7 +4,7 @@ const suratAcara = new mongoose.Schema({
     nameAcara: { type: String, required: true },
     jenisSurat : { type: String, required: true },
     isiAcara : { type:[String], required: true }, 
-    statusAcara: { type:String, required: false, default: 'belum pengajuan'}, //belum pengajuan, pengajuan, disetujui, ditolak ,
+    statusAcara: { type:String, required: false, default: 'belum pengajuan'},
     tanggalMulai: { type: Date, required: true },  // kalo di postman formatnya 2021-08-01T00:00:00.000+00:00
     tanggalSelesai: { type: Date, required: true },
     tempatAcara: { type: String, required: true },

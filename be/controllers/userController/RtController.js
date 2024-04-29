@@ -139,9 +139,7 @@ exports.deleteRt = async (req, res) => {
 exports.persetujuanSuratAcara = async (req, res) => {
     const idSurat = req.params.suratAcaraId; 
     const idRt = req.params.rtId; 
-    const statusPersetujuan = req.body.statusPersetujuan;
-
-    
+    const statusPersetujuanReq = req.body.statusPersetujuan;
 
     try {
         const PakRt = await RtModel.findById(idRt);
@@ -171,7 +169,7 @@ exports.persetujuanSuratAcara = async (req, res) => {
         if (suratAcara.statusPersetujuan === 'belum ada persetujuan') {
             suratAcara.rtId = idRt;
 
-            if (statusPersetujuan === true) {
+            if (statusPersetujuanReq === true) {
                 suratAcara.statusPersetujuan = 'disetujui rt';
                 PakRt.suratAcaraApproved.push(suratAcara._id);
                 const dataIndex = PakRt.suratAcaraPending.indexOf(suratAcara._id);
@@ -190,7 +188,7 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 await PakRw.save();
                 await PakRt.save();
                 
-            } else if (statusPersetujuan === false) {
+            } else if (statusPersetujuanReq === false) {
                 suratAcara.statusPersetujuan = 'ditolak rt';
                 PakRt.suratAcaraRejected.push(suratAcara._id);
                 await PakRt.save();
