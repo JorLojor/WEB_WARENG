@@ -115,7 +115,7 @@ exports.createSurat_TAVERSION = async (req, res) => {
         dataWarga.suratAcara.push(suratAcara._id);
         await dataWarga.save();
         // // tmbahkan ID surat acara ke array suratAcaraPending di Rt
-        Rt.suratAcaraComing.push(suratAcara._id);
+        Rt.suratAcaraPending.push(suratAcara._id);
         
         await Rt.save();
         // tambahkan ID surat acara ke array suratAcaraPending di Rw
@@ -139,25 +139,6 @@ exports.createSurat_TAVERSION = async (req, res) => {
             data: suratAcara
         });
         
-        // const data = {
-        //     nameAcara: suratAcara.nameAcara,
-        //     jenisSurat : suratAcara.jenisSurat,
-        //     isiAcara : suratAcara.isiAcara,
-        //     tanggalMulai : suratAcara.tanggalMulai,
-        //     tanggalSelesai : suratAcara.tanggalSelesai,
-        //     tempatAcara : suratAcara.tempatAcara,
-        //     Rt : Rt.ketuaRt,
-        //     Rw : Rw.ketuaRw,
-        //     RtName : Rt.user.name,
-        //     RwName : Rw.user.name
-        // };
-
-        // const SuratResultPdf = await generatePDF(data);
-        // res.status(200).send({
-        //     message: "Success create surat acara",
-        //     data: SuratResultPdf
-        // });
-
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send({

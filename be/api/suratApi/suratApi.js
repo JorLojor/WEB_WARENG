@@ -7,7 +7,7 @@ const auth = require('../../middleware/userMiddleware/wargaValidation');
 Router.get('/get/surat',auth.wargaValidation,suratController.getAllSuratAcaraLessDetail_TAVERSION);
 Router.post('/create/suratAcara/TAversion/:idWarga',suratController.createSurat_TAVERSION);
 Router.delete('/delete/suratAcara/:userId/:suratAcaraId',suratController.deleteSuratAcaraById);
-
+Router.get('/get/generatePdf/:idSuratAcara',suratController.generateSuratPdf_TAVERSION);
 
 
 module.exports = Router;

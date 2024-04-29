@@ -185,6 +185,9 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 }
                 suratAcara.statusAcara = 'pengajuan rw';
                 PakRw.suratAcaraPending.push(suratAcara._id);
+                const dataIndexRw = PakRw.suratAcaraComing.indexOf(suratAcara._id);
+                PakRw.suratAcaraComing.splice(dataIndexRw, 1);
+
                 await PakRw.save();
                 await PakRt.save();
                 
@@ -194,12 +197,11 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 await PakRt.save();
             }
             
-            await suratAcara.save(); // Simpan perubahan surat acara ke dalam database
-            await PakRt.save(); // Simpan perubahan RT ke dalam database
+            await suratAcara.save();
+            await PakRt.save();
             
-            console.log("Surat Acara successfully updated with RT approval status.");
             res.status(200).send({
-                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuan,
+                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuanReq,
                 data: suratAcara
             });
         } else {
