@@ -1,7 +1,7 @@
 
 
 //component
-import Footer from "../../components/footer/Footer";
+import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import "./InformasiDesa.css";
 

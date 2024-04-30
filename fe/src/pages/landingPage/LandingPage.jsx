@@ -1,7 +1,7 @@
 import './LandingPage.css'
 // components
 import Navbar from '../../components/navbar/Navbar';
-import Footer from '../../components/footer/Footer';
+import Footer from '../../components/Footer/Footer';
 import ButtonLandingPage from '../../components/buttonLandingPage/ButtonLandingPage';
 // import facebook from "../../assets/LogoIconFacebookFooter";
 // import google from "../../assets/LogoIconGoogleFooter";
