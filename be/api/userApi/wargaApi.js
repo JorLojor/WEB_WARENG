@@ -10,9 +10,8 @@ Router.post('/post-warga/:id',wargaController.postWarga);   // http://localhost:
 
 Router.get('/get/:id',wargaController.getWargaById);
 Router.post('/create/suratAcara/:id',wargaController.CreateSuratAcara); 
-Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara); 
+Router.post('/pengajuan/SuratAcara/:userId/:suratAcaraId',wargaController.pengajuanSuratAcara);
 
-Router.post('/create/surat/:idWarga',wargaController.createSuratPdf);
 
 Router.post('/login',wargaController.LoginWarga); // http://localhost:3555/api/v1/warga/login
 Router.post('/logout/:id',wargaController.LogOutWarga); // http://localhost:3555/api/v1/warga/logout/:id

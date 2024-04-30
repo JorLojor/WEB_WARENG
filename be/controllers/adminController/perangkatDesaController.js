@@ -124,7 +124,7 @@ exports.deletePerangkatDesaById = async (req,res) => {
 //merubah statusPersetujuan pada suratAcara menjadi disetujui perangkat desa
 exports.SubmitSuratAcara = async (req,res) => {
     const { suratAcaraId, perangkatDesaId } = req.params;
-    const { statusPersetujuan } = req.body;
+    const { statusPersetujuanReq } = req.body;
     try{
         const dataPD = await perangkatDesa.findById(perangkatDesaId);
         const surat = await SuratAcaraModel.findById(suratAcaraId);
@@ -142,7 +142,7 @@ exports.SubmitSuratAcara = async (req,res) => {
             });
         }
 
-        if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuan === true) {
+        if (surat.statusPersetujuan === 'disetujui rw' && statusPersetujuanReq === true) {
             surat.statusPersetujuan = 'disetujui perangkat desa';
             surat.statusAcara = 'pengajuan kades dan wakades';
 
@@ -156,6 +156,8 @@ exports.SubmitSuratAcara = async (req,res) => {
                 return res.status(404).send({message: "kepala desa not found"});
             } 
             DataPimpinanDesa.suratAcaraPending.push(suratAcaraId);
+            const indexDataPimpinanDesa = DataPimpinanDesa.suratAcaraComing.indexOf(suratAcaraId);
+            DataPimpinanDesa.suratAcaraComing.splice(indexDataPimpinanDesa, 1);
             await DataPimpinanDesa.save();
             surat.pimpinanDesaId = DataPimpinanDesa._id;
             await surat.save();

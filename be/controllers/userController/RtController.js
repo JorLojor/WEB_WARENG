@@ -139,9 +139,7 @@ exports.deleteRt = async (req, res) => {
 exports.persetujuanSuratAcara = async (req, res) => {
     const idSurat = req.params.suratAcaraId; 
     const idRt = req.params.rtId; 
-    const statusPersetujuan = req.body.statusPersetujuan;
-
-    
+    const statusPersetujuanReq = req.body.statusPersetujuan;
 
     try {
         const PakRt = await RtModel.findById(idRt);
@@ -171,7 +169,7 @@ exports.persetujuanSuratAcara = async (req, res) => {
         if (suratAcara.statusPersetujuan === 'belum ada persetujuan') {
             suratAcara.rtId = idRt;
 
-            if (statusPersetujuan === true) {
+            if (statusPersetujuanReq === true) {
                 suratAcara.statusPersetujuan = 'disetujui rt';
                 PakRt.suratAcaraApproved.push(suratAcara._id);
                 const dataIndex = PakRt.suratAcaraPending.indexOf(suratAcara._id);
@@ -187,21 +185,23 @@ exports.persetujuanSuratAcara = async (req, res) => {
                 }
                 suratAcara.statusAcara = 'pengajuan rw';
                 PakRw.suratAcaraPending.push(suratAcara._id);
+                const dataIndexRw = PakRw.suratAcaraComing.indexOf(suratAcara._id);
+                PakRw.suratAcaraComing.splice(dataIndexRw, 1);
+
                 await PakRw.save();
                 await PakRt.save();
                 
-            } else if (statusPersetujuan === false) {
+            } else if (statusPersetujuanReq === false) {
                 suratAcara.statusPersetujuan = 'ditolak rt';
                 PakRt.suratAcaraRejected.push(suratAcara._id);
                 await PakRt.save();
             }
             
-            await suratAcara.save(); // Simpan perubahan surat acara ke dalam database
-            await PakRt.save(); // Simpan perubahan RT ke dalam database
+            await suratAcara.save();
+            await PakRt.save();
             
-            console.log("Surat Acara successfully updated with RT approval status.");
             res.status(200).send({
-                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuan,
+                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuanReq,
                 data: suratAcara
             });
         } else {

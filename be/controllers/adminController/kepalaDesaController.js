@@ -157,7 +157,7 @@ exports.SubmitSuratKades = async (req, res) => {
     session.startTransaction();
     try{
         const {kadesId, suratAcaraId} = req.params;
-        const { statusPersetujuan } = req.body;
+        const { statusPersetujuanReq } = req.body;
         const dataKades = await KadesModel.findById([kadesId]).session(session);
         if (!dataKades){
             await session.abortTransaction();
@@ -179,7 +179,7 @@ exports.SubmitSuratKades = async (req, res) => {
             });
         }
 
-        if (statusPersetujuan === true && dataSuratAcara.statusAcara === "pengajuan kades dan wakades" && dataSuratAcara.statusPersetujuan === "disetujui perangkat desa"){
+        if (statusPersetujuanReq === true && dataSuratAcara.statusAcara === "pengajuan kades dan wakades" && dataSuratAcara.statusPersetujuan === "disetujui perangkat desa"){
             dataSuratAcara.statusPersetujuan = "disetujui pimpinan desa";
             dataSuratAcara.statusAcara = "pengajuan selesai";
             dataKades.suratAcaraApproved.push(dataSuratAcara._id);
