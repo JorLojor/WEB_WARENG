@@ -175,7 +175,7 @@ const getKasiType = (rolePd) => {
 
 exports.persetujuanSurat = async (req, res) => {
     const { SuratId, RwId } = req.params;
-    const { statusPersetujuan } = req.body;
+    const { statusPersetujuanReq } = req.body;
 
     try {
         const PakRw = await RwModel.findById(RwId);
@@ -194,16 +194,20 @@ exports.persetujuanSurat = async (req, res) => {
         }
 
         if (surat.statusPersetujuan === "disetujui rt" && surat.statusAcara === "pengajuan rw") {
-            if (statusPersetujuan === true) {
+            if (statusPersetujuanReq === true) {
                 surat.statusPersetujuan = "disetujui rw";
                 const rolePd = getRolePd(surat.jenisSurat);
 
                 if (rolePd) {
                     surat.statusAcara = `pengajuan perangkat desa kasi ${getKasiType(rolePd)}`;
+                    
                     const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePd });
 
                     if (Kasi) {
                         Kasi.suratAcaraPending.push(surat._id);
+                        // menghapus surat dari suratAcaraComing
+                        const indexDataKasi = Kasi.suratAcaraComing.indexOf(surat._id);
+                        Kasi.suratAcaraComing.splice(indexDataKasi, 1);
                         await Kasi.save();
 
                         surat.rwId = RwId;
