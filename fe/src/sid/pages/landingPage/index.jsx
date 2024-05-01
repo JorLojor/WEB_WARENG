@@ -3,21 +3,22 @@ import './LandingPage.css'
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import ButtonLandingPage from '../../components/buttonLandingPage/ButtonLandingPage';
+import { Fragment } from 'react';
 // import facebook from "../../assets/LogoIconFacebookFooter";
 // import google from "../../assets/LogoIconGoogleFooter";
 // import instagram from "../../assets/LogoIconInstagramFooter";
 
-const LandingPage = () => {
+const LandingPage = () => {  
 
-    return(
-        <>
-                    <Navbar page='landingPage' />
+    return (
+        <Fragment>
+            <Navbar page='landingPage' />
             <div className="container-fluid setbg-landing-page bg-primary">
                 <div className="set-nav">
                 </div>
 
                 <div className="container-fluid set-text-lp">
-                    <h1>Portal Terintegrasi Sistem <br/>Informasi, Administrasi <br/> dan Pelayanan Desa <br/> Wareng</h1>
+                    <h1>Portal Terintegrasi Sistem <br />Informasi, Administrasi <br /> dan Pelayanan Desa <br /> Wareng</h1>
                 </div>
 
                 <div className="container-fluid set-text-lp-sec ">
@@ -37,7 +38,7 @@ const LandingPage = () => {
                         <div className="set-btn-landing-page">
                             <ButtonLandingPage title="Aspirasi" path="Aspirasi" />
                         </div>
-                    
+
                     </div>
                 </div>
 
@@ -45,7 +46,7 @@ const LandingPage = () => {
             <div className="set-footer">
                 <Footer />
             </div>
-        </>
+        </Fragment>
     )
 }
 
