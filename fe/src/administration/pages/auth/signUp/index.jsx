@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import NavBar from '../../../../shared/layout/navBar'
 import './index.css';
 
 const SignUp = () => {
@@ -7,7 +8,8 @@ const SignUp = () => {
         <Fragment>
             <div className="container-fluid sign-up-container p-0">
                 <div className="container-fluid sign-up-container-background">
-                    <div className="row">
+                    <NavBar />
+                    <div className="row mt-5">
                         <div className="col-0 col-md-2"></div>
                         <div className="col-0 col-md-8 ">
                             <div className="card card-form-sign-up text-light pt-5">
@@ -30,7 +32,7 @@ const SignUp = () => {
                                         <div className="btn-warp  d-flex justify-content-between align-items-center">
                                             <button className='btn mt-4 mb-5 text-light px-5 py-2' style={{ backgroundColor: '#00917C', fontSize: '24px', fontWeight: 'bold' }}>Register</button>
                                             <p >
-                                                <Link style={{color:'#00BF7C',textDecoration:'none'}}>Sudah punya akun</Link>
+                                                <Link to="/login" style={{color:'#00BF7C',textDecoration:'none'}}>Sudah punya akun</Link>
                                             </p>
                                         </div>
                                     </div>

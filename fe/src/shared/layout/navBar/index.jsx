@@ -1,60 +1,64 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import { useState,useEffect } from 'react';
-import TombolLoginNav from './component/buttonLoginNavBart';
-import TombolSettingNav from './component/buttonSettingNavBar';
-import logo from "./assets/LogoIconNavbar.png";
-import "./index.css";
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom';
-const Navbar = ({page}) => {
-    const [pagesState,setPagesState]=useState()
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import Logo from './assets/LogoWareng.svg';
+import Hamburger from './assets/hamburger.svg';
+import HamburgerWhite from './assets/hamburger-white.svg';
+import LoginIcon from './assets/LoginIcon.svg';
+import './index.css';
 
-    useEffect(()=>{
-        if (page==='landingPage'){
-            setPagesState(<TombolLoginNav />)
-        }else if(page==='informasiDesa'){
-            setPagesState(<TombolSettingNav />)
-        }
+const Navbar = () => {
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
+    const [isNavOpen, setIsNavOpen] = useState(false);
 
-
-    }
-
-    ,[page])
- 
+    const toggleNav = () => {
+        setIsNavOpen(!isNavOpen);
+    };
 
     return (
-       <>
-            <nav className='bg-warning'>
-                <div className="container-fluid ">
-                    <div className="row justify-content-between align-items-center">
-                        <div className="col-3 bg-success ps-5 ms-5 pt-2">
-                            <img src={logo} alt="" />
-                        </div>
-                        <div className="col-7 bg-primary me-5 d-flex justify-content-end align-items-center">
-                            <ul className=' ul d-flex justify-content-end pt-3'>
-                                <li className='list mx-5'>Beranda</li>
-                                <li className='list mx-5'>Program</li>
-                                <li className='list mx-5'>Layanan</li>
-                                <li className='list mx-5'>Tentang</li>
-                            </ul>
-                             
-                             <div id='pagesState'>
-                                    {pagesState}
-                             </div>
-                        </div>
-                      
-                        
-                    </div>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+            <div className="container-fluid d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
+                    <Link className="navbar-brand" to="/">
+                        <img src={Logo} alt="Logo-WARENG" />
+                    </Link>
                 </div>
-            </nav>
-       </>
+                <button className="navbar-toggler" type="button" onClick={toggleNav} aria-expanded={isNavOpen ? "true" : "false"}>
+                    <span className="navbar-toggler-icon">
+                        {isHome ? <img src={Hamburger} alt="Icon" /> : <img src={HamburgerWhite} alt="Icon" />}
+                    </span>
+                </button>
+                <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}>
+                    <ul className="navbar-nav mb-2 mb-lg-0">
+                        <li className="nav-item px-1">
+                            <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Beranda</Link>
+                        </li>
+                        <li className="nav-item px-1">
+                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Program Pemerintah</Link>
+                        </li>
+                        <li className="nav-item dropdown px-1">
+                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Layanan</Link>
+                        </li>
+                        <li className="nav-item px-1">
+                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Tentang</Link>
+                        </li>
+                        <li className="nav-item px-1" style={{borderRight:'2px solid white'}}>
+                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Aspirasi</Link>
+                        </li>
+                        <li className="nav-item px-1">
+                            <Link className='nav-link' to="/login" >
+                                <div className="wrap p-1 px-2" style={{background:'#00917C', borderRadius:'0.5vw'}}>
+                                    <img src={LoginIcon} className='me-2' alt="" />
+                                    Login
+                                </div>
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     );
-}
-
-Navbar.propTypes={
-    page:PropTypes.string
 }
 
 export default Navbar;

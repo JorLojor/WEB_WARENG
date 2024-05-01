@@ -10,10 +10,11 @@ const LandingPage = () => {
         <Fragment>
             <div className="container-fluid landing-page-container p-0">
                 <div className="container-fluid landing-page-container-background">
+                    <Navbar/>
                     <div className="row pt-0 pt-md-5">
                         <div className="col-0 col-md-1"></div>
                         <div className="col-12 col-md-6 pt-0 pt-md-5">
-                            <p className="pt-0 pt-md-5" style={{color:'white', fontSize: '48px', fontWeight: 'bold' }}>Portal Terintegrasi Sistem Informasi, Administrasi dan Pelayanan Desa Wareng</p>
+                            <p style={{color:'white', fontSize: '48px', fontWeight: 'bold' }}>Portal Terintegrasi Sistem Informasi, Administrasi dan Pelayanan Desa Wareng</p>
                         </div>
                         <div className="col-0 col-sm-5"></div>
                     </div>
@@ -31,7 +32,6 @@ const LandingPage = () => {
                     </div>
                 </div>
             </div>
-            {/* <Navbar page='landingPage' /> */}
         </Fragment >
     )
 }

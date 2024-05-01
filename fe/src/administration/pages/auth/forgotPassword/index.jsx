@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import NavBar from '../../../../shared/layout/navBar'
 import './index.css';
 
 const SignUp = () => {
@@ -7,7 +8,8 @@ const SignUp = () => {
         <Fragment>
             <div className="container-fluid forget-password-container p-0">
                 <div className="container-fluid forget-password-container-background">
-                    <div className="row">
+                    <NavBar />
+                    <div className="row mt-5">
                         <div className="col-0 col-md-2"></div>
                         <div className="col-0 col-md-8 ">
                             <div className="card card-form-forget-password text-light pt-5">

@@ -1,6 +1,9 @@
 .landing-page-container {
     background-image: url('./assets/BackgroundLandingPage.svg');
+    background-size: cover;
+    background-position: center;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .landing-page-container-background {

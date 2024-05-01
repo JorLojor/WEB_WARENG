@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import NavBar from '../../../../shared/layout/navBar'
 import './index.css';
 
 const SignUp = () => {
@@ -7,7 +8,8 @@ const SignUp = () => {
         <Fragment>
             <div className="container-fluid login-container p-0">
                 <div className="container-fluid login-container-background">
-                    <div className="row">
+                    <NavBar />
+                    <div className="row mt-5">
                         <div className="col-0 col-md-2"></div>
                         <div className="col-0 col-md-8 ">
                             <div className="card card-form-login text-light pt-5">
@@ -27,10 +29,10 @@ const SignUp = () => {
                                             <button className='btn mt-4 mb-3 mb-sm-5 text-light px-5 py-2' style={{ backgroundColor: '#00917C', fontSize: '24px', fontWeight: 'bold' }}>Login</button>
                                             <div className="text-warp d-block d-sm-flex justify-content-between align-items-center mb-5 mb-sm-0">
                                                 <p className='mx-0 mx-sm-3'>
-                                                    <Link style={{ color: '#00BF7C', textDecoration: 'none' }}>Lupa Pasword ?</Link>
+                                                    <Link to="/forgot-password" style={{ color: '#00BF7C', textDecoration: 'none' }}>Lupa Pasword ?</Link>
                                                 </p>
                                                 <p className='mx-0 mx-sm-3'>
-                                                    <Link style={{ color: '#00BF7C', textDecoration: 'none' }}>Belum punya akun ?</Link>
+                                                    <Link to="/sign-up" style={{ color: '#00BF7C', textDecoration: 'none' }}>Belum punya akun ?</Link>
                                                 </p>
                                             </div>
                                         </div>
