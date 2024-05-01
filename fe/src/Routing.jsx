@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import Landing from './pages/landingPage/LandingPage';
-import InformasiDesa from "./pages/informasiDesa/InformasiDesa";
-import Login from "./pages/loginPage/loginPage";
-import SignIn from "./pages/siginPage/SiginPage";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import Landing from './sid/pages/landingPage';
+import SignUp from './administration/pages/auth/signUp';
+import Login from "./administration/pages/auth/login";
+import ForgotPassword from "./administration/pages/auth/forgotPassword";
+// import InformasiDesa from "./pages/informasiDesa/InformasiDesa";
+// import SignIn from "./pages/siginPage/SiginPage";
 
 import App from "./App";
 
@@ -17,21 +18,25 @@ const Routing = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "/informasi-desa",
-        element: <InformasiDesa />,
+        path: "/sign-up",
+        element: <SignUp />,
       },
       {
         path: "/login",
         element: <Login />,
       },
       {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
         path: "/forgot-password",
         element: <ForgotPassword />,
       },
+    //   {
+    //     path: "/informasi-desa",
+    //     element: <InformasiDesa />,
+    //   },
+    //   {
+    //     path: "/sign-in",
+    //     element: <SignIn />,
+    //   },
     ],
   },
 ]);

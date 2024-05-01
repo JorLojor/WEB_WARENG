@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useState,useEffect } from 'react';
-import TombolLoginNav from '../TombolNavbar/TombolLoginNav';
-import TombolSettingNav from '../TombolNavbar/TombolSettingNav';
-import logo from "../../assets/LogoIconNavbar.png";
-import "./Navbar.css";
+import TombolLoginNav from './component/buttonLoginNavBart';
+import TombolSettingNav from './component/buttonSettingNavBar';
+import logo from "./assets/LogoIconNavbar.png";
+import "./index.css";
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
 const Navbar = ({page}) => {

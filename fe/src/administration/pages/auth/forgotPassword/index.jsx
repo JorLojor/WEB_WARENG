@@ -1,74 +1,40 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
-import "../siginPage/SiginPage.css";
-import ButtonForgotPass from "../../components/ButtonForgotPass/ButtonForgotPass";
-import { useState, useEffect } from "react";
+import { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import './index.css';
 
-
-
-const ForgotPassword = () => {
-    const [dataUser , setDataUser] = useState({
-        nik : '',
-        password1 : '',
-        password2 : '',
-    });
-
-    const updateField = (e) => {
-        setDataUser({
-            ...dataUser,
-            [e.target.name] : e.target.value
-        })
-    }
-
-    
-
-    return(
-        <>
-            <div className='outer-Sigin ' style={{width: '100vw', height: '100vh'}}>
-            <div className="inner-Sigin">
-
-                <div className="container-fluid box-Sigin">
-                        
-                        <div className="box-Sigin-title">
-                            <h1>Ubah password</h1>
-                            {/* input nama */}
-                            <div className="box-Sigin__title__input">
-                                <label className='text-light' htmlFor="">NIK</label>
-                                <input 
-                                    type="text" 
-                                    placeholder="Masukan NIK" 
-                                    name = 'nik'
-                                    onChange={updateField}
-                                />
+const SignUp = () => {
+    return (
+        <Fragment>
+            <div className="container-fluid forget-password-container p-0">
+                <div className="container-fluid forget-password-container-background">
+                    <div className="row">
+                        <div className="col-0 col-md-2"></div>
+                        <div className="col-0 col-md-8 ">
+                            <div className="card card-form-forget-password text-light pt-5">
+                                <p className='text-center' style={{ fontSize: '45px', fontWeight: 'bold' }}>RESET PASSWORD</p>
+                                <div className="row">
+                                    <div className="col-1"></div>
+                                    <div className="col-10">
+                                        <div className="Password-baru mb-2">
+                                            <p style={{ fontSize: '24px' }} className='mb-0'>Password baru</p>
+                                            <input className='py-3 ps-3' style={{ width: '100%', borderRadius: '0.5vw' }} type="text" placeholder="Masukkan Password baru" />
+                                        </div>
+                                        <div className="Password-ulang mb-2">
+                                            <p style={{ fontSize: '24px' }} className='mb-0'>Masukkan Ulang Password</p>
+                                            <input className='py-3 ps-3' style={{ width: '100%', borderRadius: '0.5vw' }} type="text" placeholder="Masukkan Ulang Password baru" />
+                                        </div>
+                                        <button className='btn mt-4 mb-5 text-light px-5 py-2' style={{ backgroundColor: '#00917C', fontSize: '24px', fontWeight: 'bold' }}>Register</button>
+                                    </div>
+                                    <div className="col-2"></div>
+                                </div>
                             </div>
-                            {/* input paassword */}
-                            <div className="box-Sigin__title__input">
-                                <label className='text-light' htmlFor="">Password</label>
-                                <input 
-                                    type="password" 
-                                    placeholder="Masukan Password baru"
-                                    name = 'password1'
-                                    onChange = {updateField}    
-                                />
-                            </div>
-                            <div className="box-Sigin__title__input">
-                                <label className='text-light' htmlFor="">Password</label>
-                                <input 
-                                    type="password" 
-                                    placeholder="Masukan ulang Password baru"
-                                    name = 'password2'
-                                    onChange = {updateField}    
-                                />
-                            </div>
-                            
-                            <ButtonForgotPass data={dataUser}/>
                         </div>
+                        <div className="col-0 col-md-1"></div>
+                    </div>
                 </div>
-
             </div>
-        </div>
-        </>
+        </Fragment >
     )
-};
+}
 
-export default ForgotPassword;
+export default SignUp;

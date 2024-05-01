@@ -1,60 +1,14 @@
-.setbg-landing-page{
-    background-image: url(../../assets/PhotoLandingPage.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100vw;
-    height: 100vh;
-    border-radius: 16px;
-    border: 1px solid #00917C;
-}
-.set-btn-landing-page:hover{
-    color: #00917C;
-}
-.set-logo-nav{
-    padding: 31px 0px 31px 127px;
-}
-.set-nav{
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: fit-content;
-}
-.set-row-sec-nav{
-    color: #2d7c73;
-    font-family: Roboto;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-
-}
-.set-text-lp{
-    color: #FFF;
-    text-align: center;
-    font-family: Poppins;
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    position: relative;
-    z-index: 100;
-    top:35%;
-}
-.set-text-lp-sec{
-    margin-top: 22%;
+.landing-page-container {
+    background-image: url('./assets/BackgroundLandingPage.svg');
+    min-height: 100vh;
 }
 
-.set-btn-landing-page{
-    margin-left: 10px;
-    margin-right: 10px;
+.landing-page-container-background {
+    background-color: rgba(4, 41, 15, 0.5);
+    min-height: 100vh;
+    min-width: 100vw;
 }
 
-footer{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
+.button-landing-page:hover {
+    background-color: #00917C;
 }

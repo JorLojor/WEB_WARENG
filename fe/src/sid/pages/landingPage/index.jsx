@@ -1,52 +1,38 @@
-import './LandingPage.css'
-// components
-import Navbar from '../../components/navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
-import ButtonLandingPage from '../../components/buttonLandingPage/ButtonLandingPage';
+import Navbar from '../../../shared/layout/navBar';
+// import Footer from '../../../shared/layout/footer';
+import ButtonLandingPage from './component/ButtonLandingPage';
 import { Fragment } from 'react';
-// import facebook from "../../assets/LogoIconFacebookFooter";
-// import google from "../../assets/LogoIconGoogleFooter";
-// import instagram from "../../assets/LogoIconInstagramFooter";
+import './index.css'
 
-const LandingPage = () => {  
+const LandingPage = () => {
 
     return (
         <Fragment>
-            <Navbar page='landingPage' />
-            <div className="container-fluid setbg-landing-page bg-primary">
-                <div className="set-nav">
-                </div>
-
-                <div className="container-fluid set-text-lp">
-                    <h1>Portal Terintegrasi Sistem <br />Informasi, Administrasi <br /> dan Pelayanan Desa <br /> Wareng</h1>
-                </div>
-
-                <div className="container-fluid set-text-lp-sec ">
-                    <div className="d-flex justify-content-center">
-                        <div className="set-btn-landing-page">
-                            <ButtonLandingPage title="Informasi Desa" path="informasi-desa" />
+            <div className="container-fluid landing-page-container p-0">
+                <div className="container-fluid landing-page-container-background">
+                    <div className="row pt-0 pt-md-5">
+                        <div className="col-0 col-md-1"></div>
+                        <div className="col-12 col-md-6 pt-0 pt-md-5">
+                            <p className="pt-0 pt-md-5" style={{color:'white', fontSize: '48px', fontWeight: 'bold' }}>Portal Terintegrasi Sistem Informasi, Administrasi dan Pelayanan Desa Wareng</p>
                         </div>
-                        <div className="set-btn-landing-page">
-                            <ButtonLandingPage title="Kegiatan Desa" path="kegiatan-desa" />
+                        <div className="col-0 col-sm-5"></div>
+                    </div>
+                    <div className="row">
+                        <div className="col-0 col-md-1"></div>
+                        <div className="col-12 col-md-10">
+                            <div className="wrap-btn d-inlline ">
+                                <ButtonLandingPage title="Informasi Desa" path="informasi-desa" />
+                                <ButtonLandingPage title="Kegiatan Desa" path="informasi-desa" />
+                                <ButtonLandingPage title="Pelayanan Desa" path="informasi-desa" />
+                                <ButtonLandingPage title="Aspirasi" path="informasi-desa" />
+                            </div>
                         </div>
-                        <div className="set-btn-landing-page">
-                            <ButtonLandingPage title="Pelayanan Desa" path="pelayanan-desa" />
-                        </div>
-                        <div className="set-btn-landing-page">
-                            <ButtonLandingPage title="Portal" path="portal" />
-                        </div>
-                        <div className="set-btn-landing-page">
-                            <ButtonLandingPage title="Aspirasi" path="Aspirasi" />
-                        </div>
-
+                        <div className="col-0 col-md-1"></div>
                     </div>
                 </div>
-
             </div>
-            <div className="set-footer">
-                <Footer />
-            </div>
-        </Fragment>
+            {/* <Navbar page='landingPage' /> */}
+        </Fragment >
     )
 }
 

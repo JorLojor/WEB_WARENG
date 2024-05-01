@@ -6,7 +6,6 @@ const TombolLoginNav = () => {
         <>
             <Link to ="/login">
                 <button className='bg-danger d-flex gap-3 align-items-center'><img className='Login-Button' src={login} alt="" />Login</button>
-
             </Link>
         </>
     )

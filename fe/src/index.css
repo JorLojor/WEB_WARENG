@@ -1,8 +1,5 @@
-body{
+*{
   font-family: Poppins;
+  text-decoration: none;
 }
 
-button{
-  outline: none;
-  border: none;
-}
