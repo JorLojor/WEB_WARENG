@@ -10,7 +10,7 @@ const SignUp = () => {
         <Fragment>
             <div className="container-fluid login-container p-0 ">
                 <div className="container-fluid login-container-background p-0 ">
-                    <NavBar />
+                    <NavBar type={1}/>
                     <div className="row mt-0 mt-md-5">
                         <div className="col-1 col-md-2"></div>
                         <div className="col-10 col-md-8 mb-5">

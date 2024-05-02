@@ -1,23 +1,23 @@
 
 
-// //component
-// import Footer from "../../components/Footer/Footer";
-// import Navbar from "../../components/navbar/Navbar";
-// import "./index.css";
+//component
+import { Fragment } from "react";
+import Footer from "../../../shared/layout/footer";
+import Navbar from "../../../shared/layout/navBar";
+import Tentang from "./session/tentang";
+import "./index.css";
 
-// const InformasiDesa = () => {
+const InformasiDesa = () => {
 
-//     return(
-//         <>
-//         <div className="informasidesa bg-primary">
-//             ini informasi desa
-//                 <Navbar page='informasiDesa' />
-//                 <Footer />
-//         </div>
-               
-                
-//         </>
-//     )
-// }
+    return (
+        <Fragment>
+            <div className="conatiner-fluid informasi-desa-container">
+                <Navbar type={0}></Navbar>
+                    <Tentang />
+                <Footer type={2}></Footer>
+            </div>
+        </Fragment>
+    )
+}
 
-// export default InformasiDesa;
+export default InformasiDesa;

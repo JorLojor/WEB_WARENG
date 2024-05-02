@@ -10,7 +10,7 @@ const LandingPage = () => {
         <Fragment>
             <div className="container-fluid landing-page-container p-0">
                 <div className="container-fluid landing-page-container-background pb-3 pb-md-0">
-                    <Navbar/>
+                    <Navbar type={1}/>
                     <div className="row pt-0 pt-md-5">
                         <div className="col-0 col-md-1"></div>
                         <div className="col-12 col-md-6 pt-0 pt-md-5">

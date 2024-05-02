@@ -6,7 +6,7 @@ import HamburgerWhite from './assets/hamburger-white.svg';
 import LoginIcon from './assets/LoginIcon.svg';
 import './index.css';
 
-const Navbar = () => {
+const Navbar = ({type}) => {
     const location = useLocation();
     const isHome = location.pathname === '/';
 
@@ -32,19 +32,19 @@ const Navbar = () => {
                 <div className={`collapse navbar-collapse d-xs-flex justify-content-end ${isNavOpen ? 'show' : ''}`}>
                     <ul className="navbar-nav mb-2 mb-lg-0" >
                         <li className="nav-item px-1">
-                            <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Beranda</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Beranda</Link>
                         </li>
                         <li className="nav-item px-1">
-                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Program Pemerintah</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Program Pemerintah</Link>
                         </li>
                         <li className="nav-item dropdown px-1">
-                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Layanan</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Layanan</Link>
                         </li>
                         <li className="nav-item px-1">
-                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Tentang</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Tentang</Link>
                         </li>
                         <li className="nav-item px-1" >
-                            <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Aspirasi</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Aspirasi</Link>
                         </li>
                         <li className="nav-item px-1" style={{ borderLeft: '2px solid white' }}>
                             <Link className='nav-link' to="/login" >

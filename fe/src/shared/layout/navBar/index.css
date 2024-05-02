@@ -11,7 +11,6 @@ html {
 
 .navbar-nav .nav-item .nav-link {
     position: relative;
-    color: #ffff;
 }
 
 .navbar-nav .nav-item .nav-link:after {
@@ -35,7 +34,7 @@ html {
 
 .dropdown-item:hover {
     background-color: #00917C;
-    color: white;
+    color: 00917C;
 }
 
 .navbar-nav .nav-item .underline:after {
@@ -46,7 +45,7 @@ html {
     width: 40px;
     height: 3px;
     margin-left: 8px;
-    background-color: #FFFFFF;
+    background-color: #00917C;
     border-radius: 5px;
     transition: all 0.3s ease-in-out;
     transform: scaleX(0);
