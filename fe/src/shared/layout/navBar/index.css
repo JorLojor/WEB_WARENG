@@ -1,10 +1,12 @@
 html {
     scroll-behavior: smooth;
 }
-
+* {
+    color: #00917C;
+}
 
 .dropdown-item {
-    color: #5d5c5c;
+    color: #00917C;
 }
 
 .navbar-nav .nav-item .nav-link {

@@ -7,11 +7,20 @@
 }
 
 .landing-page-container-background {
-    background-color: rgba(4, 41, 15, 0.5);
+    background-color: rgba(5, 47, 42, 0.5);
     min-height: 100vh;
     min-width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
 
 .button-landing-page:hover {
     background-color: #00917C;
+}
+
+@media (max-width: 767px) {
+    .landing-page-container .page-header {
+        font-size: 36px !important;
+        margin: 20% 0;
+    }
 }

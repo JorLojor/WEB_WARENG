@@ -17,8 +17,8 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-            <div className="container-fluid d-flex justify-content-between align-items-center">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top pt-1 pt-md-5">
+            <div className="container d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
                     <Link className="navbar-brand" to="/">
                         <img src={Logo} alt="Logo-WARENG" />
@@ -29,8 +29,8 @@ const Navbar = () => {
                         {isHome ? <img src={Hamburger} alt="Icon" /> : <img src={HamburgerWhite} alt="Icon" />}
                     </span>
                 </button>
-                <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}>
-                    <ul className="navbar-nav mb-2 mb-lg-0">
+                <div className={`collapse navbar-collapse d-xs-flex justify-content-end ${isNavOpen ? 'show' : ''}`}>
+                    <ul className="navbar-nav mb-2 mb-lg-0" >
                         <li className="nav-item px-1">
                             <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Beranda</Link>
                         </li>
@@ -43,12 +43,12 @@ const Navbar = () => {
                         <li className="nav-item px-1">
                             <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Tentang</Link>
                         </li>
-                        <li className="nav-item px-1" style={{borderRight:'2px solid white'}}>
+                        <li className="nav-item px-1" >
                             <Link className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Aspirasi</Link>
                         </li>
-                        <li className="nav-item px-1">
+                        <li className="nav-item px-1" style={{ borderLeft: '2px solid white' }}>
                             <Link className='nav-link' to="/login" >
-                                <div className="wrap p-1 px-2" style={{background:'#00917C', borderRadius:'0.5vw'}}>
+                                <div className="text-light wrap p-1 px-2" style={{ background: '#00917C', borderRadius: '0.5vw' }}>
                                     <img src={LoginIcon} className='me-2' alt="" />
                                     Login
                                 </div>
