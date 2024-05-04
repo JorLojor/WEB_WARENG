@@ -8,7 +8,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
       aria-hidden="true"
       aria-disabled={currentSlide === 0 ? true : false}
       type="button"
-      style={{position: "absolute", top: "35%", left: "-1.5%", transform: "translate(0,-25%)", zIndex: "100", fontSize: "2rem", color: "#00917C"}}
+      style={{position: "absolute", top: "35%", left: "-3%", transform: "translate(0,-25%)", zIndex: "100", fontSize: "2rem", color: "#00917C"}}
     ></i>
   );
 
@@ -22,12 +22,12 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
       aria-hidden="true"
       aria-disabled={currentSlide === slideCount - 1 ? true : false}
       type="button"
-      style={{position: "absolute", top: "35%", right: "-2%", transform: "translate(0,-25%)", color: "#00917C", fontSize: "2rem"}}
+      style={{position: "absolute", top: "35%", right: "-3%", transform: "translate(0,-25%)", color: "#00917C", fontSize: "2rem"}}
     ></i>
   );
 
   const settings = {
-      dots: false,
+      dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 3,

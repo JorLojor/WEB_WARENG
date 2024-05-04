@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { Link } from 'react-router-dom'
-import Foto1 from './assets/Foto1.svg';
-import Foto2 from './assets/Foto2.svg';
-import Foto3 from './assets/Foto3.svg';
-import Instagram from "./assets/LogoIconInstagramFooter.png";
-import Google from "./assets/LogoIconGoogleFooter.png";
-import Facebook from "./assets/LogoIconFacebookFooter.png";
+import Foto1 from '../../assets/Foto1.svg';
+import Foto2 from '../../assets/Foto2.svg';
+import Foto3 from '../../assets/Foto3.svg';
+import Instagram from "../../assets/LogoIconInstagramFooter.png";
+import Google from "../../assets/LogoIconGoogleFooter.png";
+import Facebook from "../../assets/LogoIconFacebookFooter.png";
 import ImageTentang from './component/imageTentang';
 
 const Tentang = () => {

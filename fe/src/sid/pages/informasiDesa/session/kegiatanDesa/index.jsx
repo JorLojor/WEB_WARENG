@@ -3,7 +3,8 @@ import Setting from '../../../../constant/carouselSertting';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import GambarDummy from './assets/Foto.svg';
+import GambarDummy from '../../assets/Foto.svg';
+import './index.css'
 
 const KegiatanDesa = () => {
     const [data, setData] = useState([]);
@@ -48,18 +49,24 @@ const KegiatanDesa = () => {
 
     return (
         <Fragment>
-            <div className="container-fluid kegiatan-desa-container mb-0 mb-md-5">
+            <div className="container-fluid kegiatan-desa-container mb-0 mb-md-5" >
                 <p>Kegiatan Desa</p>
                 <Slider {...Setting}>
                     {data.map((item, index) => (
-                        <div key={index} className="p-3" >
-                            <div className="card mb-3">
-                                <img src={item.img} alt="" style={{ height: '316px', width: '100%' }} />
+                        <div key={index}  >
+                            <div className="card kegiatan-desa-card m-3 pb-5 mx-2" style={{borderRadius:'1vw',border : '1px solid #00917C', transition: 'transform 0.3s ease' }}>
+                                <div className="row">
+                                    <div className="col-1"></div>
+                                    <div className="col-10 ">
+                                        <img src={item.img} alt="" style={{ height: '316px', width: '100%' }} />
+                                        <div id="content-produkTerbaru" className="content">
+                                            <p style={{ fontFamily: 'poppins', fontWeight: 'bold', fontSize: '20px' }}>{item.title}</p>
+                                            <p style={{ fontFamily: 'poppins', fontSize: '12px', textAlign:'justify' }}>{item.detail}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="content-produkTerbaru" className="content">
-                                <p style={{ fontFamily: 'poppins', fontWeight: 'bold', fontSize: '20px' }}>{item.title}</p>
-                                <p style={{ fontFamily: 'poppins', fontSize: '12px' }}>{item.detail}</p>
-                            </div>
+                            <div className="col-1"></div>
                         </div>
                     ))}
                 </Slider>
