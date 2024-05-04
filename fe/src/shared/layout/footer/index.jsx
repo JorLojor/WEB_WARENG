@@ -25,7 +25,7 @@ const Footer = ({ type }) => {
                 </footer>
 
             }
-            {type == "2" || type == "3" &&
+            {(type == "2" || type == "3") &&
                 <footer className="mt-auto mx-auto" >
                     <div className="container-fluid py-4  " style={{  background: type == 2 ? '#052F2A' : '#ffff', minWidth: '100vw'}}>
                         <div className="row">
