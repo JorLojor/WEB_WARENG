@@ -4,6 +4,7 @@ import SignUp from './administration/pages/auth/signUp';
 import Login from "./administration/pages/auth/login";
 import ForgotPassword from "./administration/pages/auth/forgotPassword";
 import InformasiDesa from "./sid/pages/informasiDesa";
+import DetailKegiatanDesa from "./sid/pages/detailKegiatanDesa";
 // import SignIn from "./pages/siginPage/SiginPage";
 
 import App from "./App";
@@ -32,6 +33,10 @@ const Routing = createBrowserRouter([
       {
         path: "/informasi-desa",
         element: <InformasiDesa />,
+      },
+      {
+        path: "/detail-kegiatan-desa",
+        element: <DetailKegiatanDesa />,
       },
     //   {
     //     path: "/sign-in",

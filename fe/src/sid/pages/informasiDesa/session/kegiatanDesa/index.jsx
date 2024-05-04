@@ -59,7 +59,7 @@ const KegiatanDesa = () => {
                                     <div className="col-1"></div>
                                     <div className="col-10 ">
                                         <img src={item.img} alt="" style={{ height: '316px', width: '100%' }} />
-                                        <div id="content-produkTerbaru" className="content">
+                                        <div className="content">
                                             <p style={{ fontFamily: 'poppins', fontWeight: 'bold', fontSize: '20px' }}>{item.title}</p>
                                             <p style={{ fontFamily: 'poppins', fontSize: '12px', textAlign:'justify' }}>{item.detail}</p>
                                         </div>
