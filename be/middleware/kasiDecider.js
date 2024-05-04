@@ -62,8 +62,17 @@ const kasiDecider = (jenisSurat) => {
 
 const getKasiType = (rolePd) => {
     const kasiTypes = ["pelayanan", "pemerintahan", "kersa"];
-    return kasiTypes[rolePd - 1] || ""; 
+    if (rolePd === 1){
+        return kasiTypes[0];
+    }
+    if (rolePd === 2){
+        return kasiTypes[1];
+    }
+    if (rolePd === 3){
+        return kasiTypes[2];
+    }
+    
 };
 
 
-module.exports = { kasiDecider};
+module.exports = { kasiDecider, getKasiType};

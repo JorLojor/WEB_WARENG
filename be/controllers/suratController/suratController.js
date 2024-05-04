@@ -15,6 +15,7 @@ require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const {kasiDecider} = require('../../middleware/kasiDecider') 
+const {getKasiType} = require('../../middleware/kasiDecider')
 
 
 exports.getAllSuratAcaraLessDetail_TAVERSION = async (req, res) => {
@@ -170,7 +171,6 @@ exports.generateSuratPdf_TAVERSION = async (req, res) => {
             message: "Success generate surat acara",
             data: SuratResultPdf
         });
-
     } catch (error) {
         return res.status(500).send({
             message: error.message || "Some error occurred while generating Surat Acara."
@@ -275,7 +275,7 @@ exports.persetujuanSuratAcaraRt_TAVERSION = async (req, res) => {
             });
         }
 
-        const suratAcara = await SuratAcaraModel.findById(idSurat);
+        const suratAcara = await suratAcaraModel.findById(idSurat);
         if (!suratAcara) {
             console.error("Surat Acara not found with id", idSurat);
             return res.status(404).send({
@@ -336,18 +336,24 @@ exports.persetujuanSuratAcaraRt_TAVERSION = async (req, res) => {
     }
 };
 
-//Rw
+//Rw\
 exports.persetujuanSuratAcaraRw_TAVERSION = async (req, res) => {
-    const { SuratId, RwId } = req.params;
-    const { statusPersetujuanReq } = req.body;
-
     try {
+        console.log('masuk');
+        const { SuratId, RwId } = req.params;
+        const { statusPersetujuanReq } = req.body;
         const PakRw = await RwModel.findById(RwId);
-        const surat = await SuratAcaraModel.findById(SuratId);
+        const surat = await suratAcaraModel.findById(SuratId);
 
-        if (!PakRw || !surat) {
+        if (!PakRw) {
             return res.status(404).send({
-                message: "RW or Surat not found."
+                message: "RW not found."
+            });
+        }
+
+        if (!surat) {
+            return res.status(404).send({
+                message: "Surat not found."
             });
         }
 
@@ -362,12 +368,12 @@ exports.persetujuanSuratAcaraRw_TAVERSION = async (req, res) => {
                 surat.statusPersetujuan = "disetujui rw";
                 const rolePd = kasiDecider(surat.jenisSurat);
 
-                if (rolePd) {
-                    surat.statusAcara = `pengajuan perangkat desa kasi ${getKasiType(rolePd)}`;
-                    
-                    const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePd });
+                if (rolePd !== null) {
+                    const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePd.role });
 
                     if (Kasi) {
+                        surat.statusAcara = `pengajuan perangkat desa kasi ${getKasiType(rolePd.role)}`;
+                        
                         Kasi.suratAcaraPending.push(surat._id);
                         // menghapus surat dari suratAcaraComing
                         const indexDataKasi = Kasi.suratAcaraComing.indexOf(surat._id);
@@ -387,15 +393,12 @@ exports.persetujuanSuratAcaraRw_TAVERSION = async (req, res) => {
                             info: "Surat sudah disetujui RW dan sudah diajukan ke Perangkat Desa",
                             data: surat
                         });
-
-                        
                     } else {
                         return res.status(404).send({
                             message: "Perangkat Desa not found."
                         });
                     }
                 }
-
             } else {
                 surat.statusPersetujuan = "ditolak rw";
                 await surat.save();
@@ -413,13 +416,15 @@ exports.persetujuanSuratAcaraRw_TAVERSION = async (req, res) => {
     }
 };
 
+
+
 //Perangkat Desa
 exports.persetujuanSuratAcaraPerangkatDesa_TAVERSION = async (req,res) => {
     const { suratAcaraId, perangkatDesaId } = req.params;
     const { statusPersetujuanReq } = req.body;
     try{
-        const dataPD = await perangkatDesa.findById(perangkatDesaId);
-        const surat = await SuratAcaraModel.findById(suratAcaraId);
+        const dataPD = await PerangkatDesaModel.findById(perangkatDesaId);
+        const surat = await suratAcaraModel.findById(suratAcaraId);
         
 
         if (!dataPD || !surat) {
@@ -443,7 +448,7 @@ exports.persetujuanSuratAcaraPerangkatDesa_TAVERSION = async (req,res) => {
             dataPD.suratAcaraPending.splice(indexData, 1);
             await dataPD.save();
             
-            const DataPimpinanDesa = await PimpinanDesaModel.findOne({rolePemimpinDesa:1});
+            const DataPimpinanDesa = await PimpinanDesa.findOne({rolePemimpinDesa:1});
             if(!DataPimpinanDesa){
                 return res.status(404).send({message: "kepala desa not found"});
             } 
@@ -451,7 +456,7 @@ exports.persetujuanSuratAcaraPerangkatDesa_TAVERSION = async (req,res) => {
             const indexDataPimpinanDesa = DataPimpinanDesa.suratAcaraComing.indexOf(suratAcaraId);
             DataPimpinanDesa.suratAcaraComing.splice(indexDataPimpinanDesa, 1);
             await DataPimpinanDesa.save();
-            surat.pimpinanDesaId = DataPimpinanDesa._id;
+            surat.perangkatDesaId = dataPD._id
             await surat.save();
             return res.send({message: "test",result: surat});
         }
@@ -475,14 +480,14 @@ exports.persetujuanSuratAcaraKades_TAVERSION = async (req, res) => {
     try{
         const {kadesId, suratAcaraId} = req.params;
         const { statusPersetujuanReq } = req.body;
-        const dataKades = await KadesModel.findById([kadesId]).session(session);
+        const dataKades = await PimpinanDesa.findById([kadesId]).session(session);
         if (!dataKades){
             await session.abortTransaction();
             return res.status(404).send({
                 message: "Data kades not found"
             });
         }
-        const dataSuratAcara = await SuratAcaraModel.findById([suratAcaraId]).session(session);
+        const dataSuratAcara = await PimpinanDesa.findById([suratAcaraId]).session(session);
         if (!dataSuratAcara){
             await session.abortTransaction();
             return res.status(404).send({
