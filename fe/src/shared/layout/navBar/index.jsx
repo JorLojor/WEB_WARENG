@@ -26,7 +26,7 @@ const Navbar = ({type}) => {
                 </div>
                 <button className="navbar-toggler" type="button" onClick={toggleNav} aria-expanded={isNavOpen ? "true" : "false"}>
                     <span className="navbar-toggler-icon">
-                        {isHome ? <img src={Hamburger} alt="Icon" /> : <img src={HamburgerWhite} alt="Icon" />}
+                        <img src={Hamburger}  alt="Icon" />
                     </span>
                 </button>
                 <div className={`collapse navbar-collapse d-xs-flex justify-content-end ${isNavOpen ? 'show' : ''}`}>
