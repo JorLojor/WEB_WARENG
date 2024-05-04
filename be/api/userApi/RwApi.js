@@ -8,7 +8,7 @@ Router.post('/post',postRw);
 Router.post('/post-many-rw',postManyRw);
 Router.put('/update/:id',updateRwById);
 Router.delete('/delete/:id',deleteRwById);
-Router.put('/persetujuan-surat-acara/:RwId/:SuratId',persetujuanSurat);
+
 
 
 

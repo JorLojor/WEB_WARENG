@@ -2,8 +2,7 @@ const {getAllPerangkatDesa,
     postPerangkatDesa,
     getPerangkatDesaById,
     updatePerangkatDesaById,
-    deletePerangkatDesaById,
-    SubmitSuratAcara} = require('../../controllers/adminController/perangkatDesaController');
+    deletePerangkatDesaById,} = require('../../controllers/adminController/perangkatDesaController');
 const express = require('express');
 const Router = express.Router();
 
@@ -12,7 +11,7 @@ Router.post('/create', postPerangkatDesa);
 Router.get('/get/:id', getPerangkatDesaById);
 Router.put('/update/:id', updatePerangkatDesaById);
 Router.delete('/delete/:id', deletePerangkatDesaById);
-Router.put('/submit/:perangkatDesaId/:suratAcaraId', SubmitSuratAcara);
+
 
 //note 
 // get all : http://localhost:3555/api/v1/perangkatDesa/get
