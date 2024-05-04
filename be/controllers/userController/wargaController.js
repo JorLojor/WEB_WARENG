@@ -89,6 +89,7 @@ exports.RegisterWarga = async (req,res) => {
             if (cekWarga) {
                 throw new Error('user already registered as warga');
             }
+            // const HashUsername = await bcrypt.hash(username,10);
             const Hashpassword = await bcrypt.hash(password, 10);
             const newWarga = await WargaModel.create({
                 user: checkUsername._id,
