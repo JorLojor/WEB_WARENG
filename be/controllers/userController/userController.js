@@ -1,6 +1,8 @@
 const db = require("../../models/index");
 const userModel = db.user;
 const crypto = require('crypto');//import crypto
+require('dotenv').config();
+
 
 exports.getAllUser = async (req,res) => {
     try{
@@ -52,7 +54,13 @@ exports.getUserById = async (req,res) => {
 exports.postUser = async (req, res) => {
     try {
         const { name, nik, password, alamat, nohp, statusPerkawinan, domisili } = req.body;
-        const aesKey = crypto.scryptSync('th1s0W1ll0B30War3ng03ncrypted0K3y', 'bismillahirohmanirohim', 32);  // itu key nya di simpen di env mas bro
+        const aesKey = crypto.scryptSync(
+
+            process.env.encrypt_key_one, 
+            process.env.encrypt_key_two,
+            32
+        
+        );  
         const iv = crypto.randomBytes(16);
         const encryptedNik = encrypt(nik, aesKey, iv).encryptedData;
         const encryptedAlamat = encrypt(alamat, aesKey, iv).encryptedData;
