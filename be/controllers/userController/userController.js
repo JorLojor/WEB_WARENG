@@ -48,45 +48,46 @@ exports.getUserById = async (req,res) => {
     }
 }
 
-exports.postUser = async (req,res) => {
-    try{
-        const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
 
+exports.postUser = async (req, res) => {
+    try {
+        const { name, nik, password, alamat, nohp, statusPerkawinan, domisili } = req.body;
+        const aesKey = crypto.scryptSync('th1s0W1ll0B30War3ng03ncrypted0K3y', 'bismillahirohmanirohim', 32);  // itu key nya di simpen di env mas bro
         const iv = crypto.randomBytes(16);
-        const aesKey = "th1s0W1ll0B30War3ng03ncrypted0K3y";
+        const encryptedNik = encrypt(nik, aesKey, iv).encryptedData;
+        const encryptedAlamat = encrypt(alamat, aesKey, iv).encryptedData;
+        const encryptedNohp = encrypt(nohp, aesKey, iv).encryptedData;
 
-        const encryptedNik = encrypt(nik, aesKey, iv);
-        const encryptedAlamat = encrypt(alamat, aesKey, iv);
-        const encryptedNohp = encrypt(nohp, aesKey, iv);
-
+        console.log("Encrypted NIK:", encryptedNik);
+        console.log("Encrypted NoHP:", encryptedNohp);
+        console.log("Encrypted Alamat:", encryptedAlamat);
         const newUser = await userModel.create({
-            name : name.toUpperCase(),
-            nik : encryptedNik,
+            name: name.toUpperCase(),
+            nik: encryptedNik,
             password,
-            alamat: encryptedAlamat.toUpperCase(),
-            nohp : encryptedNohp,
-            statusPerkawinan : statusPerkawinan.toUpperCase(),
-            domisili : domisili.map((domisili) => domisili.toUpperCase())
+            alamat: encryptedAlamat,
+            nohp: encryptedNohp,
+            statusPerkawinan: statusPerkawinan.toUpperCase(),
+            domisili: domisili.map((dom) => dom.toUpperCase())
         });
+
         res.status(200).send({
             message: "Success create user",
             data: newUser
         });
-
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
-            message: error.message || "Some error occurred while creating warga."
+            message: error.message || "Some error occurred while creating user."
         });
     }
 }
-
-//mas bro ini aku tambahin fungsi disini gapapa kali ya
 function encrypt(text, key, iv) {
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-    const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
     return {
-      encryptedData: encrypted,
-      initializationVector: iv.toString('hex'), // Base64 atau hex encoding umum digunakan
+        encryptedData: encrypted,
+        initializationVector: iv.toString('hex')
     };
 }
 
