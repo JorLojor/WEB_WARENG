@@ -5,7 +5,8 @@ const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
 const RwModel = db.rw;
 
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+// const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -89,11 +90,17 @@ exports.RegisterWarga = async (req,res) => {
             if (cekWarga) {
                 throw new Error('user already registered as warga');
             }
-            const Hashpassword = await bcrypt.hash(password, 10);
+
+            // initiate crypto aes encryption
+            const iv = crypto.randomBytes(16);
+            const aesKey = "th1s0W1ll0B30War3ng03ncrypted0K3y";
+            const encryptedPassword = encrypt(password, aesKey, iv)
+
+            // const Hashpassword = await bcrypt.hash(password, 10);
             const newWarga = await WargaModel.create({
                 user: checkUsername._id,
             });
-            checkUsername.password = Hashpassword;
+            checkUsername.password = encryptedPassword;
             checkUsername.nohp = nohp;
             checkUsername.role = 1;
             checkUsername.save();
@@ -114,6 +121,16 @@ exports.RegisterWarga = async (req,res) => {
         });
     }
 };
+
+//function encrypt aes
+function encrypt(text, key, iv) {
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    return {
+      encryptedData: encrypted,
+      initializationVector: iv.toString('hex'), // Base64 atau hex encoding umum digunakan
+    };
+}
 
 // forgot password warga
 exports.ForgotPassword = async (req, res) => {
