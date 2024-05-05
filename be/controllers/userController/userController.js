@@ -1,5 +1,6 @@
 const db = require("../../models/index");
 const userModel = db.user;
+const crypto = require('crypto');//import crypto
 
 exports.getAllUser = async (req,res) => {
     try{
@@ -51,12 +52,19 @@ exports.postUser = async (req,res) => {
     try{
         const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
 
+        const iv = crypto.randomBytes(16);
+        const aesKey = "th1s0W1ll0B30War3ng03ncrypted0K3y";
+
+        const encryptedNik = encrypt(nik, aesKey, iv);
+        const encryptedAlamat = encrypt(alamat, aesKey, iv);
+        const encryptedNohp = encrypt(nohp, aesKey, iv);
+
         const newUser = await userModel.create({
             name : name.toUpperCase(),
-            nik,
+            nik : encryptedNik,
             password,
-            alamat: alamat.toUpperCase(),
-            nohp,
+            alamat: encryptedAlamat.toUpperCase(),
+            nohp : encryptedNohp,
             statusPerkawinan : statusPerkawinan.toUpperCase(),
             domisili : domisili.map((domisili) => domisili.toUpperCase())
         });
@@ -70,6 +78,16 @@ exports.postUser = async (req,res) => {
             message: error.message || "Some error occurred while creating warga."
         });
     }
+}
+
+//mas bro ini aku tambahin fungsi disini gapapa kali ya
+function encrypt(text, key, iv) {
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    return {
+      encryptedData: encrypted,
+      initializationVector: iv.toString('hex'), // Base64 atau hex encoding umum digunakan
+    };
 }
 
 exports.postManyUser = async (req,res) => {
