@@ -7,7 +7,7 @@ const SuratAcaraModel = db.suratAcara;
 
 exports.getAllRt = async (req, res) => {
     try {
-        const rt = await RtModel.find();
+        const rt = await RtModel.find().populate('user');
         res.status(200).send({ 
             message: "Success get all rt",
             data: rt
@@ -35,15 +35,11 @@ exports.getRtById = async (req, res) => {
 
 exports.createRt = async (req, res) => {
     try{
-        const {name, nik,password, alamat, nohp, status} = req.body;
+        const {name, nik} = req.body;
 
         const newRt = await RtModel.create({
             name,
             nik,
-            password,
-            alamat,
-            nohp,
-            status
         });
 
         if(!newRt){
@@ -140,88 +136,6 @@ exports.deleteRt = async (req, res) => {
 
 
 
-exports.persetujuanSuratAcara = async (req, res) => {
-    const idSurat = req.params.suratAcaraId; 
-    const idRt = req.params.rtId; 
-    const statusPersetujuan = req.body.statusPersetujuan;
-
-    
-
-    try {
-        const PakRt = await RtModel.findById(idRt);
-        if (!PakRt) {
-            console.error("RT not found with id", idRt);
-            return res.status(404).send({
-                message: "RT not found with id " + idRt
-            });
-        }
-
-        const userRt = await userModel.findById(PakRt.user);
-        if (!userRt) {
-            console.error("User RT not found with id", PakRt.user);
-            return res.status(404).send({
-                message: "User RT not found with id " + PakRt.user
-            });
-        }
-
-        const suratAcara = await SuratAcaraModel.findById(idSurat);
-        if (!suratAcara) {
-            console.error("Surat Acara not found with id", idSurat);
-            return res.status(404).send({
-                message: "Surat Acara not found with id " + idSurat
-            });
-        }
-
-        if (suratAcara.statusPersetujuan === 'belum ada persetujuan') {
-            suratAcara.rtId = idRt;
-
-            if (statusPersetujuan === true) {
-                suratAcara.statusPersetujuan = 'disetujui rt';
-                PakRt.suratAcaraApproved.push(suratAcara._id);
-                const dataIndex = PakRt.suratAcaraPending.indexOf(suratAcara._id);
-                PakRt.suratAcaraPending.splice(dataIndex, 1);
-
-                
-                const PakRw = await RwModel.findOne({ ketuaRw: userRt.domisili[1] });
-                if (!PakRw || PakRw.length === 0) {
-                    console.error("RW not found with domisili rw", userRt.domisili[1]);
-                    return res.status(404).send({
-                        message: "RW not found with domisili rw " + userRt.domisili[1]
-                    });
-                }
-                suratAcara.statusAcara = 'pengajuan rw';
-                PakRw.suratAcaraPending.push(suratAcara._id);
-                await PakRw.save();
-                await PakRt.save();
-                
-            } else if (statusPersetujuan === false) {
-                suratAcara.statusPersetujuan = 'ditolak rt';
-                PakRt.suratAcaraRejected.push(suratAcara._id);
-                await PakRt.save();
-            }
-            
-            await suratAcara.save(); // Simpan perubahan surat acara ke dalam database
-            await PakRt.save(); // Simpan perubahan RT ke dalam database
-            
-            console.log("Surat Acara successfully updated with RT approval status.");
-            res.status(200).send({
-                message: "Surat Acara successfully updated with RT approval status." + statusPersetujuan,
-                data: suratAcara
-            });
-        } else {
-            console.error("Surat Acara has already been approved or rejected.");
-            res.status(400).send({
-                message: "Surat Acara has already been approved or rejected."
-            });
-        }
-
-    } catch (error) {
-        console.error("Error in persetujuanSuratAcara:", error);
-        res.status(500).send({
-            message: error.message || "Some error occurred while updating surat acara."
-        });
-    }
-};
 
 
 

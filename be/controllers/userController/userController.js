@@ -105,6 +105,8 @@ exports.postManyUser = async (req,res) => {
         });
     }
 }
+
+
 // untuk melengkapi data user
 exports.updateuserById = async (req,res) => {
     try{
@@ -150,6 +152,8 @@ exports.updateuserById = async (req,res) => {
     }   
 };
 
+
+// use by admin
 exports.deleteUserById = async (req,res) => {
     const id = req.params.id;
     try{

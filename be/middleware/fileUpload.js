@@ -2,7 +2,7 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 
 
-const generateHTML = ({ nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSelesai, tempatAcara }) => {
+const generateHTML = ({ nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSelesai, tempatAcara,Rt,Rw,RtName,RwName }) => {
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -70,7 +70,23 @@ const generateHTML = ({ nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSe
                     </div>
                 </div>
             </div>
+           
         </div>
+        <h3>Disetujui Oleh</h3> 
+        <table>
+            <tr>
+                <th>Rt</th>
+                <th>Rw</th>
+                <th>RtName</th>
+                <th>RwName</th>
+            </tr>
+            <tr>
+                <td>${Rt}</td>
+                <td>${Rw}</td>
+                <td>${RtName}</td>
+                <td>${RwName}</td>
+            </tr>       
+        </table>        
     </body>
     `;
 };

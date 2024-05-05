@@ -1,0 +1,111 @@
+/* .outer-Sigin{
+    background-image: url("../../assets/sigin_bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+.inner-Sigin{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: rgba(5, 47, 42, 0.8);
+}
+
+
+.box-Sigin{
+    margin: auto;
+    margin-top: 8%;
+    width: 973px;
+    height: fit-content;
+    padding-bottom: 44px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(10px);
+}
+
+
+
+.box-Sigin-title{
+    padding-left: 94px;
+    padding-right: 94px;
+    padding-top: 30px;
+}
+
+.box-Sigin-title h1{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 42px;
+    text-align: center;
+}
+
+.box-Sigin__title__input{
+    display: block;
+    margin-top: 12px;
+}
+
+.box-Sigin__title__input input{
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+    padding-left: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #202020;
+}
+
+.box-Sigin__title__input label{
+    text-align: justify;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sigin-btn button{
+    padding: 12px 34px 12px 34px;
+    border-radius: 10px;
+    background: #00917C;
+    color: #FFF;
+    text-align: justify;
+    font-family: Poppins;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.cover-spa-sigin{
+   margin-top:18px;
+}
+
+
+.login-btn button{
+    padding: 12px 34px 12px 34px;
+    border-radius: 10px;
+    background: #184D47;
+    color: #FFF;
+    text-align: justify;
+    font-family: Poppins;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+
+p{
+    text-decoration: none;
+    color:#00BF7C;
+} */

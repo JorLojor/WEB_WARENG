@@ -8,7 +8,7 @@ Router.post('/create',createRt);
 Router.post('/post-many-rt',postManyRt);
 Router.put('/update/:id',updateRt);
 Router.delete('/delete/:id',deleteRt);
-Router.put('/persetujuan-surat-acara/:rtId/:suratAcaraId',persetujuanSuratAcara);
+// Router.put('/persetujuan-surat-acara/:rtId/:suratAcaraId',persetujuanSuratAcara);
 
 
 module.exports = Router;

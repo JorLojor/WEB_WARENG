@@ -1,0 +1,56 @@
+
+.forget-password-container {
+    position: relative;
+    background-image: url('../assets/backgroundSignUp.svg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.forget-password-container-background {
+    background-color: rgba(5, 47, 42, 0.5);
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-form-forget-password {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: rgba(176, 172, 172, 0.2);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    width: 80%;
+}
+
+@media (max-width: 600px) {
+    .forget-password-container .card-form-forget-password {
+        position: relative;
+        left: 0;
+        top: 0;
+        transform: translate(0,-0);
+        top: 0vh;
+        width: 100%;
+    }
+}
+
+@media (max-width: 376px) {
+    .forget-password-container {
+        padding: 0 0 10vh 0;
+    }
+}
+
+@media (max-height: 1200px) {
+    .forget-password-container {
+        min-height: 115vh !important;
+    }
+    
+    .forget-password-container-background {
+        min-height: 115vh !important;
+    }
+}
