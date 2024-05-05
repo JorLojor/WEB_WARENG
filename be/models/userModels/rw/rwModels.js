@@ -5,6 +5,8 @@ const rw = new moongose.Schema({
     
     ketuaRw: { type: String, required: false, default: '' },
     suratAcara: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
+
+    suratAcaraComing: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraRejected: [{ type: moongose.Schema.Types.ObjectId, ref: 'suratAcara' }]

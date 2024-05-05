@@ -3,6 +3,7 @@ const WargaModel = db.warga;
 const userModel = db.user;
 const suratAcaraModel = db.suratAcara;
 const RtModel = db.rt;
+const RwModel = db.rw;
 
 const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer');
@@ -12,75 +13,101 @@ require('dotenv').config();
 
 const {generatePDF} = require('../../middleware/fileUpload');
 const wargaModel = require('../../models/userModels/warga/wargaModel');
-const { find, findOne } = require('../../models/suratIzinModel/suratAcaraModels');
 
 
 exports.LoginWarga = async (req,res) => {
     const {name,password} = req.body;
     try{
         const dataNama = name.toUpperCase();
-        const dataUser = await userModel.findOne({name: dataNama}).select('-token');
-
+        const dataUser = await userModel.findOne({name: dataNama});
         if (!dataUser) {
-            return res.status(404).send({
-                message: "User not found with name " + name
-            });
+            throw new Error('user not found with name :  ' + name);
         }
-
         const comparePassword = await bcrypt.compare(password, dataUser.password);
-
         if (!comparePassword) {
             return res.status(400).send({
-                message: "incorrect password"
+                message: "Invalid Password!"
             });
         }
-
         const token = jwt.sign({id: dataUser._id}, process.env.LOGIN_TOKEN, {expiresIn: '1d'});
         dataUser.token = token;
         await dataUser.save();
-
         res.status(200).send({
             status: 'success',
             message: "Success login warga",
             data: dataUser
         });
-    
-
     }catch(error){
+        console.log('Error:', error);
         res.status(500).send({
             message: error.message || "Some error occurred while login warga."
         });
     }
 };
 
+exports.LogOutWarga = async (req,res) => {
+    const {id} = req.params;
+    try{
+        const dataUser = await userModel.findById(id);
+        if (!dataUser) {
+            return res.status(404).send({
+                message: "User not found with id " + id
+            });
+        }
+
+        dataUser.token = '';
+        await dataUser.save();
+
+        res.status(200).send({
+            message: "Success logout warga",
+            data: dataUser
+        });
+
+    }catch(error){
+        res.status(500).send({
+            message: error.message || "Some error occurred while logout warga."
+        });
+    }
+}
+
 exports.RegisterWarga = async (req,res) => {
     try{
         const {username,password,nohp} = req.body;
-
+        
         if (!username || !password || !nohp) {
             return res.status(400).send({
                 message: "you must insert username, password, and nohp"
             });
         }
-
-        const newUser = await userModel.create({
-            name: username.toUpperCase(),
-            password : await bcrypt.hash(password, 10), 
-            nohp: nohp,
-        });
-
-        // buat warga
-
-        const newWarga = await WargaModel.create({
-            user: newUser._id
-        });
         
-        return res.status(200).send({
-            message: "Success register warga",
-            user: newUser,
-            warga: newWarga,
-            status: 'success'
+        // cek apakah username belum terdaftar
+        const checkUsername = await userModel.findOne({
+            name: username.toUpperCase()
         });
+        if (checkUsername) {
+            const cekWarga = await wargaModel.findOne({user: checkUsername._id});
+            if (cekWarga) {
+                throw new Error('user already registered as warga');
+            }
+            const Hashpassword = await bcrypt.hash(password, 10);
+            const newWarga = await WargaModel.create({
+                user: checkUsername._id,
+            });
+            checkUsername.password = Hashpassword;
+            checkUsername.nohp = nohp;
+            checkUsername.role = 1;
+            checkUsername.save();
+            
+            return res.status(200).send({
+                message: "Success register warga",
+                user: checkUsername,
+                warga: newWarga,
+                status: 'success'
+            });
+        }else{
+            // lempar kesalahan kebagian catch
+            throw new Error('user not found with name :  ' + username);    
+        }
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while register warga."
@@ -120,23 +147,28 @@ exports.ForgotPassword = async (req, res) => {
 };
 
 exports.postWarga = async (req,res) => {
-    const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
     try{
-        // UPPER CASE request body
-        const warga = await WargaModel.create({
-            name : name.toUpperCase(),
-            nik,
-            password,
-            alamat: alamat.toUpperCase(),
-            nohp,
-            statusPerkawinan : statusPerkawinan.toUpperCase(),
-            domisili : domisili.map((domisili) => domisili.toUpperCase())
+        const {id} = req.params;
+
+        const data = await userModel.findById(id);
+        if (!data) {
+            return res.status(404).send({
+                message: "User not found with id " + id
+            });
+        }
+
+        const newWarga = await WargaModel.create({
+            user: id
         });
 
-        return res.status(200).send({
+        res.status(200).send({
             message: "Success create warga",
-            data: warga
+
+            
+            // delete when deploy   
+            data: newWarga
         });
+       
     }catch(error){
         res.status(500).send({
             message: error.message || "Some error occurred while creating warga."
@@ -202,6 +234,60 @@ exports.getAllWarga = async (req, res) => {
     }
 };
 
+
+// this controller used for user not admin
+
+exports.getAllwargaLessDetail = async (req, res) => {
+    try {
+        const viewerId = req.params.id;
+        const ArrData = [];
+        const validViewer = await userModel.findById(viewerId);
+
+        // validasi user memiliki token sesuai login
+        const token = req.header('Authorization');
+        if (!token || !validViewer || validViewer.token !== token.replace('Bearer ', '')) {
+            return res.status(403).send({
+                message: "Forbidden. You are not authorized to access this resource."
+            });
+        }
+
+        const warga = await WargaModel.find().populate('user');
+        warga.forEach((warga) => {
+            if (warga.user && warga.user.name && warga.user.alamat) {
+                const dataResponse = {
+                    nama: warga.user.name,
+                    alamat: warga.user.alamat
+                };
+                ArrData.push(dataResponse);
+            }
+        });
+
+        const dataRequest = validViewer.name;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const total = ArrData.length;
+
+        res.status(200).send({
+            request: "GET",
+            from: dataRequest,
+            message: "Success get all warga less detail for users",
+            data: ArrData,
+            page: page,
+            limit: limit,
+            totalDocument: total
+        });
+
+        console.log(`Received GET request to /api/v1/warga/get with page: ${page}, limit: ${limit}`);
+    } catch (error) {
+        console.error('Error while handling GET request to /api/v1/warga/get:', error);
+        res.status(500).send({
+            message: error.message || "Some error occurred while getting all warga less detail."
+        });
+    }
+}
+
+
+
 exports.getWargaById = async (req,res) => {
     const id = req.params.id;
     try{
@@ -258,7 +344,7 @@ exports.deleteWargaById = async (req,res) => {
     }
 }
 
-
+// udh nga kepake
 exports.CreateSuratAcara = async (req, res) => {
     try {
         const wargaId = req.params.id;
@@ -545,49 +631,79 @@ exports.createSuratPdf = async (req, res) => {
 }
 
 
+//TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
+//TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
+//TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
+//TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
+//TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version - TA version -
+//TA version
 
+//TA version
+exports.CreateSuratAcara = async (req, res) => {
+    try {
+        const wargaId = req.params.id;
 
+        // Temukan user berdasarkan id
+        const user = await userModel.findById(wargaId);
 
-
-
-
-exports.deleteSuratAcaraById = async (req,res) =>{
-    const UserId = req.params.userId;
-    const SuratAcaraId = req.params.suratAcaraId;
-
-    try{
-        const User = await WargaModel.findById(UserId);
-        if (!User) {
+        if (!user) {
             return res.status(404).send({
-                message: "User not found with id " + UserId
+                message: "User not found with id " + wargaId
             });
         }
-        const SuratAcara = await suratAcaraModel.findById(SuratAcaraId);
-        if (!SuratAcara) {
+
+        // Temukan warga berdasarkan user id
+        const warga = await WargaModel.findOne({ user: wargaId });
+
+        if (!warga) {
             return res.status(404).send({
-                message: "Surat Acara not found with id " + SuratAcaraId
+                message: "Warga not found with user id " + wargaId
             });
         }
 
-        if (SuratAcara.wargaId.toString() !== UserId) {
-            return res.status(403).send({
-                message: "Forbidden. Surat Acara does not belong to the specified user."
+        const { nameAcara, jenisSurat, isiAcara, tanggalMulai, tanggalSelesai, tempatAcara } = req.body;
+
+        // Periksa apakah surat acara dengan nama yang sama sudah ada
+        const existingSuratAcara = await suratAcaraModel.findOne({
+            nameAcara,
+            wargaId: warga._id
+        });
+
+        if (existingSuratAcara) {
+            return res.status(400).send({
+                message: "Surat Acara already exists with name " + nameAcara + " for user with id " + wargaId,
             });
         }
 
-        const dataSuratAcara = await suratAcaraModel.findByIdAndDelete(SuratAcaraId);
+        // Buat surat acara baru
+        const suratAcara = await suratAcaraModel.create({
+            nameAcara,
+            jenisSurat: jenisSurat.toLowerCase(),
+            isiAcara,
+            tanggalMulai,
+            tanggalSelesai,
+            tempatAcara,
+            wargaId: warga._id
+        });
+
+        // Tambahkan ID surat acara ke array suratAcara di warga
+        warga.suratAcara.push(suratAcara._id);
+        await warga.save();
 
         res.status(200).send({
-            message: "Success delete surat acara",
-            data: dataSuratAcara
+            message: "Success create surat acara",
+            data: suratAcara,
+            author: warga
         });
-
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
-            message: error.message || "Some error occurred while delete surat acara."
+            message: error.message || "Some error occurred while create surat acara."
         });
     }
-}
+};
+
+
+
 
 
 module.exports = exports;

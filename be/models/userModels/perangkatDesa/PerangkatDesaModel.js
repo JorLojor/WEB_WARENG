@@ -5,6 +5,8 @@ const perangkatDesaSchema = new mongoose.Schema({
 
     rolePD : { type: Number, required: true },
     suratAcara: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
+
+    suratAcaraComing: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraPending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraApproved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }],
     suratAcaraRejected: [{ type: mongoose.Schema.Types.ObjectId, ref: 'suratAcara' }]

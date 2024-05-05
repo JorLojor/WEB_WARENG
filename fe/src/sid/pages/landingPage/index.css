@@ -1,0 +1,26 @@
+.landing-page-container {
+    background-image: url('./assets/BackgroundLandingPage.svg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.landing-page-container-background {
+    background-color: rgba(5, 47, 42, 0.5);
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-landing-page:hover {
+    background-color: #00917C;
+}
+
+@media (max-width: 767px) {
+    .landing-page-container .page-header {
+        font-size: 36px !important;
+        margin: 20% 0;
+    }
+}

@@ -49,12 +49,11 @@ exports.getUserById = async (req,res) => {
 
 exports.postUser = async (req,res) => {
     try{
-        const { name,nik,password, alamat, nohp, statusPerkawinan ,domisili } = req.body;
+        const { name,nik, alamat, nohp, statusPerkawinan ,domisili } = req.body;
 
         const newUser = await userModel.create({
             name : name.toUpperCase(),
             nik,
-            password,
             alamat: alamat.toUpperCase(),
             nohp,
             statusPerkawinan : statusPerkawinan.toUpperCase(),
@@ -87,6 +86,8 @@ exports.postManyUser = async (req,res) => {
         });
     }
 }
+
+
 // untuk melengkapi data user
 exports.updateuserById = async (req,res) => {
     try{
@@ -132,6 +133,8 @@ exports.updateuserById = async (req,res) => {
     }   
 };
 
+
+// use by admin
 exports.deleteUserById = async (req,res) => {
     const id = req.params.id;
     try{

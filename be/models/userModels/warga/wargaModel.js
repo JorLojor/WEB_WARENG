@@ -6,4 +6,3 @@ const warga = new mongoose.Schema({
 },{timestamps: true});
 
 module.exports = mongoose.model('warga', warga);
-// Path: WEB_WARENG/be/models/userModels/warga/suratAcaraModel.js

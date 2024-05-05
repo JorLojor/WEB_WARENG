@@ -1,0 +1,55 @@
+.sign-up-container {
+    position: relative;
+    background-image: url('../assets/backgroundSignUp.svg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.sign-up-container-background {
+    background-color: rgba(5, 47, 42, 0.5);
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-form-sign-up {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: rgba(176, 172, 172, 0.2);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    width: 80%;
+}
+
+@media (max-width: 600px) {
+    .sign-up-container .card-form-sign-up {
+        position: relative;
+        left: 0;
+        top: 0;
+        transform: translate(0,-0);
+        top: 0vh;
+        width: 100%;
+    }
+}
+
+@media (max-width: 376px) {
+    .sign-up-container {
+        padding: 0 0 10vh 0;
+    }
+}
+
+@media (max-height: 1200px) {
+    .sign-up-container {
+        min-height: 120vh !important;
+    }
+    
+    .sign-up-container-background {
+        min-height: 120vh !important;
+    }
+}
