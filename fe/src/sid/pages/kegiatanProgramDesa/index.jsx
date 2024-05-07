@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import Footer from "../../../shared/layout/footer";
 import Navbar from "../../../shared/layout/navBar";
 import GambarDummy from "./assets/Foto.svg";
+import { Link } from "react-router-dom"
 
 const KegiatanProgramDesa = () => {
     const [data, setData] = useState([]);
@@ -109,27 +110,28 @@ const KegiatanProgramDesa = () => {
                         <div className="row">
                             {data.map((item, index) => (
                                 <div className="col-12 col-md-6 mb-5" style={{ position: 'relative' }}>
-                                    <div>
-                                        <img src={item.img} alt="" style={{ width: '100%', maxHeight: '100%' }} />
-                                        <button className="btn text-light" style={{ position: 'absolute', bottom: '200px', right: '10%', fontSize: '14px', background: '#00917C' }}>Lihat selengkapnya</button>
-                                    </div>
-                                    <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{item.title}</p>
-                                    <div className="row">
-                                        <div className="col-12 col-md-6 d-flex">
-                                            <i className="fa-regular fa-clock me-1"></i>
-                                            <p style={{ fontSize: '14px' }}>{new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                    <Link to="/detail-kegiatan-desa">
+                                        <div>
+                                            <img src={item.img} alt="" style={{ width: '100%', maxHeight: '100%' }} />
+                                            <button className="btn text-light" style={{ position: 'absolute', bottom: '200px', right: '10%', fontSize: '14px', background: '#00917C' }}>Lihat selengkapnya</button>
+                                        </div>
+                                        <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{item.title}</p>
+                                        <div className="row">
+                                            <div className="col-12 col-md-6 d-flex">
+                                                <i className="fa-regular fa-clock me-1"></i>
+                                                <p style={{ fontSize: '14px' }}>{new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            </div>
+                                            <div className="col-12 col-md-6 d-flex">
+                                                <i className="fa-solid fa-location-dot me-1"></i>
+                                                <p style={{ fontSize: '14px' }}>{item.location}</p>
+                                            </div>
                                         </div>
                                         <div className="col-12 col-md-6 d-flex">
-                                            <i className="fa-solid fa-location-dot me-1"></i>
-                                            <p style={{ fontSize: '14px' }}>{item.location}</p>
+                                            <i className="fa-regular fa-calendar me-1"></i>
+                                            <p style={{ fontSize: '14px' }}>{formatDate(new Date(item.date))}</p>
                                         </div>
-                                    </div>
-                                    <div className="col-12 col-md-6 d-flex">
-                                        <i className="fa-regular fa-calendar me-1"></i>
-                                        <p style={{ fontSize: '14px' }}>{formatDate(new Date(item.date))}</p>
-                                    </div>
+                                    </Link>
                                 </div>
-
                             ))}
                         </div>
                     </div>

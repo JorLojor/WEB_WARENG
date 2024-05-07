@@ -39,10 +39,10 @@ const Routing = createBrowserRouter([
         path: "/kegiatan-program-desa",
         element: <KegiatanProgramDesa />,
       },
-    //   {
-    //     path: "/sign-in",
-    //     element: <SignIn />,
-    //   },
+      {
+        path: "/detail-kegiatan-desa",
+        element: <DetailKegiatanDesa />,
+      },
     ],
   },
 ]);

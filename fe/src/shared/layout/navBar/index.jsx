@@ -35,17 +35,17 @@ const Navbar = ({type}) => {
                             <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Beranda</Link>
                         </li>
                         <li className="nav-item px-1">
-                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Program Pemerintah</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/informasi-desa' ? 'active underline' : ''}`} to="/informasi-desa">Informasi Desa</Link>
                         </li>
                         <li className="nav-item dropdown px-1">
-                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Layanan</Link>
+                            <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/kegiatan-program-desa' ? 'active underline' : ''}`} to="/kegiatan-program-desa">Kegiatan Desa</Link>
                         </li>
-                        <li className="nav-item px-1">
+                        {/* <li className="nav-item px-1">
                             <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Tentang</Link>
                         </li>
                         <li className="nav-item px-1" >
                             <Link style={{color: type ? 'white' : 'black'  }} className={`nav-link ${location.pathname === '/#' ? 'active underline' : ''}`} to="/#">Aspirasi</Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item px-1" style={{ borderLeft: '2px solid white' }}>
                             <Link className='nav-link' to="/login" >
                                 <div className="text-light wrap p-1 px-2" style={{ background: '#00917C', borderRadius: '0.5vw' }}>
