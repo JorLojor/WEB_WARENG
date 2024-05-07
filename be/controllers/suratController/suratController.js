@@ -554,6 +554,11 @@ exports.persetujuanSuratAcaraKades_TAVERSION = async (req, res) => {
 
 
 exports.baypassSuratAcara_TAVERSION = async (req, res) => {
+    // controller ini memungkinkan utk melewatkan proses persetujuan surat acara oleh RT, RW, Perangkat Desa, dan langsung menuju ke Kades
+    // dengan parameter id surat acara dan siapa yang melewati proses tersebut seperti RT, RW, Perangkat Desa
+    // ketika rquuest ini berupa RT, maka akan langsung menuju ke RW, ketika request ini berupa RW, maka akan langsung menuju ke Perangkat Desa ketika request ini berupa Perangkat Desa, maka akan langsung menuju ke Kades
+    // gunakan databese transaction untuk menghindari data yang tidak konsisten
+    
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
@@ -592,8 +597,16 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
         }
 
         if (role === "RW"){
-            const dataRw = await
-            RwModel.findById(dataSuratAcara.rwId).session(session);
+
+            const dataRt = await RtModel.findById(dataSuratAcara.rtId).session(session);
+            if (!dataRt){
+                await session.abortTransaction();
+                return res.status(404).send({
+                    message: "Data RT not found"
+                });
+            }
+
+            const dataRw = await RwModel.findById(dataSuratAcara.rwId).session(session);
             if (!dataRw){
                 await session.abortTransaction();
                 return res.status(404).send({
@@ -601,23 +614,54 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 });
             }
 
-            if (dataSuratAcara.statusPersetujuan === "disetujui RT" && dataSuratAcara.statusAcara === "pengajuan RW"){
-                dataSuratAcara.statusPersetujuan = "disetujui RW";
-                dataSuratAcara.statusAcara = "pengajuan Perangkat Desa";
-                dataRw.suratAcaraApproved.push(dataSuratAcara._id);
-                const indexData = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
-                dataRw.suratAcaraPending.splice(indexData, 1);
-                await dataRw.save();
-                await dataSuratAcara.save();
-                await session.commitTransaction();
-                return res.status(200).send({
-                    message: "Success submit surat RW",
-                    data: dataSuratAcara
-                });
+            dataSuratAcara.statusPersetujuan = "disetujui RW";
+            dataSuratAcara.statusAcara = "pengajuan Perangkat Desa";
+            // pemindahan id surat di model rt (iDP_RT) indexDataPending di model RT
+            const iDP_RT = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id)
+            if(iDP_RT){
+                dataRw.suratAcaraPending.splice(iDP_RT, 1);
             }
+            dataRt.suratAcaraApproved.push(dataSuratAcara._id)
+            await dataRt.save();            
+            // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
+            const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
+            if(iDP_RW){
+                dataRw.suratAcaraPending.splice(iDP_RW, 1);
+            }
+            const iDC_RW = dataRw.suratAcaraComing.indexOf(dataSuratAcara._id)
+            if(iDC_RW){
+                dataRw.suratAcaraComing.splice(iDC_RW, 1)
+            }
+            dataRw.suratAcaraApproved.push(dataSuratAcara._id);
+            await dataRw.save();
+
+
+            await dataSuratAcara.save();
+            await session.commitTransaction();
+            return res.status(200).send({
+                message: "Success submit surat RW",
+                data: dataSuratAcara
+            });
+            
         }
 
         if (role === "Perangkat Desa"){
+            const dataRt = await RtModel.findById(dataSuratAcara.rtId).session(session); 
+            if (!dataRt){
+                await session.abortTransaction();
+                return res.status(404).send({
+                    message: "Data RT not found"
+                });
+            }
+
+            const dataRw = await RwModel.findById(dataSuratAcara.rwId).session(session);
+            if (!dataRw){
+                await session.abortTransaction();
+                return res.status(404).send({
+                    message: "Data RW not found"
+                });
+            }
+
             const dataPD = await PerangkatDesaModel.findById(dataSuratAcara.perangkatDesaId).session(session);
             if (!dataPD){
                 await session.abortTransaction();
@@ -626,20 +670,20 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 });
             }
 
-            if (dataSuratAcara.statusPersetujuan === "disetujui RW" && dataSuratAcara.statusAcara === "pengajuan Perangkat Desa"){
-                dataSuratAcara.statusPersetujuan = "disetujui Perangkat Desa";
-                dataSuratAcara.statusAcara = "pengajuan Kades";
-                dataPD.suratAcaraApproved.push(dataSuratAcara._id);
-                const indexData = dataPD.suratAcaraPending.indexOf(dataSuratAcara._id);
-                dataPD.suratAcaraPending.splice(indexData, 1);
-                await dataPD.save();
-                await dataSuratAcara.save();
-                await session.commitTransaction();
-                return res.status(200).send({
-                    message: "Success submit surat Perangkat Desa",
-                    data: dataSuratAcara
-                });
-            }
+           
+            dataSuratAcara.statusPersetujuan = "disetujui Perangkat Desa";
+            dataSuratAcara.statusAcara = "pengajuan Kades";
+            dataPD.suratAcaraApproved.push(dataSuratAcara._id);
+            const indexData = dataPD.suratAcaraPending.indexOf(dataSuratAcara._id);
+            dataPD.suratAcaraPending.splice(indexData, 1);
+            await dataPD.save();
+            await dataSuratAcara.save();
+            await session.commitTransaction();
+            return res.status(200).send({
+                message: "Success submit surat Perangkat Desa",
+                data: dataSuratAcara
+            });
+            
         }
 
         
