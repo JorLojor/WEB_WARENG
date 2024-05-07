@@ -583,6 +583,9 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
             if (dataSuratAcara.statusPersetujuan === "belum ada persetujuan"){
                 dataSuratAcara.statusPersetujuan = "disetujui RT";
                 dataSuratAcara.statusAcara = "pengajuan RW";
+                
+                dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh ketua RT ${dataRt.ketuaRt}` );
+
                 dataRt.suratAcaraApproved.push(dataSuratAcara._id);
                 const indexData = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id);
                 dataRt.suratAcaraPending.splice(indexData, 1);
@@ -616,6 +619,9 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
 
             dataSuratAcara.statusPersetujuan = "disetujui RW";
             dataSuratAcara.statusAcara = "pengajuan Perangkat Desa";
+
+            dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh ketua RW ${dataRw.ketuaRw} melewati RT ${dataRt.ketuaRt}`);
+
             // pemindahan id surat di model rt (iDP_RT) indexDataPending di model RT
             const iDP_RT = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id)
             if(iDP_RT){
@@ -669,14 +675,42 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                     message: "Data Perangkat Desa not found"
                 });
             }
-
-           
             dataSuratAcara.statusPersetujuan = "disetujui Perangkat Desa";
             dataSuratAcara.statusAcara = "pengajuan Kades";
-            dataPD.suratAcaraApproved.push(dataSuratAcara._id);
-            const indexData = dataPD.suratAcaraPending.indexOf(dataSuratAcara._id);
-            dataPD.suratAcaraPending.splice(indexData, 1);
+
+            dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh Perangkat Desa ${dataPD.rolePD} melewati RW ${dataRw.ketuaRw} melewati RT ${dataRt.ketuaRt}`);
+
+            // pemindahan id surat di model rt (iDP_RT) indexDataPending di model RT
+            const iDP_RT = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id)
+            if(iDP_RT){
+                dataRw.suratAcaraPending.splice(iDP_RT, 1);
+            }
+            dataRt.suratAcaraApproved.push(dataSuratAcara._id)
+            await dataRt.save();            
+            // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
+            const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
+            if(iDP_RW){
+                dataRw.suratAcaraPending.splice(iDP_RW, 1);
+            }
+            const iDC_RW = dataRw.suratAcaraComing.indexOf(dataSuratAcara._id)
+            if(iDC_RW){
+                dataRw.suratAcaraComing.splice(iDC_RW, 1)
+            }
+            dataRw.suratAcaraApproved.push(dataSuratAcara._id);
+            await dataRw.save();
+
+            // pemindahan id surat di model PD (iDP_PD) indexDataPending di model PD (IDC) indexDataComing di model PD
+            const iDC_PD = dataPD.suratAcaraComing.indexOf(dataSuratAcara._id);
+            if(iDC_PD){
+                dataPD.suratAcaraComing.splice(iDC_PD, 1);
+            }
+
+            const iDP_PD = dataPD.suratAcaraPending.indexOf(dataSuratAcara._id);
+            if(iDP_PD){
+                dataPD.suratAcaraPending.splice(iDP_PD, 1);
+            }dataPD.suratAcaraApproved.push(dataSuratAcara._id);
             await dataPD.save();
+
             await dataSuratAcara.save();
             await session.commitTransaction();
             return res.status(200).send({
@@ -685,8 +719,6 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
             });
             
         }
-
-        
 
     }catch(error){
         await session.abortTransaction();
