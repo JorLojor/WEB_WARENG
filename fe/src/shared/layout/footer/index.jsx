@@ -23,7 +23,6 @@ const Footer = ({ type }) => {
                         </div>
                     </div>
                 </footer>
-
             }
             {(type == "2" || type == "3") &&
                 <footer className="mt-auto mx-auto" >
