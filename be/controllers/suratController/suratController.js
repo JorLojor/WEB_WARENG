@@ -553,12 +553,7 @@ exports.persetujuanSuratAcaraKades_TAVERSION = async (req, res) => {
 };
 
 
-exports.baypassSuratAcara_TAVERSION = async (req, res) => {
-    // controller ini memungkinkan utk melewatkan proses persetujuan surat acara oleh RT, RW, Perangkat Desa, dan langsung menuju ke Kades
-    // dengan parameter id surat acara dan siapa yang melewati proses tersebut seperti RT, RW, Perangkat Desa
-    // ketika rquuest ini berupa RT, maka akan langsung menuju ke RW, ketika request ini berupa RW, maka akan langsung menuju ke Perangkat Desa ketika request ini berupa Perangkat Desa, maka akan langsung menuju ke Kades
-    // gunakan databese transaction untuk menghindari data yang tidak konsisten
-    
+exports.baypassSuratAcara_TAVERSION = async (req, res) => {    
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
@@ -589,8 +584,8 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 dataRt.suratAcaraApproved.push(dataSuratAcara._id);
                 const indexData = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id);
                 dataRt.suratAcaraPending.splice(indexData, 1);
-                await dataRt.save();
-                await dataSuratAcara.save();
+                // await dataRt.save();
+                // await dataSuratAcara.save();
                 await session.commitTransaction();
                 return res.status(200).send({
                     message: "Success submit surat RT",
@@ -628,7 +623,7 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 dataRw.suratAcaraPending.splice(iDP_RT, 1);
             }
             dataRt.suratAcaraApproved.push(dataSuratAcara._id)
-            await dataRt.save();            
+            // await dataRt.save();            
             // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
             const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
             if(iDP_RW){
@@ -639,10 +634,10 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 dataRw.suratAcaraComing.splice(iDC_RW, 1)
             }
             dataRw.suratAcaraApproved.push(dataSuratAcara._id);
-            await dataRw.save();
+            // await dataRw.save();
 
 
-            await dataSuratAcara.save();
+            // await dataSuratAcara.save();
             await session.commitTransaction();
             return res.status(200).send({
                 message: "Success submit surat RW",
@@ -686,7 +681,7 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 dataRw.suratAcaraPending.splice(iDP_RT, 1);
             }
             dataRt.suratAcaraApproved.push(dataSuratAcara._id)
-            await dataRt.save();            
+            // await dataRt.save();            
             // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
             const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
             if(iDP_RW){
@@ -697,7 +692,7 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
                 dataRw.suratAcaraComing.splice(iDC_RW, 1)
             }
             dataRw.suratAcaraApproved.push(dataSuratAcara._id);
-            await dataRw.save();
+            // await dataRw.save();
 
             // pemindahan id surat di model PD (iDP_PD) indexDataPending di model PD (IDC) indexDataComing di model PD
             const iDC_PD = dataPD.suratAcaraComing.indexOf(dataSuratAcara._id);
@@ -709,9 +704,9 @@ exports.baypassSuratAcara_TAVERSION = async (req, res) => {
             if(iDP_PD){
                 dataPD.suratAcaraPending.splice(iDP_PD, 1);
             }dataPD.suratAcaraApproved.push(dataSuratAcara._id);
-            await dataPD.save();
+            // await dataPD.save();
 
-            await dataSuratAcara.save();
+            // await dataSuratAcara.save();
             await session.commitTransaction();
             return res.status(200).send({
                 message: "Success submit surat Perangkat Desa",
