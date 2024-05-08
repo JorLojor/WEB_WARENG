@@ -26,6 +26,15 @@ Router.put('/submit/:kadesId/:suratAcaraId',suratController.persetujuanSuratAcar
 //baypasss
 Router.put('/baypass/:suratAcaraId',suratController.baypassSuratAcara_TAVERSION);
 
+
+//baypass RT 
+Router.put('/baypassRT/:suratAcaraId',suratController.baypassSuratAcaraRT_TAVERSION);
+
+//baypass RW
+Router.put('/baypassRW/:suratAcaraId',suratController.baypassSuratAcaraRW_TAVERSION)
+
+//baypass Perangkat Desa
+Router.put('/baypassKasi/:suratAcaraId',suratController.baypassSuratAcaraKasi_TAVERSION);
 module.exports = Router;
 
 
@@ -41,4 +50,10 @@ module.exports = Router;
 
 
 // get all surat : http://localhost:3555/api/v1/surat/get/surat
-//663616a4d4418a5605196e7a
+
+
+
+// baypass surat acara : http://localhost:3555/api/v1/surat/baypass/:suratAcaraId
+// baypass surat acara RT : http://localhost:3555/api/v1/surat/baypassRT/:suratAcaraId
+// baypass surat acara RW : http://localhost:3555/api/v1/surat/baypassRW/:suratAcaraId
+// baypass surat acara Perangkat Desa : http://localhost:3555/api/v1/surat/baypassKasi/:suratAcaraId
