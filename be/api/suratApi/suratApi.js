@@ -23,6 +23,9 @@ Router.put('/submit/:perangkatDesaId/:suratAcaraId',suratController.persetujuanS
 //kepala desa
 Router.put('/submit/:kadesId/:suratAcaraId',suratController.persetujuanSuratAcaraKades_TAVERSION);
 
+//baypasss
+Router.put('/baypass/:suratAcaraId',suratController.baypassSuratAcara_TAVERSION);
+
 module.exports = Router;
 
 

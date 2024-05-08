@@ -6,7 +6,8 @@ const user = new mongoose.Schema({
     password: { type: String, required: false, default: '' },
     alamat: { type: String, required: false, default: '' },
     domisili: [{ type: String, required: false, default: '' }],  // array of string[rt,rw,desa,kecamatan,kabupaten,provinsi]
-    nohp: { type: Number, required: true, default: '' },
+    // nohp: { type: Number, required: true, default: '' },
+    nohp: { type: String, required: true, default: '' },
     statusPerkawinan: { type: String, required: false, default: '' }, // sudah menikah atau belum ,janda ,duda, meninggal
     tempatlahir: { type: String, required: false, default: '' },
     tanggallahir: { type: String, required: false, default: '' },

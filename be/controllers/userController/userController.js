@@ -1,5 +1,8 @@
 const db = require("../../models/index");
 const userModel = db.user;
+const crypto = require('crypto');//import crypto
+require('dotenv').config();
+
 
 exports.getAllUser = async (req,res) => {
     try{
@@ -47,28 +50,53 @@ exports.getUserById = async (req,res) => {
     }
 }
 
-exports.postUser = async (req,res) => {
-    try{
-        const { name,nik, alamat, nohp, statusPerkawinan ,domisili } = req.body;
 
+exports.postUser = async (req, res) => {
+    try {
+        const { name, nik, password, alamat, nohp, statusPerkawinan, domisili } = req.body;
+        const aesKey = crypto.scryptSync(
+
+            process.env.encrypt_key_one, 
+            process.env.encrypt_key_two,
+            32
+        
+        );  
+        const iv = crypto.randomBytes(16);
+        const encryptedNik = encrypt(nik, aesKey, iv).encryptedData;
+        const encryptedAlamat = encrypt(alamat, aesKey, iv).encryptedData;
+        const encryptedNohp = encrypt(nohp, aesKey, iv).encryptedData;
+
+        console.log("Encrypted NIK:", encryptedNik);
+        console.log("Encrypted NoHP:", encryptedNohp);
+        console.log("Encrypted Alamat:", encryptedAlamat);
         const newUser = await userModel.create({
-            name : name.toUpperCase(),
-            nik,
-            alamat: alamat.toUpperCase(),
-            nohp,
-            statusPerkawinan : statusPerkawinan.toUpperCase(),
-            domisili : domisili.map((domisili) => domisili.toUpperCase())
+            name: name.toUpperCase(),
+            nik: encryptedNik,
+            password,
+            alamat: encryptedAlamat,
+            nohp: encryptedNohp,
+            statusPerkawinan: statusPerkawinan.toUpperCase(),
+            domisili: domisili.map((dom) => dom.toUpperCase())
         });
+
         res.status(200).send({
             message: "Success create user",
             data: newUser
         });
-
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
-            message: error.message || "Some error occurred while creating warga."
+            message: error.message || "Some error occurred while creating user."
         });
     }
+}
+function encrypt(text, key, iv) {
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return {
+        encryptedData: encrypted,
+        initializationVector: iv.toString('hex')
+    };
 }
 
 exports.postManyUser = async (req,res) => {
