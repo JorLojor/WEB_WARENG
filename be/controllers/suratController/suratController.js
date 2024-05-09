@@ -70,17 +70,13 @@ exports.wargaCreateSurat_TAVERSION = async (req, res) => {
             });
         }
         const Rw = await RwModel.findOne({ ketuaRw: dataWarga.user.domisili[1] }).populate('user');
-        console.log('Rw:', Rw);
-        console.log('nama Rw:', Rw.user.alamat);
         if (!Rw || Rw.length === 0) {
             return res.status(404).send({
                 message: "RW not found with domisili rw " + dataWarga.user.domisili[1]
             });
         }
         const rolePerangkatDesa = kasiDecider(jenisSurat);
-        console.log('rolePerangkatDesa:', rolePerangkatDesa);
         const Kasi = await PerangkatDesaModel.findOne({ rolePD: rolePerangkatDesa.role });
-        console.log('Kasi:', Kasi);
 
         const kades = await PimpinanDesa.findOne({rolePemimpinDesa: 1});
         if (!kades) {
@@ -584,10 +580,8 @@ exports.baypassSuratAcaraRT_TAVERSION  = async (req, res)=>{
         }
 
         dataSuratAcara.statusPersetujuan = "disetujui RT";
-        dataSuratAcara.statusAcara = "pengajuan RW";
-        
+        dataSuratAcara.statusAcara = "pengajuan RW";  
         dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh ketua RT ${dataRt.ketuaRt}` );
-
         dataRt.suratAcaraApproved.push(dataSuratAcara._id);
         const indexData = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id);
         dataRt.suratAcaraPending.splice(indexData, 1);
@@ -712,7 +706,7 @@ exports.baypassSuratAcaraRW_TAVERSION = async (req, res) => {
         console.log('session end');
     }
 }
-
+// KASI BAYPASS
 exports.baypassSuratAcaraKasi_TAVERSION = async (req, res)=> {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -783,7 +777,7 @@ exports.baypassSuratAcaraKasi_TAVERSION = async (req, res)=> {
         const iDC_Kades = dataKades.suratAcaraComing.indexOf(dataSuratAcara._id);
         dataKades.suratAcaraComing.splice(iDC_Kades, 1);
 
-        await dataPd.save();
+        await dataKades.save();
         await dataPd.save();
         await dataRw.save();
         await dataRt.save();
@@ -807,174 +801,38 @@ exports.baypassSuratAcaraKasi_TAVERSION = async (req, res)=> {
     }
 }
 
-exports.baypassSuratAcara_TAVERSION = async (req, res) => {    
+
+exports.passingSuratAcara_TAVERSION = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
-    try{
-        const {suratAcaraId, role} = req.params;
-        const dataSuratAcara = await suratAcaraModel.findById([suratAcaraId]).session(session);
-        if (!dataSuratAcara){
+    try {
+        const { suratAcaraId } = req.params;
+        const suratAcara = await suratAcaraModel.findById(suratAcaraId).session(session);
+        if (!suratAcara) {
             await session.abortTransaction();
             return res.status(404).send({
-                message: "Data surat acara not found"
+                message: "Surat Acara not found with id " + suratAcaraId
             });
         }
 
-        if (role === "RT"){
-            const dataRt = await RtModel.findById(dataSuratAcara.rtId).session(session);
-            if (!dataRt){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data RT not found"
-                });
-            }
-
-            if (dataSuratAcara.statusPersetujuan === "belum ada persetujuan"){
-                dataSuratAcara.statusPersetujuan = "disetujui RT";
-                dataSuratAcara.statusAcara = "pengajuan RW";
-                
-                dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh ketua RT ${dataRt.ketuaRt}` );
-
-                dataRt.suratAcaraApproved.push(dataSuratAcara._id);
-                const indexData = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id);
-                dataRt.suratAcaraPending.splice(indexData, 1);
-                // await dataRt.save();
-                // await dataSuratAcara.save();
-                await session.commitTransaction();
-                return res.status(200).send({
-                    message: "Success submit surat RT",
-                    data: dataSuratAcara
-                });
-            }
-        }
-
-        if (role === "RW"){
-
-            const dataRt = await RtModel.findById(dataSuratAcara.rtId).session(session);
-            if (!dataRt){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data RT not found"
-                });
-            }
-
-            const dataRw = await RwModel.findById(dataSuratAcara.rwId).session(session);
-            if (!dataRw){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data RW not found"
-                });
-            }
-
-            dataSuratAcara.statusPersetujuan = "disetujui RW";
-            dataSuratAcara.statusAcara = "pengajuan Perangkat Desa";
-
-            dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh ketua RW ${dataRw.ketuaRw} melewati RT ${dataRt.ketuaRt}`);
-
-            // pemindahan id surat di model rt (iDP_RT) indexDataPending di model RT
-            const iDP_RT = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id)
-            if(iDP_RT){
-                dataRw.suratAcaraPending.splice(iDP_RT, 1);
-            }
-            dataRt.suratAcaraApproved.push(dataSuratAcara._id)
-            // await dataRt.save();            
-            // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
-            const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
-            if(iDP_RW){
-                dataRw.suratAcaraPending.splice(iDP_RW, 1);
-            }
-            const iDC_RW = dataRw.suratAcaraComing.indexOf(dataSuratAcara._id)
-            if(iDC_RW){
-                dataRw.suratAcaraComing.splice(iDC_RW, 1)
-            }
-            dataRw.suratAcaraApproved.push(dataSuratAcara._id);
-            // await dataRw.save();
-
-
-            // await dataSuratAcara.save();
-            await session.commitTransaction();
-            return res.status(200).send({
-                message: "Success submit surat RW",
-                data: dataSuratAcara
+        const wakilKades = await PimpinanDesa.findOne({ rolePemimpinDesa: 2 }).session(session);
+        const kades = await PimpinanDesa.findOne({ rolePemimpinDesa: 1 }).session(session);
+        
+        if (!wakilKades || !kades) {
+            await session.abortTransaction();
+            return res.status(404).send({
+                message: "Wakil Kades or Kades not found"
             });
-            
         }
 
-        if (role === "Perangkat Desa"){
-            const dataRt = await RtModel.findById(dataSuratAcara.rtId).session(session); 
-            if (!dataRt){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data RT not found"
-                });
-            }
-
-            const dataRw = await RwModel.findById(dataSuratAcara.rwId).session(session);
-            if (!dataRw){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data RW not found"
-                });
-            }
-
-            const dataPD = await PerangkatDesaModel.findById(dataSuratAcara.perangkatDesaId).session(session);
-            if (!dataPD){
-                await session.abortTransaction();
-                return res.status(404).send({
-                    message: "Data Perangkat Desa not found"
-                });
-            }
-            dataSuratAcara.statusPersetujuan = "disetujui Perangkat Desa";
-            dataSuratAcara.statusAcara = "pengajuan Kades";
-
-            dataSuratAcara.keterangan.push(`Surat acara ini telah dilewati oleh Perangkat Desa ${dataPD.rolePD} melewati RW ${dataRw.ketuaRw} melewati RT ${dataRt.ketuaRt}`);
-
-            // pemindahan id surat di model rt (iDP_RT) indexDataPending di model RT
-            const iDP_RT = dataRt.suratAcaraPending.indexOf(dataSuratAcara._id)
-            if(iDP_RT){
-                dataRw.suratAcaraPending.splice(iDP_RT, 1);
-            }
-            dataRt.suratAcaraApproved.push(dataSuratAcara._id)
-            // await dataRt.save();            
-            // perpinadahn id surat di model rw (iDP_RW) indexDataPendding di model Rw (IDC) indexDataComing di model Rw
-            const iDP_RW = dataRw.suratAcaraPending.indexOf(dataSuratAcara._id);
-            if(iDP_RW){
-                dataRw.suratAcaraPending.splice(iDP_RW, 1);
-            }
-            const iDC_RW = dataRw.suratAcaraComing.indexOf(dataSuratAcara._id)
-            if(iDC_RW){
-                dataRw.suratAcaraComing.splice(iDC_RW, 1)
-            }
-            dataRw.suratAcaraApproved.push(dataSuratAcara._id);
-            // await dataRw.save();
-
-            // pemindahan id surat di model PD (iDP_PD) indexDataPending di model PD (IDC) indexDataComing di model PD
-            const iDC_PD = dataPD.suratAcaraComing.indexOf(dataSuratAcara._id);
-            if(iDC_PD){
-                dataPD.suratAcaraComing.splice(iDC_PD, 1);
-            }
-
-            const iDP_PD = dataPD.suratAcaraPending.indexOf(dataSuratAcara._id);
-            if(iDP_PD){
-                dataPD.suratAcaraPending.splice(iDP_PD, 1);
-            }dataPD.suratAcaraApproved.push(dataSuratAcara._id);
-            // await dataPD.save();
-
-            // await dataSuratAcara.save();
-            await session.commitTransaction();
-            return res.status(200).send({
-                message: "Success submit surat Perangkat Desa",
-                data: dataSuratAcara
-            });
-            
-        }
-
-    }catch(error){
+        const dataSuratPending = await PimpinanDesa.suratAcaraPending.indexOf(suratAcaraId);
+        
+    } catch (error) {
         await session.abortTransaction();
-        res.status(500).send({
-            message: error.message || "Some error occurred while submit surat kades."
+        return res.status(500).send({
+            message: error.message || "Some error occurred while passing surat acara."
         });
-    }finally{
+    } finally {
         session.endSession();
     }
 };
