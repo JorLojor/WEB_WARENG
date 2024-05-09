@@ -807,6 +807,7 @@ exports.passingSuratAcara_TAVERSION = async (req, res) => {
     session.startTransaction();
     try {
         const { suratAcaraId } = req.params;
+        const keteranga = `Surat acara ini telah di pindahkan oleh Kades ke wakil kades dengan alasan : ${req.body.keteranganPassing}`;
         const suratAcara = await suratAcaraModel.findById(suratAcaraId).session(session);
         if (!suratAcara) {
             await session.abortTransaction();
@@ -824,9 +825,25 @@ exports.passingSuratAcara_TAVERSION = async (req, res) => {
                 message: "Wakil Kades or Kades not found"
             });
         }
-
-        const dataSuratPending = await PimpinanDesa.suratAcaraPending.indexOf(suratAcaraId);
-        
+        const indexDataKades = kades.suratAcaraPending.indexOf(suratAcaraId);
+        if (indexDataKades !== -1) {
+            suratAcara.keterangan.push(keteranga);
+            wakilKades.suratAcaraPending.push(suratAcara._id);
+            kades.suratAcaraPending.splice(indexDataKades, 1);
+            await wakilKades.save();
+            await kades.save();
+            await suratAcara.save();
+            await session.commitTransaction();
+            return res.status(200).send({
+                message: "Success passing surat acara",
+                data: suratAcara
+            });
+        } else {
+            await session.abortTransaction();
+            return res.status(404).send({
+                message: "Surat Acara not found in Kades suratAcaraPending"
+            });
+        }        
     } catch (error) {
         await session.abortTransaction();
         return res.status(500).send({
@@ -836,11 +853,6 @@ exports.passingSuratAcara_TAVERSION = async (req, res) => {
         session.endSession();
     }
 };
-
-
-
-
-
 
 
 
